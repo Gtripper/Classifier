@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Classifier
 {
-    public class Class1
+    class RegularInterface
     {
     }
 }
