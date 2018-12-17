@@ -378,32 +378,26 @@ namespace Classifier
 
         }
         /// <summary>
-        /// Сортировка массива значений VRI_List_2 по возрастанию. На вход массив всех ври, на выход - сортированный массив.
+        /// Сортировка строки VRI_List по возрастанию значений кодов.
         /// </summary>
-        /// <param name="array"></param>
-        /// <returns></returns>
+        /// <param name="inputstr"></param>
+        /// <returns>Отсортированная строка кодов ВРИ</returns>
         public static void Sort(string[] array)
         {
-            for (int i = 0; i < array.Length; i++)
+            MatchCollection matchCollection = Regex.Matches(array[0], @"((?:\d+[.]*)+)", RegexOptions.IgnoreCase);
+
+            var list = matchCollection.Cast<Match>().Select(match => match.Value).ToList();
+
+            var comp = new VRI_Comparer();
+            list.Sort(comp);
+
+            string result = "";
+
+            foreach (var val in list)
             {
-                var inputstr = array[i];
-
-                MatchCollection matchCollection = Regex.Matches(inputstr, @"((?:\d+[.]*)+)", RegexOptions.IgnoreCase);
-
-                var list = matchCollection.Cast<Match>().Select(match => match.Value).ToList();
-
-                var comp = new VRI_Comparer();
-                list.Sort(comp);
-
-                string res = "";
-
-                foreach (var val in list)
-                {
-                    res += res.Equals("") ? val : ", " + val;
-                }
-
-                array[i] = res;
+                result += result.Equals("") ? val : ", " + val;
             }
+            array[1] = result;
         }
     }
 }
