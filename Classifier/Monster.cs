@@ -14,7 +14,8 @@ namespace Classifier
     {
         private string vri;
         private string vri540;
-        private string hexCode;
+        private string kindCode;
+        private string typeCode;
         private string description;
         private string simpleDescription;
         private string funcUse;
@@ -24,12 +25,13 @@ namespace Classifier
         public Node() { }
 
         public Node(string vri, string vri540
-            , string hexCode, string description, string simpleDescription
+            , string kindCode, string typeCode, string description, string simpleDescription
             , string funcUse, string simpleFuncUse, string[] regexpPatterns)
-        {            
+        {
             this.vri = vri;
             this.vri540 = vri540;
-            this.hexCode = hexCode;
+            this.kindCode = kindCode;
+            this.typeCode = typeCode;
             this.description = description;
             this.simpleDescription = simpleDescription;
             this.funcUse = funcUse;
@@ -40,44 +42,50 @@ namespace Classifier
         public Node(Node mnstr)
         {
             vri = mnstr.Vri;
-            vri540 = mnstr.GetVri540;
-            hexCode = mnstr.GetHexCode();
+            vri540 = mnstr.Vri540;
+            kindCode = mnstr.KindCode;
+            typeCode = mnstr.TypeCode;
             description = mnstr.GetDescription();
             simpleDescription = mnstr.GetSimpleDescription();
             funcUse = mnstr.GetFuncUse();
             simpleFuncUse = mnstr.GetSimpleFuncUse();
             regexpPatterns = mnstr.GetPatterns();
         }
-        
+
         public string Vri
         {
             get
             {
                 if (vri != "") return vri;
-                
+
                 else return vri540;
             }
         }
 
-        public string GetVri540
+        public string Vri540
         {
             get => vri540;
         }
 
-        public string GetHexCode()
+        public string KindCode
         {
-            return hexCode;
+            get => kindCode;
+        }
+
+        public string TypeCode
+        {
+            get => typeCode;
         }
 
         public List<string> GetQCode()
         {
             List<string> result = new List<string>();
 
-            MatchCollection match = Regex.Matches(hexCode, @"(\b\d{3,4}\b)", RegexOptions.IgnoreCase);
+            MatchCollection match = Regex.Matches(kindCode, @"(\b\d{3,4}\b)", RegexOptions.IgnoreCase);
 
             foreach (Match iter in match)
             {
-                result.Add(iter.Groups[1].Value);               
+                result.Add(iter.Groups[1].Value);
             }
             return result;
         }
@@ -101,7 +109,7 @@ namespace Classifier
         {
             return simpleFuncUse;
         }
-                
+
         public List<string> CodeToList(string input)
         {
             List<string> result = new List<string>();
@@ -115,7 +123,7 @@ namespace Classifier
         {
             return regexpPatterns;
         }
-                
+
         public virtual bool GetParent(Node mstr)
         {
             //return null;
@@ -143,9 +151,9 @@ namespace Classifier
 
     class Agriculture : Node
     {
-        public Agriculture(string vri, string vri540, string hexCode, string description, 
-            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) : 
-                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Agriculture(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
 
@@ -157,9 +165,9 @@ namespace Classifier
 
     class GrowPlanting : Agriculture
     {
-        public GrowPlanting(string vri, string vri540, string hexCode, string description, 
-            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) : 
-                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public GrowPlanting(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -170,9 +178,9 @@ namespace Classifier
 
     class LiveStocking : Agriculture
     {
-        public LiveStocking(string vri, string vri540, string hexCode, string description,
+        public LiveStocking(string vri, string vri540, string kindCode, string typeCode, string description,
             string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -183,9 +191,9 @@ namespace Classifier
 
     class Agronomy : Agriculture
     {
-        public Agronomy(string vri, string vri540, string hexCode, string description,
+        public Agronomy(string vri, string vri540, string kindCode, string typeCode, string description,
             string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -196,9 +204,9 @@ namespace Classifier
 
     class Dwelling : Node
     {
-        public Dwelling(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Dwelling(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
 
@@ -215,9 +223,9 @@ namespace Classifier
 
     class Housing : Dwelling
     {
-        public Housing(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Housing(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -233,9 +241,9 @@ namespace Classifier
 
     class HParking : Node
     {
-        public HParking(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public HParking(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -249,11 +257,11 @@ namespace Classifier
         }
     }
 
-    class TwoSevenZero : Node
+    class MaintenanceOfResidentialBuildings : Node
     {
-        public TwoSevenZero(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public MaintenanceOfResidentialBuildings(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
 
@@ -270,9 +278,9 @@ namespace Classifier
 
     class BaseCommunity : Node
     {
-        public BaseCommunity(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseCommunity(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -283,9 +291,9 @@ namespace Classifier
 
     class Community : BaseCommunity
     {
-        public Community(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Community(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -296,9 +304,9 @@ namespace Classifier
 
     class Education : BaseCommunity
     {
-        public Education(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Education(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -309,9 +317,9 @@ namespace Classifier
 
     class ProfessionalEducation : Education
     {
-        public ProfessionalEducation(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public ProfessionalEducation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -322,9 +330,9 @@ namespace Classifier
 
     class SchoolEducation : Education
     {
-        public SchoolEducation(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public SchoolEducation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -335,9 +343,9 @@ namespace Classifier
 
     class HealthCare : BaseCommunity
     {
-        public HealthCare(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public HealthCare(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -348,9 +356,9 @@ namespace Classifier
 
     class Clinic : HealthCare
     {
-        public Clinic(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Clinic(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -361,9 +369,9 @@ namespace Classifier
 
     class Hospital : HealthCare
     {
-        public Hospital(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Hospital(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -374,9 +382,9 @@ namespace Classifier
 
     class Sсience : BaseCommunity
     {
-        public Sсience(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Sсience(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -387,9 +395,9 @@ namespace Classifier
 
     class WeatherStation : BaseCommunity
     {
-        public WeatherStation(string vri, string vri540, string hexCode, string description,
-                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public WeatherStation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -400,9 +408,9 @@ namespace Classifier
 
     class Veterenary : BaseCommunity
     {
-        public Veterenary(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Veterenary(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -413,9 +421,9 @@ namespace Classifier
 
     class VetClinic : Veterenary
     {
-        public VetClinic(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public VetClinic(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -426,9 +434,9 @@ namespace Classifier
 
     class AnimalShelter : Veterenary
     {
-        public AnimalShelter(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public AnimalShelter(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -439,9 +447,9 @@ namespace Classifier
 
     class BaseBuisness : Node
     {
-        public BaseBuisness(string vri, string vri540, string hexCode, string description,
-                                   string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                       base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseBuisness(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -452,9 +460,9 @@ namespace Classifier
 
     class Buisness : BaseBuisness
     {
-        public Buisness(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Buisness(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -465,9 +473,9 @@ namespace Classifier
 
     class Hotel : BaseBuisness
     {
-        public Hotel(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Hotel(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -478,9 +486,9 @@ namespace Classifier
 
     class Hostel : BaseBuisness
     {
-        public Hostel(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Hostel(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -491,9 +499,9 @@ namespace Classifier
 
     class Dormitory : BaseBuisness
     {
-        public Dormitory(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Dormitory(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -502,13 +510,13 @@ namespace Classifier
         }
     }
 
-    
+
 
     class GasStation : BaseBuisness
     {
-        public GasStation(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public GasStation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -519,9 +527,9 @@ namespace Classifier
 
     class Motel : BaseBuisness
     {
-        public Motel(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Motel(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -532,9 +540,9 @@ namespace Classifier
 
     class CarWashingStation : BaseBuisness
     {
-        public CarWashingStation(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public CarWashingStation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -545,9 +553,9 @@ namespace Classifier
 
     class BodyShop : BaseBuisness //автомастеская
     {
-        public BodyShop(string vri, string vri540, string hexCode, string description,
-                            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BodyShop(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -558,9 +566,9 @@ namespace Classifier
 
     class BaseRecreation : Node
     {
-        public BaseRecreation(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseRecreation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -571,9 +579,9 @@ namespace Classifier
 
     class Recreation : BaseRecreation
     {
-        public Recreation(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Recreation(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -584,9 +592,9 @@ namespace Classifier
 
     class Sport : BaseRecreation
     {
-        public Sport(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Sport(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -597,9 +605,9 @@ namespace Classifier
 
     class BaseIndustry : Node
     {
-        public BaseIndustry(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseIndustry(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -610,9 +618,9 @@ namespace Classifier
 
     class Industry : BaseIndustry
     {
-        public Industry(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Industry(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -623,9 +631,9 @@ namespace Classifier
 
     class BaseTransport : Node
     {
-        public BaseTransport(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseTransport(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -636,9 +644,9 @@ namespace Classifier
 
     class Transport : BaseTransport
     {
-        public Transport(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Transport(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -649,27 +657,27 @@ namespace Classifier
 
     class SecurityForces : Node
     {
-        public SecurityForces(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public SecurityForces(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
     }
 
     class Environment : Node
     {
-        public Environment(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Environment(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
     }
 
     class BaseForestry : Node
     {
-        public BaseForestry(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public BaseForestry(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -680,9 +688,9 @@ namespace Classifier
 
     class Forestry : BaseForestry
     {
-        public Forestry(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Forestry(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
         public override bool isBaseClass()
@@ -693,27 +701,27 @@ namespace Classifier
 
     class WaterObjs : Node
     {
-        public WaterObjs(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public WaterObjs(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
     }
 
     class Infrastructure : Node
     {
-        public Infrastructure(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public Infrastructure(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
     }
 
     class OtherFunction : Node
     {
-        public OtherFunction(string vri, string vri540, string hexCode, string description,
-                                    string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
-                                        base(vri, vri540, hexCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
+        public OtherFunction(string vri, string vri540, string kindCode, string typeCode, string description,
+            string simpleDescription, string funcUse, string simpleFuncUse, string[] regexpPatterns) :
+                base(vri, vri540, kindCode, typeCode, description, simpleDescription, funcUse, simpleFuncUse, regexpPatterns)
         {
         }
     }
@@ -743,29 +751,30 @@ namespace Classifier
         {
             foreach (var iter in nodes)
             {
-                if (iter.Vri.Equals(vri)) {
+                if (iter.Vri.Equals(vri))
+                {
                     return iter;
-                }                              
+                }
             }
             return null;
         }
 
-        private void Feeding() 
+        private void Feeding()
         {
 
-            nodes = new List<Node>();            
-            nodes.Add(new Agriculture("1.0.0", "1.0", "3006, 8000"
+            nodes = new List<Node>();
+            nodes.Add(new Agriculture("1.0.0", "1.0", "3006", "800",
 
-                , "Ведение сельского, в т.ч. фермерского хозяйства. " +
+                "Ведение сельского, в т.ч. фермерского хозяйства. " +
                 "Содержание данного вида разрешенного использования включает в себя содержание видов " +
                 "разрешенного использования с кодами 1.1-1.18, в том числе размещение зданий и " +
-                "сооружений, используемых для хранения и переработки сельскохозяйственной продукции "
+                "сооружений, используемых для хранения и переработки сельскохозяйственной продукции ",
 
-                , "Сельскохозяйственное использование"
+                "Сельскохозяйственное использование",
 
-                , ""
-                , ""
-                , new string[] {
+                "",
+                "",
+                new string[] {
                     @"",
                     @"\bвыращиван\w*\s*сель\w*\s*хоз\w*\s*(культур\w*)?|\bживотновод\w*\b",
 
@@ -785,19 +794,20 @@ namespace Classifier
                     @"\bсел\w*\s*хоз\w*[-\s]*производ\w*\b" }
                 ));
 
-            nodes.Add(new GrowPlanting("1.1.0", "1.1", "3006, 8000"
+            nodes.Add(new GrowPlanting("1.1.0", "1.1", "3006", "800",
 
-                , "Осуществление хозяйственной " +
+                "Осуществление хозяйственной " +
                 "деятельности, связанной с выращиванием сельскохозяйственных культур. Содержание данного " +
                 "вида разрешенного использования включает в себя содержание видов разрешенного " +
-                "использования с кодами 1.2-1.6 "
+                "использования с кодами 1.2-1.6 ",
 
-                , "Растениеводство"
-                , ""
-                , ""
-                , new string[] {
+                "Растениеводство",
+
+                "",
+                "",
+                new string[] {
                     @"",
-                    @"\bрастениеводств\w*\b",                    
+                    @"\bрастениеводств\w*\b",
 
                     @"",
                     @"\bсельскохоз\w*\s*(использ\w*|назнач\w*|угодия)\b",
@@ -806,44 +816,46 @@ namespace Classifier
                     @"\bсенкошен\w*\s*и\s*выпас\w*\s*скот\w*" }
                 ));
 
-            nodes.Add(new GrowPlanting("1.2.0", "1.2", "3006 01, 8000 01"
+            nodes.Add(new GrowPlanting("1.2.0", "1.2", "3006", "800",
 
-                , "Осуществление хозяйственной " +
+                "Осуществление хозяйственной " +
                 "деятельности на сельскохозяйственных угодьях, связанной с производством зерновых, " +
                 "бобовых, кормовых, технических, масличных, эфиромасличных, и иных сельскохозяйственных " +
-                "культур "
+                "культур ",
 
-                , "Выращивание зерновых и иных сельскохозяйственных культур"
-                , ""
-                , ""
-                , new string[] {
+                "Выращивание зерновых и иных сельскохозяйственных культур",
+
+                "",
+                "",
+                new string[] {
                     @"центр|переработке|продаже",
                     @"\bзернов\w*\b|\bбобв\w*\b|\bкормов\w*\b|масличн\w*\b" }
                 ));
 
-            nodes.Add(new GrowPlanting("1.3.0", "1.3", "3006 02, 8000 02"
+            nodes.Add(new GrowPlanting("1.3.0", "1.3", "3006", "800",
 
-                , "Осуществление хозяйственной деятельности на сельскохозяйственных угодьях, связанной " +
+                "Осуществление хозяйственной деятельности на сельскохозяйственных угодьях, связанной " +
                 "с производством картофеля, листовых, плодовых, луковичных и бахчевых " +
-                "сельскохозяйственных культур, в том числе с использованием теплиц "
+                "сельскохозяйственных культур, в том числе с использованием теплиц ",
 
-                , "Овощеводство"
-                , ""
-                , ""
-                , new string[] {
+                "Овощеводство",
+
+                "",
+                "",
+                new string[] {
                     @"картофелехранилищ|научного\sцентра|павильон|\bжил\w*\s*дом\w*\b",
                     @"\bкартофел\w*\b|\bлистов\w*\b|\bплодов\w*\b|\bлуковичн\w*\b|\bбахчев\w*\b" }
                 ));
 
-            nodes.Add(new GrowPlanting("1.4.0", "1.4", "3006 03, 8000 03"
+            nodes.Add(new GrowPlanting("1.4.0", "1.4", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
-               "угодьях, связанной с производством чая, лекарственных и цветочных культур "
+               "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
+               "угодьях, связанной с производством чая, лекарственных и цветочных культур ",
 
-               ,"Выращивание тонизирующих, лекарственных, цветочных культур"
-               , ""
-               , ""
-               , new string[] {
+               "Выращивание тонизирующих, лекарственных, цветочных культур",
+               "",
+               "",
+               new string[] {
                     @"\bжил\w*\s*дом\w*\b",
                     @"\b(выращива\w*|сбор\w*)\b?.+\b(лекарств\w*\s*растен\w*|цвет\w*)\b",
 
@@ -857,36 +869,36 @@ namespace Classifier
                     @"\bнеплодород\w*\s*кустарн\w*\b" }
                ));
 
-            nodes.Add(new GrowPlanting("1.5.0", "1.5", "3006 04, 8000 04"
+            nodes.Add(new GrowPlanting("1.5.0", "1.5", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
+               "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
                "угодьях, связанной с выращиванием многолетних плодовых и ягодных культур, винограда, " +
-               "и иных многолетних культур "
+               "и иных многолетних культур ",
 
-               , "Садоводство+"
-               , ""
-               , ""
-               , new string[] {
+               "Садоводство+",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bмноголетн\w*\b[-\s]*(плодов\w*|ягодня\w*)|\bвиноград\w{0,1}\b" }
                ));
 
-            nodes.Add(new GrowPlanting("1.6.0", "1.6", "3006 05, 8000 05"
+            nodes.Add(new GrowPlanting("1.6.0", "1.6", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
-               "угодьях, связанной с выращиванием льна, конопли "
+               "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных " +
+               "угодьях, связанной с выращиванием льна, конопли ",
 
-               , "Выращивание льна и конопли"
-               , ""
-               , ""
-               , new string[] {
+               "Выращивание льна и конопли",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bл[еёь]н\w{0,1}\b|\bконопл\w*\b" }
                ));
 
-            nodes.Add(new LiveStocking("1.7.0", "1.7", "3006, 8000"
+            nodes.Add(new LiveStocking("1.7.0", "1.7", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, связанной с производством " +
+               "Осуществление хозяйственной деятельности, связанной с производством " +
                "продукции животноводства, в том числе сенокошение, выпас " +
                "сельскохозяйственных животных, разведение племенных животных, " +
                "производство и использование племенной продукции (материала), " +
@@ -894,12 +906,12 @@ namespace Classifier
                "сельскохозяйственных животных, производства, хранения и первичной " +
                "переработки сельскохозяйственной продукции. Содержание данного вида " +
                "разрешенного использования включает в себя содержание видов разрешенного " +
-               "использования с кодами 1.8-1.11 "
+               "использования с кодами 1.8-1.11 ",
 
-               , "Животноводство"
-               , ""
-               , ""
-               , new string[] {
+               "Животноводство",
+               "",
+               "",
+               new string[] {
                    @"",
                    @"\bголубин\w*\s*питомн\w*\b|\bмолоч\w*\b.*\bферм\w*\b",
 
@@ -910,20 +922,20 @@ namespace Classifier
                    @"\b(разведен\w*|питомн\w*)\b.*\bголуб\w*\b"  }
                ));
 
-            nodes.Add(new LiveStocking("1.8.0", "1.8", "3006 06, 8000 06"
+            nodes.Add(new LiveStocking("1.8.0", "1.8", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, в том числе на " +
+               "Осуществление хозяйственной деятельности, в том числе на " +
                "сельскохозяйственных угодьях, связанной с разведением сельскохозяйственных " +
                "животных (крупного рогатого скота, овец, коз, лошадей, верблюдов, оленей); " +
                "сенокошение, выпас сельскохозяйственных животных, производство кормов, размещение " +
                "зданий, сооружений, используемых для содержания и разведения сельскохозяйственных " +
                "животных; разведение племенных животных, производство и использование племенной " +
-               "продукции (материала) "
+               "продукции (материала) ",
 
-               , "Скотоводство"
-               , ""
-               , ""
-               , new string[] {
+               "Скотоводство",
+               "",
+               "",
+               new string[] {
                     @"торгового",
                     @"\bрогат\w*\s*скот\w*\b|\bове?ц\w*|\bкозо\w*\b|" +
                     @"\bлошад\w*\b|\bверблюд\w*\b|\bолен\w*",
@@ -935,32 +947,33 @@ namespace Classifier
                     @"\bмолочн\w*\s*комплекс\w*\b" }
                ));
 
-            nodes.Add(new LiveStocking("1.9.0", "1.9", "3006 07, 8000 07"
+            nodes.Add(new LiveStocking("1.9.0", "1.9", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, связанной с разведением в неволе " +
+               "Осуществление хозяйственной деятельности, связанной с разведением в неволе " +
                "ценных пушных зверей; размещение зданий, сооружений, используемых для содержания и " +
                "разведения животных, производства, хранения и первичной переработки продукции; " +
-               "разведение племенных животных, производство и использование племенной продукции(материала) "
+               "разведение племенных животных, производство и использование племенной продукции(материала) ",
 
-               , "Звероводство"
-               , ""
-               , ""
-               , new string[] {
+               "Звероводство",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bпушн\w*\s*звер\w*\b|\bзверокомплекс\w*\b" }
                ));
 
-            nodes.Add(new LiveStocking("1.10.0", "1.10", "3006 08, 8000 08"
+            nodes.Add(new LiveStocking("1.10.0", "1.10", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, связанной с разведением домашних пород птиц, " +
+               "Осуществление хозяйственной деятельности, связанной с разведением домашних пород птиц, " +
                "в том числе водоплавающих; размещение зданий, сооружений, используемых для содержания и " +
                "разведения животных, производства, хранения и первичной переработки продукции птицеводства;" +
-               "разведение племенных животных, производство и использование племенной продукции(материала) "
-               , "Птицеводство"
+               "разведение племенных животных, производство и использование племенной продукции(материала) ",
 
-               , ""
-               , ""
-               , new string[] {
+               "Птицеводство",
+
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bптицевод\w*\b",
 
@@ -968,60 +981,60 @@ namespace Classifier
                     @"\bразведен\w*\b.*\bдомашн\w*\s*птиц\w*" }
                ));
 
-            nodes.Add(new LiveStocking("1.11.0", "1.11", "3006 09, 8000 09"
+            nodes.Add(new LiveStocking("1.11.0", "1.11", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, связанной с разведением свиней; размещение зданий, " +
+               "Осуществление хозяйственной деятельности, связанной с разведением свиней; размещение зданий, " +
                "сооружений, используемых для содержания и разведения животных, производства, хранения и " +
                "первичной переработки продукции; разведение племенных животных, производство и использование " +
-               "племенной продукции (материала) "
+               "племенной продукции (материала) ",
 
-               , "Свиноводство"
-               , ""
-               , ""
-               , new string[] {
+               "Свиноводство",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bсвин\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.12.0", "1.12", "3006 10, 8000 10"
+            nodes.Add(new Agronomy("1.12.0", "1.12", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных угодьях, " +
+               "Осуществление хозяйственной деятельности, в том числе на сельскохозяйственных угодьях, " +
                "по разведению, содержанию и использованию пчел и иных полезных насекомых; размещение ульев, " +
                "иных объектов и оборудования, необходимого для пчеловодства и разведениях иных полезных насекомых; " +
-               "размещение сооружений используемых для хранения и первичной переработки продукции пчеловодства "
+               "размещение сооружений используемых для хранения и первичной переработки продукции пчеловодства ",
 
-               , "Пчеловодство"
-               , ""
-               , ""
-               , new string[] {
+               "Пчеловодство",
+               "",
+               "",
+               new string[] {
                     @"по\sпродаж\w*\b",
                     @"\bпч[её]л\w*\b|\bполезн\w*\s*насеком\w*\b|\bпасек\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.13.0", "1.13", "3006 11, 8000 11"
+            nodes.Add(new Agronomy("1.13.0", "1.13", "3006", "800",
 
-               , "Осуществление хозяйственной деятельности, связанной с разведением и (или) содержанием, " +
+               "Осуществление хозяйственной деятельности, связанной с разведением и (или) содержанием, " +
                "выращиванием объектов рыбоводства (аквакультуры); размещение зданий, сооружений, оборудования, " +
-               "необходимых для осуществления рыбоводства (аквакультуры) "
+               "необходимых для осуществления рыбоводства (аквакультуры) ",
 
-               , "Рыбоводство"
-               , ""
-               , ""
-               , new string[] {
+               "Рыбоводство",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bрыбоводств\w*\b|\bаквакультур\w*\b|\bрыбн\w*\s*хоз\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.14.0", "1.14", "1001 01"
+            nodes.Add(new Agronomy("1.14.0", "1.14", "1001", "100",
 
-               , "Осуществление научной и селекционной работы, ведения сельского хозяйства для получения " +
+               "Осуществление научной и селекционной работы, ведения сельского хозяйства для получения " +
                "ценных с научной точки зрения образцов растительного и животного мира; размещение коллекций " +
-               "генетических ресурсов растений "
+               "генетических ресурсов растений ",
 
-               , "Научное обеспечение сельского хозяйства"
-               , ""
-               , ""
-               , new string[] {
+               "Научное обеспечение сельского хозяйства",
+               "",
+               "",
+               new string[] {
                    @"",
                    @"науч...исследоват.+сельскохоз",
 
@@ -1038,15 +1051,15 @@ namespace Classifier
                    @"\bмосагронаучприбор\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.15.0", "1.15", "3006 12"
+            nodes.Add(new Agronomy("1.15.0", "1.15", "3006", "800",
 
-               , "Размещение зданий, сооружений, используемых для производства, хранения, первичной и " +
-               "глубокой переработки сельскохозяйственной продукции "
+               "Размещение зданий, сооружений, используемых для производства, хранения, первичной и " +
+               "глубокой переработки сельскохозяйственной продукции ",
 
-               , "Хранение и переработка сельскохозяйственной продукции"
-               , ""
-               , ""
-               , new string[] {
+               "Хранение и переработка сельскохозяйственной продукции",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bтепли\w*\b|\bэлеватор\w*\b",
 
@@ -1067,26 +1080,26 @@ namespace Classifier
                     @"\b(плодово)?овощ\w*\s*(баз\w*|хранилищ\w*)\b|\bхладокомбинат\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.16.0", "1.16", "8000 12"
+            nodes.Add(new Agronomy("1.16.0", "1.16", "3006", "800",
 
-               , "Производство сельскохозяйственной продукции без права возведения объектов " +
-               "капитального строительства "
+               "Производство сельскохозяйственной продукции без права возведения объектов " +
+               "капитального строительства ",
 
-               , "Ведение личного подсобного хозяйства на полевых участках"
-               , ""
-               , ""
-               , new string[] { }));
+               "Ведение личного подсобного хозяйства на полевых участках",
+               "",
+               "",
+               new string[] { }));
 
-            nodes.Add(new Agronomy("1.17.0", "1.17", "3006 13, 8000 13"
+            nodes.Add(new Agronomy("1.17.0", "1.17", "3006", "800",
 
-               , "Выращивание и реализация подроста деревьев и кустарников, используемых в сельском хозяйстве, " +
+               "Выращивание и реализация подроста деревьев и кустарников, используемых в сельском хозяйстве, " +
                "а также иных сельскохозяйственных культур для получения рассады и семян; " +
-               "размещение сооружений, необходимых для указанных видов сельскохозяйственного производства "
+               "размещение сооружений, необходимых для указанных видов сельскохозяйственного производства ",
 
-               , "Питомники"
-               , ""
-               , ""
-               , new string[] {
+               "Питомники",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bпитомн\w*\b.*\bрастен\w*\b",
 
@@ -1100,16 +1113,16 @@ namespace Classifier
                     @"\bвыращиван\w*\s*декоратив\w*\s*растен\w*\b" }
                ));
 
-            nodes.Add(new Agronomy("1.18.0", "1.18", "3006 14"
+            nodes.Add(new Agronomy("1.18.0", "1.18", "3006", "800",
 
-               , "Размещение машинно-транспортных и ремонтных станций, ангаров и гаражей для " +
+               "Размещение машинно-транспортных и ремонтных станций, ангаров и гаражей для " +
                "сельскохозяйственной техники, амбаров, водонапорных башен, трансформаторных станций и " +
-               "иного технического оборудования, используемого для ведения сельского хозяйства "
+               "иного технического оборудования, используемого для ведения сельского хозяйства ",
 
-               , "Обеспечение сельскохозяйственного производства"
-               , ""
-               , ""
-               , new string[] {
+               "Обеспечение сельскохозяйственного производства",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bсел\w*\s*хоз\w*\s*техн\w*\b",
 
@@ -1124,19 +1137,17 @@ namespace Classifier
                     @"\bобслуживан\w*\s*сара[йяе]в?\b" }
                ));
 
-            nodes.Add(new Dwelling("2.0.0", "2.0", "2000"
+            nodes.Add(new Dwelling("2.0.0", "2.0", "2000", "200",
 
-               // "2000, 1200, 2001, 2002, 2003"
-
-               , "Размещение жилых помещений различного вида и обеспечение проживания в них. " +
+               "Размещение жилых помещений различного вида и обеспечение проживания в них. " +
                "К жилой застройке относятся здания (помещения в них), предназначенные для проживания человека; " +
                "Содержание данного вида разрешенного использования включает в себя содержание видов " +
-               "разрешенного использования с кодами 2.1-2.7.1 "
+               "разрешенного использования с кодами 2.1-2.7.1 ",
 
-               , "Жилая застройка"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Жилая застройка",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"\bпри\sстроительстве\sжил\w*\b",
                     @"\bжил(ого|ых|ую|ые|ая|ом|ой|ищн\w*|ыми?|ому)\s*(дом\w*|строительств\w*|(за)?стройк\w*|" +
                     @"комплекс\w*|зон\w*|микрорай\w*|здан\w*|квартал\w*)\b",
@@ -1175,17 +1186,17 @@ namespace Classifier
                     @"\bжил\w*\s*и\s*вспомогат\w*\s*строен\w*\b" }
                ));
 
-            nodes.Add(new Housing("2.1.0", "2.1", "2001 01"
+            nodes.Add(new Housing("2.1.0", "2.1", "2001", "200",
 
-               , "Размещение индивидуального жилого дома (дом, пригодный для постоянного проживания, " +
+               "Размещение индивидуального жилого дома (дом, пригодный для постоянного проживания, " +
                "высотой не выше трех надземных этажей); выращивание плодовых, ягодных, овощных, " +
                "бахчевых или иных декоративных или сельскохозяйственных культур; " +
-               "размещение индивидуальных гаражей и подсобных сооружений "
+               "размещение индивидуальных гаражей и подсобных сооружений ",
 
-               , "Для индивидуального жилищного строительства"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Для индивидуального жилищного строительства",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"",
                     @"\bи?ндивид\w*\b\s*(жил\w*|дом\w*|строит\w*)\b|" +
                     @"\bижс\b|\bкоттедж\w*\b|" +
@@ -1193,7 +1204,7 @@ namespace Classifier
 
                     @"",
                     @"\bиндивид\w*\s*(ж?жи?о?[лд]ищ)",
-                    
+
                     @"",
                     @"\bдомовладен\w*\b",
 
@@ -1219,21 +1230,21 @@ namespace Classifier
                     @"\bжил\w*\s*застр\w*\s*индивид\w*\b|\bиндивид\w*\b.*\bжил\w*\s*застр\w*\b" }
                ));
 
-            nodes.Add(new Housing("2.1.1.0", "2.1.1", "2002 02"
+            nodes.Add(new Housing("2.1.1.0", "2.1.1", "2002", "200",
 
-               , "Размещение малоэтажного многоквартирного жилого дома, (дом, пригодный для " +
+               "Размещение малоэтажного многоквартирного жилого дома, (дом, пригодный для " +
                "постоянного проживания, высотой до 4 этажей, включая мансардный);" +
                "разведение декоративных и плодовых деревьев, овощных и ягодных культур;" +
                "размещение индивидуальных гаражей и иных вспомогательных сооружений;" +
                "обустройство спортивных и детских площадок, площадок отдыха; размещение объектов " +
                "обслуживания жилой застройки во встроенных, пристроенных и встроенно-пристроенных " +
                "помещениях малоэтажного многоквартирного дома, если общая площадь таких помещений " +
-               "в малоэтажном многоквартирном доме не составляет более 15% общей площади помещений дома "
+               "в малоэтажном многоквартирном доме не составляет более 15% общей площади помещений дома ",
 
-               , "Малоэтажная многоквартирная жилая застройка"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Малоэтажная многоквартирная жилая застройка",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"блокированн?\w*\s*дома|нескольких\sблоков-секций",
                     @"\bмногоквартир\w*\b|\bмалоэтаж\w*\s*многоквартир\w*\b|\bмалоэтаж\w*\s*жил\w*\b",
 
@@ -1241,17 +1252,17 @@ namespace Classifier
                     @"\bмалоэтаж\w*\s*(застрой\w*|строит\w*)\b" }
                ));
 
-            nodes.Add(new Housing("2.2.0", "2.2", "2001 02"
+            nodes.Add(new Housing("2.2.0", "2.2", "2001", "200",
 
-               , "Размещение жилого дома, не предназначенного для раздела на квартиры " +
+               "Размещение жилого дома, не предназначенного для раздела на квартиры " +
                "(дома, пригодные для постоянного проживания и высотой не выше трех надземных этажей);" +
                "производство сельскохозяйственной продукции; размещение гаража и иных " +
-               "вспомогательных сооружений;содержание сельскохозяйственных животных "
+               "вспомогательных сооружений;содержание сельскохозяйственных животных ",
 
-               , "Для ведения личного подсобного хозяйства"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Для ведения личного подсобного хозяйства",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"",
                     @"\bиндивид\w*\b\s*жил\w*\b|\bкоттедж\w*\b|" +
                     @"\bодноквартир\w*\b|\bчастн\w*\s*дом\w*\b",
@@ -1283,9 +1294,9 @@ namespace Classifier
                     @"\bжил\w*\s*застр\w*\s*индивид\w*\b" }
                ));
 
-            nodes.Add(new Housing("2.3.0", "2.3", "2002 03"
+            nodes.Add(new Housing("2.3.0", "2.3", "2002", "200",
 
-               , "Размещение жилого дома, не предназначенного для раздела на квартиры, " +
+               "Размещение жилого дома, не предназначенного для раздела на квартиры, " +
                "имеющего одну или несколько общих стен с соседними жилыми домами " +
                "(количеством этажей не более чем три, при общем количестве совмещенных " +
                "домов не более десяти и каждый из которых предназначен для проживания " +
@@ -1294,12 +1305,12 @@ namespace Classifier
                "выход на территорию общего пользования (жилые дома блокированной застройки); " +
                "разведение декоративных и плодовых деревьев, овощных и ягодных культур; " +
                "размещение индивидуальных гаражей и иных вспомогательных сооружений; " +
-               "обустройство спортивных и детских площадок, площадок отдыха "
+               "обустройство спортивных и детских площадок, площадок отдыха ",
 
-               , "Блокированная жилая застройка"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Блокированная жилая застройка",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"",
                     @"\bблокирован\w*\s*\b(застро[ий]к\w*|таунхаус\w*|(жил\w*\s*)?дом\w*)\b|\bтаунхаус\w*\b",
 
@@ -1313,18 +1324,18 @@ namespace Classifier
                     @"\bмалоэтаж\w*\s*(застрой\w*|строит\w*)\b" }
                ));
 
-            nodes.Add(new Housing("2.4.0", "2.4", "1004 01"
+            nodes.Add(new Housing("2.4.0", "2.4", "1004", "100",
 
-               , "Размещение сооружений, пригодных к использованию в качестве жилья " +
+               "Размещение сооружений, пригодных к использованию в качестве жилья " +
                "(палаточные городки, кемпинги, жилые вагончики, жилые прицепы) с возможностью " +
                "подключения названных сооружений к инженерным сетям, находящимся на земельном " +
                "участке или на земельных участках, имеющих инженерные сооружения, " +
-               "предназначенных для общего пользования "
+               "предназначенных для общего пользования ",
 
-               , "Передвижное жилье"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Передвижное жилье",
+               "Жилая зона",
+               "",
+               new string[] {
                    @"",
                    @"\bпалаточ\w*\s*город\w*\b|\bкемпинг\w*\b|\bжил\w*\sвагон\w*\b",
 
@@ -1335,9 +1346,9 @@ namespace Classifier
                    @"\b(жил\w*|строит\w*)\s*(городок|городка)\b|\bпрорабск\w*\b" }
                ));
 
-            nodes.Add(new Housing("2.5.0", "2.5","2002 04"
+            nodes.Add(new Housing("2.5.0", "2.5", "2002", "200",
 
-               , "Размещение жилых домов, предназначенных для разделения на квартиры, каждая " +
+               "Размещение жилых домов, предназначенных для разделения на квартиры, каждая " +
                "из которых пригодна для постоянного проживания (жилые дома, высотой не выше " +
                "восьми надземных этажей, разделенных на две и более квартиры); " +
                "благоустройство и озеленение;размещение подземных гаражей и автостоянок;" +
@@ -1345,19 +1356,19 @@ namespace Classifier
                "размещение объектов обслуживания жилой застройки во встроенных, пристроенных и " +
                "встроенно-пристроенных помещениях многоквартирного дома, если общая площадь " +
                "таких помещений в многоквартирном доме не составляет " +
-               "более 20% общей площади помещений дома "
+               "более 20% общей площади помещений дома ",
 
-               , "Среднеэтажная жилая застройка"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Среднеэтажная жилая застройка",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"",
                     @"\bмногоквартирн\w*\b|\bмногоэтаж\w*\s*(жил\w*|дом\w*|застрой\w*)\b" }
                ));
 
-            nodes.Add(new Housing("2.6.0", "2.6", "2002 05"
+            nodes.Add(new Housing("2.6.0", "2.6", "2002", "200",
 
-               , "Размещение жилых домов, предназначенных для разделения на квартиры, " +
+               "Размещение жилых домов, предназначенных для разделения на квартиры, " +
                "каждая из которых пригодна для постоянного проживания (жилые дома высотой " +
                "девять и выше этажей, включая подземные, разделенных на двадцать и более квартир); " +
                "благоустройство и озеленение придомовых территорий; " +
@@ -1365,12 +1376,12 @@ namespace Classifier
                "подземных гаражей и наземных автостоянок, размещение объектов обслуживания жилой " +
                "застройки во встроенных, пристроенных и встроенно-пристроенных помещениях " +
                "многоквартирного дома в отдельных помещениях дома, если площадь таких " +
-               "помещений в многоквартирном доме не составляет более 15% от общей площади дома "
+               "помещений в многоквартирном доме не составляет более 15% от общей площади дома ",
 
-               , "Многоэтажная жилая застройка (высотная застройка)"
-               , "Жилая зона"
-               , ""
-               , new string[] {
+               "Многоэтажная жилая застройка (высотная застройка)",
+               "Жилая зона",
+               "",
+               new string[] {
                     @"",
                     @"\bмногоквартирн\w*\b|\bмногоэтаж\w*\s*\bжил\w*\b",
 
@@ -1381,39 +1392,33 @@ namespace Classifier
                     @"\b\d+-ти\s*этаж\w*\s*жил\w*\s*дом\w*\b" }
                ));
 
-            nodes.Add(new TwoSevenZero("2.7.0", "2.7","1000"
+            nodes.Add(new MaintenanceOfResidentialBuildings("2.7.0", "2.7", "1000", "300",
 
-               // "1000, 1001, 1003, 1004, 1005, 1007, 2003, 3004"
-
-               , "Размещение объектов капитального строительства, размещение которых предусмотрено видами " +
+               "Размещение объектов капитального строительства, размещение которых предусмотрено видами " +
                "разрешенного использования с кодами " +
                "3.1, 3.2, 3.3, 3.4, 3.4.1, 3.5.1, 3.6, 3.7, 3.10.1, 4.1, 4.3, 4.4, 4.6, 4.7, 4.9, " +
                "если их размещение связано с удовлетворением повседневных потребностей жителей, не причиняет " +
                "вреда окружающей среде и санитарному благополучию, не причиняет существенного неудобства жителям, " +
-               "не требует установления санитарной зоны "
+               "не требует установления санитарной зоны ",
 
-               , "Обслуживание жилой застройки"
-               , ""
-               , ""
-               , new string[] {
+               "Обслуживание жилой застройки",
+               "",
+               "",
+               new string[] {
                    @"\bлпх\b|\bличн\w*\s*подсобн\w*\b",
-                   @"\bпристройк\w*\s*к\sдому\b|\bжилых\s*и\s*нежилых\b"
-
-                   //@"",
-                   //@"\bобслуживан\w*\s*жил\w*\b"
-                 }               
+                   @"\bпристройк\w*\s*к\sдому\b|\bжилых\s*и\s*нежилых\b" }
                ));
 
-            nodes.Add(new HParking("2.7.1.0", "2.7.1", "3004 01"
+            nodes.Add(new HParking("2.7.1.0", "2.7.1", "3004", "300",
 
-               , "Размещение отдельно стоящих и пристроенных гаражей, в том числе подземных, " +
+               "Размещение отдельно стоящих и пристроенных гаражей, в том числе подземных, " +
                "предназначенных для хранения личного автотранспорта граждан, " +
-               "с возможностью размещения автомобильных моек "
+               "с возможностью размещения автомобильных моек ",
 
-               , "Объекты гаражного назначения"
-               , ""
-               , ""
-               , new string[] {
+               "Объекты гаражного назначения",
+               "",
+               "",
+               new string[] {
                     @"\bавтостоян\w*\b",
                     @"\bхранен\w*\s*личн\w*\b\s*((авто)?транспор\w*|автомоб\w*)\b|" +
                     @"\bметал\w*\s*(тент\w*|гараж\w*)\b|\bиндивидуал\w*\s*гараж\w*\b",
@@ -1425,19 +1430,17 @@ namespace Classifier
                     @"\bсбор\w*[-\s]*разбор\w*\b.*\bтент\w*\b" }
                ));
 
-            nodes.Add(new BaseCommunity("3.0.0", "3.0", "1000"
+            nodes.Add(new BaseCommunity("3.0.0", "3.0", "1000", "100",
 
-               // "1000, 1001, 1002, 1003, 1004, 1005, 1007, 2003"
-
-               , "Размещение объектов капитального строительства в целях обеспечения удовлетворения " +
+               "Размещение объектов капитального строительства в целях обеспечения удовлетворения " +
                "бытовых, социальных и духовных потребностей человека. Содержание данного вида " +
                "разрешенного использования включает в себя содержание видов разрешенного " +
-               "использования с кодами 3.1-3.10.2 "
+               "использования с кодами 3.1-3.10.2 ",
 
-               , "Общественное использование объектов капитального строительства"
-               , ""
-               , ""
-               , new string[] {
+               "Общественное использование объектов капитального строительства",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"смешанного общественного вида",
 
@@ -1457,20 +1460,20 @@ namespace Classifier
                     @"\bзем\w*\s*участ\w*\s*смешан\w*\s*размещен\w*\b" }
                ));
 
-            nodes.Add(new Community("3.1.1", "3.1","3004 02"
+            nodes.Add(new Community("3.1.1", "3.1", "3004", "300",
 
-               , "Размещение объектов капитального строительства в целях обеспечения физических и " +
+               "Размещение объектов капитального строительства в целях обеспечения физических и " +
                "юридических лиц коммунальными услугами, в частности: поставки воды, тепла, " +
                "электричества, газа, предоставления услуг связи, отвода канализационных " +
                "стоков, очистки и уборки объектов недвижимости (котельных, водозаборов, " +
                "очистных сооружений, насосных станций, водопроводов, линий электропередач, " +
                "трансформаторных подстанций, газопроводов, линий связи, телефонных станций, " +
-               "канализаций, стоянок, гаражей и мастерских для обслуживания уборочной и аварийной техники "
+               "канализаций, стоянок, гаражей и мастерских для обслуживания уборочной и аварийной техники ",
 
-               , "Коммунальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Коммунальное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"личн|авто",
                     @"\bремонт\w*\s*транспорт\w*\b|обслуж\w{0,5}\s*транспорта",
 
@@ -1676,27 +1679,27 @@ namespace Classifier
                     @"\bбаз\w*\b.*\b(комм?унальн\w*|дорож\w*[-\s]*строит\w*)\s*техник\w*\b" }
                ));
 
-            nodes.Add(new Community("3.1.2", "3.1","1004 02"
+            nodes.Add(new Community("3.1.2", "3.1", "1004", "100",
 
-               , "Размещение помещений и технических устройств общественных туалетов "
+               "Размещение помещений и технических устройств общественных туалетов ",
 
-               , "Коммунальное обслуживание"
-               , ""
-               , ""  
-               , new string[] {
+               "Коммунальное обслуживание",
+               "",
+               "",
+               new string[] {
                    @"",
                    @"туалет" }
                ));
 
-            nodes.Add(new Community("3.1.3", "3.1", "1001 02"
+            nodes.Add(new Community("3.1.3", "3.1", "1001", "100",
 
-               , "Размещение зданий или помещений, предназначенных для " +
-               "приема физических и юридических лиц в связи с предоставлением им коммунальных услуг "
+               "Размещение зданий или помещений, предназначенных для " +
+               "приема физических и юридических лиц в связи с предоставлением им коммунальных услуг ",
 
-               , "Коммунальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Коммунальное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"авиа|дорожно-эксплуатац|отстойно|\bконечн\w{0,2}\s+\w{0,11}?\s*\bстанц\w+|" +
                     @"\sпод\sмагазин|\sнасосной\sстанции|\bпредприят\w{0,3}\s+транспор|антенного|" +
                     @"\bобщественного\s+транспорта|пассажирских\s+терминалов|складских\s+предприятий|" +
@@ -1719,17 +1722,17 @@ namespace Classifier
                     @"\bобъекты размещения некоммерческих организаций, связанных с проживанием населения\b" }
             ));
 
-            nodes.Add(new Community("3.2.1", "3.2", "1007 01"
+            nodes.Add(new Community("3.2.1", "3.2", "1007", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для оказания " +
+               "Размещение объектов капитального строительства, предназначенных для оказания " +
                "гражданам социальной помощи (службы занятости населения, дома престарелых, " +
                "дома ребенка, детские дома, пункты питания малоимущих граждан, " +
-               "пункты ночлега для бездомных граждан) "
+               "пункты ночлега для бездомных граждан) ",
 
-               , "Социальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Социальное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bсоц\w*\s*защит\w*\b",
 
@@ -1756,17 +1759,17 @@ namespace Classifier
                     @"\bсоциал\w*\s*(приют\w*|отделен\w*)\b" }
                ));
 
-            nodes.Add(new Community("3.2.2", "3.2", "1007 02"
-
-               , "Размещение объектов капитального строительства для служб психологической и " +
+            nodes.Add(new Community("3.2.2", "3.2", "1007", "100",
+                
+               "Размещение объектов капитального строительства для служб психологической и " +
                "бесплатной юридической помощи, социальных, пенсионных и иных служб, в которых " +
                "осуществляется прием граждан по вопросам оказания социальной помощи и " +
-               "назначения социальных или пенсионных выплат "
+               "назначения социальных или пенсионных выплат ",
 
-               , "Социальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Социальное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bюридических\sуслуг\sнаселению\b|\bсоц\w*\s*обеспеч\w*\b|" +
                     @"\bсоц\w*[\s\-]*психо\w*\b|\bпсихолого-медико-социального\b",
@@ -1785,15 +1788,15 @@ namespace Classifier
                     @"\bгусо мо рц\b|\bмастерск\w*\b.*\bдля\s*дет\w*[-\s]*инвалид\w*\b" }
                ));
 
-            nodes.Add(new Community("3.2.3", "3.2", "1004 03"
+            nodes.Add(new Community("3.2.3", "3.2", "1004", "100",
 
-               , "Размещение объектов капитального строительства для размещения отделений почты " +
-               "и телеграфа "
+               "Размещение объектов капитального строительства для размещения отделений почты " +
+               "и телеграфа ",
 
-               , "Социальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Социальное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bотдел\w*\s*связ\w*\b|\bтелеграф\w*\b",
 
@@ -1804,16 +1807,16 @@ namespace Classifier
                     @"\bпочт\w*[-\s]*сортиров\w*\b" }
                ));
 
-            nodes.Add(new Community("3.2.4", "3.2", "1001 03"
+            nodes.Add(new Community("3.2.4", "3.2", "1001", "100",
 
-               , "Размещение объектов капитального строительства для размещения общественных " +
+               "Размещение объектов капитального строительства для размещения общественных " +
                "некоммерческих организаций: некоммерческих фондов," +
-               "благотворительных организаций, клубов по интересам "
+               "благотворительных организаций, клубов по интересам ",
 
-               , "Социальное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Социальное обслуживание",
+               "",
+               "",
+               new string[] {
                    @"",
                    @"благотвор\w*\b",
 
@@ -1828,16 +1831,16 @@ namespace Classifier
                    @"\bлитератур\w*\s*фонд\w*\s*россии\w*\b" }
                ));
 
-            nodes.Add(new Community("3.3.0", "3.3", "1004 04"
+            nodes.Add(new Community("3.3.0", "3.3", "1004", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для оказания " +
+               "Размещение объектов капитального строительства, предназначенных для оказания " +
                "населению или организациям бытовых услуг (мастерские мелкого ремонта, " +
-               "ателье, бани, парикмахерские, прачечные, химчистки, похоронные бюро и т.п.) "
+               "ателье, бани, парикмахерские, прачечные, химчистки, похоронные бюро и т.п.) ",
 
-               , "Бытовое обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Бытовое обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bба[н]{1,2}[^к]*\b|\bпрач\w*\b|\bремонт\w*\s*быт\w*\b",
 
@@ -1881,7 +1884,7 @@ namespace Classifier
                     @"\bсалон\w*\s*красот\w*|\bточильн\w*\s*мастерск\w*\b|\bфотоуслуг\w*\b",
 
                     @"",
-                    @"\bювелирн\w*\b|\bчасов\w*\b|\bфотоатель\w*\b|\bшвейн\w*\s*мастерск\w*\b", 
+                    @"\bювелирн\w*\b|\bчасов\w*\b|\bфотоатель\w*\b|\bшвейн\w*\s*мастерск\w*\b",
 
                     @"",
                     @"\bсервис\w*\s*центр\w*\b|кбо|\bблок\w*\s*обслуживан\w*\b|\bкинофотолаб\w*\b",
@@ -1929,17 +1932,17 @@ namespace Classifier
                     @"\bкосметич\w*\s*салон\w*\b|\bремонт\w*\b.*\bгаз\w*\s*оборудов\w*\b" }
                ));
 
-            nodes.Add(new HealthCare("3.4.0", "3.4", "1005 01"
+            nodes.Add(new HealthCare("3.4.0", "3.4", "1005", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для оказания " +
+               "Размещение объектов капитального строительства, предназначенных для оказания " +
                "гражданам медицинской помощи. Содержание данного вида разрешенного " +
                "использования включает в себя содержание видов разрешенного " +
-               "использования с кодами 3.4.1 - 3.4.2 "
+               "использования с кодами 3.4.1 - 3.4.2 ",
 
-               , "Здравоохранение"
-               , ""
-               , ""
-               , new string[] {
+               "Здравоохранение",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bсанитарно[\s\-]*эпидемиолог\w*\b|\bпротивочумн\w*\b|\bдезинфекц\w*\b|" +
                     @"\bгигиен\w*\b\s+и\s+эпидемио\w*",
@@ -1960,18 +1963,18 @@ namespace Classifier
                     @"\bобъект\w*\s*лечебно-оздоровит\w*\b" }
                ));
 
-            nodes.Add(new Clinic("3.4.1.0", "3.4.1", "1005 02"
+            nodes.Add(new Clinic("3.4.1.0", "3.4.1", "1005", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для " +
+               "Размещение объектов капитального строительства, предназначенных для " +
                "оказания гражданам амбулаторно-поликлинической медицинской помощи " +
                "(поликлиники, фельдшерские пункты, пункты здравоохранения, центры матери и " +
                "ребенка, диагностические центры, молочные кухни, станции донорства " +
-               "крови, клинические лаборатории) "
+               "крови, клинические лаборатории) ",
 
-               , "Амбулаторно-поликлиническое обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Амбулаторно-поликлиническое обслуживание",
+               "",
+               "",
+               new string[] {
                     @"открытой\sгостевой\sавтостоянки|\bветеринарн\w*\b",
                     @"\bполиклин\w*\b|\bдиспансер\w*\b|\bженск\w*\b\s*\bконсульт\w*\b|" +
                     @"\bамбулатор\w*\b|\bмедико-санитар\w*\b",
@@ -2014,18 +2017,18 @@ namespace Classifier
                     @"\bвакцинац\w*\s*корп\w*\b" }
                ));
 
-            nodes.Add(new Hospital("3.4.2.0", "3.4.2", "1005 03"
+            nodes.Add(new Hospital("3.4.2.0", "3.4.2", "1005", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для " +
+               "Размещение объектов капитального строительства, предназначенных для " +
                "оказания гражданам медицинской помощи в стационарах " +
                "(больницы, родильные дома, научно-медицинские учреждения и " +
                "прочие объекты, обеспечивающие оказание услуги по лечению в " +
-               "стационаре); размещение станций скорой помощи "
+               "стационаре); размещение станций скорой помощи ",
 
-               , "Стационарное медицинское обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Стационарное медицинское обслуживание",
+               "",
+               "",
+               new string[] {
                     @"\bветеринарн\w*\b",
                     @"\bбольниц\w*\b|\bгоспит\w*\b|\bрод[\w\.\s]*\b\s*дом\w*\b|" +
                     @"\bперинат\w*\b\s*\b\w*\b|\bскор\w*\s*(и\s*неотлож\w*\s*)?помощ\w*\b|\bхоспис\w*\b|" +
@@ -2063,9 +2066,9 @@ namespace Classifier
                     @"\bпаталог\w*[-\s]анатом\w*\b|\bскор\w*\b.*\bнеотлож\w*\s*помощ\w*\b" }
                ));
 
-            nodes.Add(new Education("", "3.5", ""
+            nodes.Add(new Education("", "3.5", "", "",
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для воспитания, образования и просвещения (детские ясли, детские сады, " +
                "школы, лицеи, гимназии, профессиональные технические училища, колледжи, " +
                "художественные, музыкальные школы и училища, образовательные кружки, " +
@@ -2073,12 +2076,12 @@ namespace Classifier
                "и повышению квалификации специалистов и иные организации, " +
                "осуществляющие деятельность по воспитанию, образованию и просвещению). " +
                "Содержание данного вида разрешенного использования включает в себя " +
-               "содержание видов разрешенного использования с кодами 3.5.1 - 3.5.2 "
+               "содержание видов разрешенного использования с кодами 3.5.1 - 3.5.2 ",
 
-               , "Образование и просвещение"
-               , ""
-               , ""
-               , new string[] {
+               "Образование и просвещение",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bобразоват\w*\s*деятельност\w*|(\bобразоват\w*|\bучебн\w*)\s*" +
                     @"(цел\w*|здан\w*|центр\w*|комплек\w*|площадк\w*)",
@@ -2090,18 +2093,18 @@ namespace Classifier
                     @"\b(объ?ект\w*|центр\w*|цел\w*)\s*образов\w*\b" }
                ));
 
-            nodes.Add(new SchoolEducation("3.5.1.0", "3.5.1", "2003 01"
+            nodes.Add(new SchoolEducation("3.5.1.0", "3.5.1", "2003", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для " +
+               "Размещение объектов капитального строительства, предназначенных для " +
                "просвещения, дошкольного, начального и среднего общего образования " +
                "(детские ясли, детские сады, школы, лицеи, гимназии, художественные, " +
                "музыкальные школы, образовательные кружки и иные организации, " +
-               "осуществляющие деятельность по воспитанию, образованию и просвещению) "
+               "осуществляющие деятельность по воспитанию, образованию и просвещению) ",
 
-               , "Дошкольное, начальное и среднее общее образование"
-               , ""
-               , ""
-               , new string[] {
+               "Дошкольное, начальное и среднее общее образование",
+               "",
+               "",
+               new string[] {
                     @"православн",
                     @"[-\s]*лице[^н]\w*\b",
 
@@ -2163,19 +2166,19 @@ namespace Classifier
                     @"\bучебн\w*[\s\-]*\bвоспитат\w*\b" }
                ));
 
-            nodes.Add(new ProfessionalEducation("3.5.2.0", "3.5.2", "1002 01"
+            nodes.Add(new ProfessionalEducation("3.5.2.0", "3.5.2", "1002", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для " +
+               "Размещение объектов капитального строительства, предназначенных для " +
                "профессионального образования и просвещения " +
                "(профессиональные технические училища, колледжи, художественные, " +
                "музыкальные училища, общества знаний, институты, университеты, " +
                "организации по переподготовке и повышению квалификации специалистов " +
-               "и иные организации, осуществляющие деятельность по образованию и просвещению) "
+               "и иные организации, осуществляющие деятельность по образованию и просвещению) ",
 
-               , "Среднее и высшее профессиональное образование"
-               , ""
-               , ""
-               , new string[] {
+               "Среднее и высшее профессиональное образование",
+               "",
+               "",
+               new string[] {
                     @"\bказарм\w*\b",
                     @"\bсредне\w*[\s\-]*профессионально\w*\s*\bобразова\w*\b|" +
                     @"\bвысше\w*[\s\-]*профессионально\w*\s*\bобразова\w*\b|" +
@@ -2248,17 +2251,17 @@ namespace Classifier
                ));
 
 
-            nodes.Add(new Community("3.6.1", "3.6", "1003 01"
+            nodes.Add(new Community("3.6.1", "3.6", "1003", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных для " +
+               "Размещение объектов капитального строительства, предназначенных для " +
                "размещения в них музеев, выставочных залов, художественных галерей, " +
                "домов культуры, библиотек, кинотеатров и кинозалов, театров, филармоний, " +
-               "планетариев, творческих центров и иных культурно-досуговых учреждений "
+               "планетариев, творческих центров и иных культурно-досуговых учреждений ",
 
-               , "Культурное развитие"
-               , ""
-               , ""
-               , new string[] {
+               "Культурное развитие",
+               "",
+               "",
+               new string[] {
                     @"\bказарм\w*\b",
                     @"\bобъект\w*\s*культур\w*\b",
 
@@ -2348,29 +2351,29 @@ namespace Classifier
                     @"\bдемострац\w*\s*павиль\w*\b" }
                ));
 
-            nodes.Add(new Community("3.6.2", "3.6", "1003 02"
+            nodes.Add(new Community("3.6.2", "3.6", "1003", "100",
 
-               , "Устройство площадок для празднеств и гуляний "
+               "Устройство площадок для празднеств и гуляний ",
 
-               , "Культурное развитиее"
-               , ""
-               , ""
-               , new string[] {
+               "Культурное развитиее",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bпразднен\w*\b|\bгулян\w*\b"
                 }
                ));
 
-            nodes.Add(new Community("3.6.3", "3.6", "1003 03"
+            nodes.Add(new Community("3.6.3", "3.6", "1003", "100",
 
-               , "Размещение зданий и сооружений для размещения цирков, зверинцев, " +
+               "Размещение зданий и сооружений для размещения цирков, зверинцев, " +
                "зоопарков, океанариумов; размещение помещений и технических " +
-               "устройств парков культуры и отдыха, оранжерей, ботанических садов "
+               "устройств парков культуры и отдыха, оранжерей, ботанических садов ",
 
-               , "Культурное развитиее"
-               , ""
-               , ""
-               , new string[] {
+               "Культурное развитиее",
+               "",
+               "",
+               new string[] {
                     @"\bторгов\w*\b|\bпредприят\w*\b|\bпринадлежностей\w*\b",
                     @"\bцирк\w*\b|\bоранжере\w*\b",
 
@@ -2379,19 +2382,19 @@ namespace Classifier
 
                     @"",
                     @"\bвольер\w*\b.*\bвыгул\w*\s*животн\w*\b"
-                 }   
+                 }
                ));
 
-            nodes.Add(new Community("3.7.1", "3.7", "1003 04"
+            nodes.Add(new Community("3.7.1", "3.7", "1003", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для отправления религиозных обрядов (церкви, соборы, храмы, " +
-               "часовни, мечети, молельные дома, синагоги и иные культовые объекты) "
+               "часовни, мечети, молельные дома, синагоги и иные культовые объекты) ",
 
-               , "Религиозное использование"
-               , ""
-               , ""
-               , new string[] {
+               "Религиозное использование",
+               "",
+               "",
+               new string[] {
                     @"\bритуал\w*\b|\bна\s+период\w*\b|\bгараж\w*\b",
                     @"\bкульто\w*\b|\bмечет\w*\b|\bмолеб\w*\b|\bсинагог\w*\b|\bхрам\w*\b|\bцерк\w*\b",
 
@@ -2411,19 +2414,19 @@ namespace Classifier
                 }
                ));
 
-            nodes.Add(new Community("3.7.2", "3.7", "1003 05"
+            nodes.Add(new Community("3.7.2", "3.7", "1003", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для постоянного местонахождения духовных лиц, паломников и " +
                "послушников в связи с осуществлением ими религиозной службы, " +
                "а также для осуществления благотворительной и религиозной " +
                "образовательной деятельности (монастыри, скиты, воскресные и " +
-               "религиозные школы, семинарии, духовные училища, дома притча и т.п.) "
+               "религиозные школы, семинарии, духовные училища, дома притча и т.п.) ",
 
-               , "Религиозное использование"
-               , ""
-               , ""
-               , new string[] {
+               "Религиозное использование",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bвоскр\w*\s*\bшкол\w*\b|\bдухов\w*[\-]*\w*\b|\bмонастыр\w*\b",
 
@@ -2436,18 +2439,18 @@ namespace Classifier
                 }
                ));
 
-            nodes.Add(new Community("3.8.1", "3.8", "1001 04"
+            nodes.Add(new Community("3.8.1", "3.8", "1001", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для размещения органов государственной власти, государственного " +
                "пенсионного фонда, органов местного самоуправления, судов, а " +
                "также организаций, непосредственно обеспечивающих их деятельность; " +
-               "размещение иных объектов государственных органов "
+               "размещение иных объектов государственных органов ",
 
-               , "Общественное управление"
-               , ""
-               , ""
-               , new string[] {
+               "Общественное управление",
+               "",
+               "",
+               new string[] {
                    @"мед|судов|двух\sтренировочных\sполей|экспертиз",
                    @"\bсуд\w{0,3}|\b(гос)?арбитраж\w*\b",
 
@@ -2498,21 +2501,21 @@ namespace Classifier
                    @"\bэнергонадзор\w*\b" }
                ));
 
-            nodes.Add(new Community("3.8.2", "3.8", "1001 05"
+            nodes.Add(new Community("3.8.2", "3.8", "1001", "100", 
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для размещения органов управления политических партий, " +
                "профессиональных и отраслевых союзов, творческих союзов и " +
                "иных общественных объединений граждан по отраслевому " +
-               "или политическому признаку "
+               "или политическому признаку ",
 
-               , "Общественное управление"
-               , ""
-               , ""
-               , new string[] {
+               "Общественное управление",
+               "",
+               "",
+               new string[] {
                    @"обществ.{1,5}\sпитан.+|обеспечение\sобороны\sи\sбезопасности",
                    @"обществ\w{1,5}\b\sорган\w*\b",
-                   
+
                    @"",
                    @"политич.{1,5}\sпартий\w*\b|политич.{1,5}\sсоюз\w*\b|обществ.{1,5}\sобъединен\w*\b",
 
@@ -2520,16 +2523,16 @@ namespace Classifier
                    @"\bобществ\w*\s*пункт\w*\s*охран\w*\s*поряд\w*\s" }
                ));
 
-            nodes.Add(new Community("3.8.3", "3.8", "1001 06"
+            nodes.Add(new Community("3.8.3", "3.8", "1001", "100",
 
-               , "Размещение объектов капитального строительства для дипломатических " +
+               "Размещение объектов капитального строительства для дипломатических " +
                "представительств иностранных государств и субъектов РФ, " +
-               "консульских учреждений в Российской Федерации "
+               "консульских учреждений в Российской Федерации ",
 
-               , "Общественное управление"
-               , ""
-               , ""
-               , new string[] {
+               "Общественное управление",
+               "",
+               "",
+               new string[] {
                    @"постановл\w{0,5}\s*правитель|распоряж\w{0,5}\s*правитель|киоск|жилого\sдома|автопарк|" +
                    @"народного\sхозяйства",
                    @"консульств|посольств|правительств",
@@ -2538,17 +2541,17 @@ namespace Classifier
                    @"\bино\w*\s*представительст\w*\b|\bдом\w*\s*прием\w*\s*официал\w*\s*делегац\w*\b" }
                ));
 
-            nodes.Add(new Sсience("3.9.2", "3.9", "1001 07"
+            nodes.Add(new Sсience("3.9.2", "3.9", "1001", "100",
 
-               , "Размещение объектов капитального строительства для " +
+               "Размещение объектов капитального строительства для " +
                "проведения научных исследований (научно-исследовательские и " +
                "проектные институты, научные центры, инновационные центры, " +
-               "государственные академии наук, в том числе отраслевые) "
+               "государственные академии наук, в том числе отраслевые) ",
 
-               , "Обеспечение научной деятельности"
-               , ""
-               , ""
-               , new string[]  {
+               "Обеспечение научной деятельности",
+               "",
+               "",
+               new string[]  {
                     @"пилюгин|научно-богословского|колопроктологии|картофел\w|" +
                     @"древесин\w|\bнауч\w*[-\s]*(производ\w*|лаборат\w*|технич\w*)\b" +
                     @"\bнауч\w*[-\s]исследоват\w*\b.*\bпроизвод\w*\s*баз\w*\b|\bпроизводств\w*\b",
@@ -2582,17 +2585,17 @@ namespace Classifier
                     @"\bниитавтопром\b" }
                ));
 
-            nodes.Add(new Sсience("3.9.3", "3.9", "130"
+            nodes.Add(new Sсience("3.9.3", "3.9", "130", "300",
 
-               , "Размещение объектов капитального строительства для " +
+               "Размещение объектов капитального строительства для " +
                "проведения изысканий, испытаний опытных промышленных образцов, " +
                "для размещения организаций, осуществляющих научные изыскания, " +
-               "исследования и разработки "
+               "исследования и разработки ",
 
-               , "Обеспечение научной деятельности"
-               , ""
-               , ""
-               , new string[] {
+               "Обеспечение научной деятельности",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bнауч\w*[-\s]*(производ\w*|лаборат\w*|технич\w*)\b",
 
@@ -2632,14 +2635,14 @@ namespace Classifier
                     @"\bунпб\b" }
                ));
 
-            nodes.Add(new Sсience("3.9.4", "3.9", "1001 11"
+            nodes.Add(new Sсience("3.9.4", "3.9", "1001", "300",
 
-               , "Размещение технологических парков, технополисов,  бизнес-инкубаторов "
+               "Размещение технологических парков, технополисов,  бизнес-инкубаторов ",
 
-               , "Обеспечение научной деятельносит"
-               , ""
-               , ""
-               , new string[] {
+               "Обеспечение научной деятельносит",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bбизнес\w*\b[\s\-]*парк\w*\b|\bтехно\w*[-\s]*парк\w*\b|\bтехнополис\w*\b",
 
@@ -2650,21 +2653,21 @@ namespace Classifier
                     @"\bособо\w*\s*экономич\w*\s*зон\w*\b.*\bтехник\w*[-\s]*внедренч\w*\s*тип\w*\b"}
                ));
 
-            nodes.Add(new Sсience("3.9.5", "3.9", "3002 02"
+            nodes.Add(new Sсience("3.9.5", "3.9", "3002", "300",
 
-               , "Размещение индустриальных (промышленных) парков "
+               "Размещение индустриальных (промышленных) парков ",
 
-               , "Обеспечение научной деятельности"
-               , ""
-               , ""
-               , new string[] {
+               "Обеспечение научной деятельности",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bиндустр\w*\s*парк\w*\b|\bпромышл\w*\s*парк\w*\b" }
                ));
 
-            nodes.Add(new WeatherStation("3.9.1.0", "3.9.1", "3003 01"
+            nodes.Add(new WeatherStation("3.9.1.0", "3.9.1", "3003", "300",
 
-               , "Размещение объектов капитального строительства, " +
+               "Размещение объектов капитального строительства, " +
                "предназначенных для наблюдений за физическими и химическими " +
                "процессами, происходящими в окружающей среде, определения " +
                "ее гидрометеорологических, агрометеорологических и " +
@@ -2674,13 +2677,13 @@ namespace Classifier
                "космического пространства, зданий и сооружений, " +
                "используемых в области гидрометеорологии и смежных с " +
                "ней областях (доплеровские метеорологические радиолокаторы, " +
-               "гидрологические посты и другие) "
+               "гидрологические посты и другие) ",
 
-               , "Обеспечение деятельности в области гидрометеорологии и " +
-               "смежных с ней областях"
-               , ""
-               , ""
-               , new string[] {
+               "Обеспечение деятельности в области гидрометеорологии и " +
+               "смежных с ней областях",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bметеороло\w*\b|\bметеостанц\w*\b",
 
@@ -2695,31 +2698,31 @@ namespace Classifier
                     @"(атмосферн\w*)?воздух\w*\b"}
                ));
 
-            nodes.Add(new Veterenary("", "3.10", ""
+            nodes.Add(new Veterenary("", "3.10", "", "",
 
-               , "Размещение объектов капитального строительства, " +
+               "Размещение объектов капитального строительства, " +
                "предназначенных для оказания ветеринарных услуг, " +
                "содержания или разведения животных, не являющихся " +
                "сельскохозяйственными, под надзором человека. " +
                "Содержание данного вида разрешенного использования " +
                "включает в себя содержание видов разрешенного " +
-               "использования с кодами 3.10.1 - 3.10.2 "
+               "использования с кодами 3.10.1 - 3.10.2 ",
 
-               , "Ветеринарное обслуживание"
-               , ""
-               , ""
-               , new string[] { }));
+               "Ветеринарное обслуживание",
+               "",
+               "",
+               new string[] { }));
 
-            nodes.Add(new VetClinic("3.10.1.0", "3.10.1", "1005 04"
+            nodes.Add(new VetClinic("3.10.1.0", "3.10.1", "1005", "100",
 
-               , "Размещение объектов капитального строительства, " +
+               "Размещение объектов капитального строительства, " +
                "предназначенных для оказания ветеринарных " +
-               "услуг без содержания животных "
+               "услуг без содержания животных ",
 
-               , "Амбулаторное ветеринарное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Амбулаторное ветеринарное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"клиник\sс\sсодержанием",
                     @"\bветеринар\w*\s*клини\w*\b|\bветклин\w*\b|" +
                     @"\bветеринар\w*\s*лаборатор\w*\b|\bветеринар\w*\s*станц\w*\b|" +
@@ -2738,20 +2741,20 @@ namespace Classifier
                     @"\b(зоо)?ветеринар\w*\s*комплекс\w*\b" }
                ));
 
-            nodes.Add(new AnimalShelter("3.10.2.0", "3.10.2", "1004 05, 1005 05"
+            nodes.Add(new AnimalShelter("3.10.2.0", "3.10.2", "1005", "100",
 
-               , "Размещение объектов капитального строительства, предназначенных " +
+               "Размещение объектов капитального строительства, предназначенных " +
                "для оказания ветеринарных услуг в стационаре; размещение объектов " +
                "капитального строительства, предназначенных для содержания, " +
                "разведения животных, не являющихся сельскохозяйственными, " +
                "под надзором человека, оказания услуг по содержанию и " +
                "лечению бездомных животных; размещение объектов капитального " +
-               "строительства, предназначенных для организации гостиниц для животных "
+               "строительства, предназначенных для организации гостиниц для животных ",
 
-               , "Приюты для животных"
-               , ""
-               , ""
-               , new string[] {
+               "Приюты для животных",
+               "",
+               "",
+               new string[] {
                     @"\bголуб\w*\b|\bрастен\w*\b|декоратив\w*\b",
                     @"\bпитомни\w*\b|\bприют\w*\s*животн\b|\bбездом\w*\s*животн\b|\bприют\w*\b.*животн\w*\b",
 
@@ -2771,21 +2774,19 @@ namespace Classifier
                     @"\bпередерж\w*\s*(безнадзор\w*\s*)?животн\w*\b"}
                 ));
 
-            nodes.Add(new BaseBuisness("4.0.0", "4.0", "1000"
+            nodes.Add(new BaseBuisness("4.0.0", "4.0", "1000", "100",
 
-               // "1001 08, 1004 06, 1000"
-
-               , "Размещение объектов капитального строительства в целях извлечения " +
+               "Размещение объектов капитального строительства в целях извлечения " +
                "прибыли на основании торговой, банковской и иной " +
                "предпринимательской деятельности. Содержание данного вида " +
                "разрешенного использования включает в себя содержание видов " +
                "разрешенного использования с кодами 4.1.0, 4.2.0, 4.3.0, 4.4.0, " +
-               "4.5.0, 4.6.0, 4.8.0, 4.9.0, 4.10.0 "
+               "4.5.0, 4.6.0, 4.8.0, 4.9.0, 4.10.0 ",
 
-               , "Предпринимательство"
-               , ""
-               , ""
-               , new string[] {
+               "Предпринимательство",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bпредприниматель\w{1,6}\s{1,5}\bдеятельност\w{1,5}\b",
 
@@ -2817,20 +2818,20 @@ namespace Classifier
                     @"\bмногофункц\w*\s*комм?ерч\w*\s*центр\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.1.0", "4.1", "1001 09"
+            nodes.Add(new Buisness("4.1.0", "4.1", "1001", "100",
 
-               , "Размещение объектов капитального строительства с целью: " +
+               "Размещение объектов капитального строительства с целью: " +
                "размещения объектов управленческой деятельности, не связанной " +
                "с государственным или муниципальным управлением и оказанием услуг, " +
                "а также с целью обеспечения совершения сделок, не требующих " +
                "передачи товара в момент их совершения между организациями, в " +
                "том числе биржевая деятельность (за исключением банковской и " +
-               "страховой деятельности) "
+               "страховой деятельности) ",
 
-               , "Деловое управление"
-               , ""
-               , ""
-               , new string[] {
+               "Деловое управление",
+               "",
+               "",
+               new string[] {
                     @"\bбанк\w*\b|\bстрахов\w*\b|\bадминистра\w*[-\s]*управленч\w*\s*учрежден\w*\b",
                     @"\bадминистративн\w*\b-*\bделов\w*\b|" +
                     @"\bадминистративн\w*\b\s*\bучрежден\w*\b",
@@ -2889,20 +2890,20 @@ namespace Classifier
                     @"\bбизнес\w*[-\s]*центр\w*\b|\bстол\w*\s*заказ\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.2.0", "4.2", "1004 07, 1000"
+            nodes.Add(new Buisness("4.2.0", "4.2", "1004", "100",
 
-               , "Размещение объектов капитального строительства общей площадью " +
+               "Размещение объектов капитального строительства общей площадью " +
                "свыше 5000 кв. м с целью размещения одной или нескольких " +
                "организаций, осуществляющих продажу товаров и (или) оказание " +
                "услуг в соответствии с содержанием видов разрешенного " +
                "использования с кодами 4.5.0, 4.6.0, 4.8.0, 4.9.0; размещение " +
-               "гаражей и(или) стоянок для автомобилей сотрудников и посетителей "
+               "гаражей и(или) стоянок для автомобилей сотрудников и посетителей ",
 
-               , "Объекты торговли (торговые центры, " +
-               "торгово-развлекательные центры (комплексы))"
-               , ""
-               , ""
-               , new string[] {
+               "Объекты торговли (торговые центры, " +
+               "торгово-развлекательные центры (комплексы))",
+               "",
+               "",
+               new string[] {
                     @"оптово-складской|оптово-распределитель|мелко-оптовой|складов",
                     @"\bоптов\w*[\s\-]\b\w+\b|\bгипермарк\w*\b|\s\bмолл\w*\b",
 
@@ -2922,19 +2923,19 @@ namespace Classifier
                     @"\bсвыш\w*\s*5000\s*\b.*\bпродаж\w*\s*товар\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.3.0", "4.3", "1004 08"
+            nodes.Add(new Buisness("4.3.0", "4.3", "1004", "100",
 
-               , "Размещение объектов капитального строительства, сооружений, " +
+               "Размещение объектов капитального строительства, сооружений, " +
                "предназначенных для организации постоянной или временной " +
                "торговли (ярмарка, рынок, базар), с учетом того, что каждое " +
                "из торговых мест не располагает торговой площадью более 200 кв. м;" +
                "размещение гаражей и(или) стоянок для автомобилей сотрудников и " +
-               "посетителей рынка "
+               "посетителей рынка ",
 
-               , "Рынки"
-               , ""
-               , ""
-               , new string[] {
+               "Рынки",
+               "",
+               "",
+               new string[] {
                     @"автостоянки\sрынка\sМедведково|бесплатной\sгостевой\sавтопарковки",
                     @"\bрын\w*\b|\bярмар\w*\b|\bбазар\w*\b",
 
@@ -2942,16 +2943,16 @@ namespace Classifier
                     @"\bсадов\w*\s*центр\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.4.0", "4.4", "1004 09"
+            nodes.Add(new Buisness("4.4.0", "4.4", "1004", "100",
 
-               , "Размещение объектов капитального строительства, " +
+               "Размещение объектов капитального строительства, " +
                "предназначенных для продажи товаров, торговая площадь " +
-               "которых составляет до 5000 кв. м "
+               "которых составляет до 5000 кв. м ",
 
-               , "Магазины"
-               , ""
-               , ""
-               , new string[] {
+               "Магазины",
+               "",
+               "",
+               new string[] {
                     @"вход\w*\b\sв\sмагазин",
                     @"\bгастроном\w*\b|\bсамообслуж\w*\b|\bунивер[см][агм]{2}\w*\b|" +
                     @"\bмагаз\w*\b|\bмагаз\w*[\s\-]{1,4}\bкулинар\w*\b|\bапте[кч]\w*\b|\bоптик\w*\b",
@@ -2971,7 +2972,7 @@ namespace Classifier
                     @"",
                     @"\bпродаж\w*\s*(печтн\w*\s*продук\w*|\bхлеб\w*(\s*издел\w*)?)\b",
 
-                    @"", 
+                    @"",
                     @"\bтов\w*\s*нар\w*\s*прод\w*\s*|\bавтосалон\w*\b",
 
                     @"",
@@ -3004,7 +3005,7 @@ namespace Classifier
 
                     @"",
                     @"\bобмен\w*\s*газ\w*\s*баллон\w*\b",
-                    
+
                     @"",
                     @"\bбвт?к\b|\bкрыт\w*\s*палатк\w*\b|\bпавильон\w*\s*обои\w*\b",
 
@@ -3054,15 +3055,15 @@ namespace Classifier
                     @"\bреализац\w*\s*мебел\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.5.0", "4.5", "1001 10"
+            nodes.Add(new Buisness("4.5.0", "4.5", "1001", "100", 
 
-               , "Размещение объектов капитального строительства, предназначенных " +
-               "для размещения организаций, оказывающих банковские и страховые "
+               "Размещение объектов капитального строительства, предназначенных " +
+               "для размещения организаций, оказывающих банковские и страховые ",
 
-               , "Банковская и страховая деятельность"
-               , ""
-               , ""
-               , new string[] {
+               "Банковская и страховая деятельность",
+               "",
+               "",
+               new string[] {
                     @"банкетного",
                     @"\bбанк\w{0,9}\b|\bкредит\w{0,9}\b|\bстрахов\w{0,9}\b|\bфинанс\b",
 
@@ -3076,16 +3077,16 @@ namespace Classifier
                     @"\bпункт\w*\s*обмен\w*\s*валют\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.6.0", "4.6", "1004 10"
+            nodes.Add(new Buisness("4.6.0", "4.6", "1004", "100", 
 
-               , "Размещение объектов капитального строительства в целях " +
+               "Размещение объектов капитального строительства в целях " +
                "устройства мест общественного питания (рестораны, " +
-               "кафе, столовые, закусочные, бары) "
+               "кафе, столовые, закусочные, бары) ",
 
-               , "Общественное питание"
-               , ""
-               , ""
-               , new string[] {
+               "Общественное питание",
+               "",
+               "",
+               new string[] {
                     @"отдельного\sвхода|бара\sСакура|\bбарж\b|\bкафедр\w*\b",
                     @"\bрестор\w*\b|\bбар\w{0,3}\b|\bкафе\w*\b|\bстолов\w*\b|" +
                     @"\bзакусоч\w*\b|\bбуфет\w*\b|\bкофей\w*\b|\bбыстр\w*\b\s*\bобслуж\w*\b",
@@ -3100,16 +3101,16 @@ namespace Classifier
                     @"\bпредприят\w*\s*масс\w*\s*питан\w*\b" }
                ));
 
-            nodes.Add(new Hotel("4.7.1", "4.7", "1004 11"
+            nodes.Add(new Hotel("4.7.1", "4.7", "1004", "100",
 
-               , "Размещение гостиниц, туристических гостиниц, а также иных зданий, " +
+               "Размещение гостиниц, туристических гостиниц, а также иных зданий, " +
                "используемых с целью извлечения предпринимательской выгоды из " +
-               "предоставления жилого помещения для временного проживания в них "
+               "предоставления жилого помещения для временного проживания в них ",
 
-               , "Гостиничное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Гостиничное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bапарт\w*\b|\bгостиниц\w*\b|\bмотел\w*\b|\bс[ьъ]?юит[\s\-]*отел\w*\b",
 
@@ -3120,26 +3121,26 @@ namespace Classifier
                     @"\b(мини)?гостини[чц]\w*\b|\bгостев\w*\s*дом\w*\b" }
                ));
 
-            nodes.Add(new Hostel("4.7.2", "4.7", "1004 12"
+            nodes.Add(new Hostel("4.7.2", "4.7", "1004", "100",
 
-               , "Размещение хостелов "
+               "Размещение хостелов ",
 
-               , "Гостиничное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Гостиничное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bхостел\w*\b" }
                ));
 
-            nodes.Add(new Dormitory("4.7.3", "4.7", "2002 01"
+            nodes.Add(new Dormitory("4.7.3", "4.7", "2002", "100",
 
-               , "Размещение общежитий "
+               "Размещение общежитий ",
 
-               , "Гостиничное обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Гостиничное обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bобщежит\w*\b",
 
@@ -3147,18 +3148,18 @@ namespace Classifier
                     @"\bстуд\w*\s*город\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.8.0", "4.8", "1003 07"
+            nodes.Add(new Buisness("4.8.0", "4.8", "1003", "100",
 
-               , "Размещение объектов капитального строительства, " +
+               "Размещение объектов капитального строительства, " +
                "предназначенных для размещения: дискотек и танцевальных площадок, " +
                "ночных клубов, аквапарков, боулинга, аттракционов, " +
                "ипподромов и т.п., игровых автоматов (кроме игрового оборудования," +
-               " используемого для проведения азартных игр), игровых площадок "
+               " используемого для проведения азартных игр), игровых площадок ",
 
-               , "Развлечения"
-               , ""
-               , ""
-               , new string[] {
+               "Развлечения",
+               "",
+               "",
+               new string[] {
                   @"",
                   @"\bби[л]{1,2}ьярд\w*\b",
 
@@ -3182,16 +3183,16 @@ namespace Classifier
                   @"\bкультурн\w*[-\s]*оздоровит\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.9.0", "4.9", "3004 03"
+            nodes.Add(new Buisness("4.9.0", "4.9", "3004", "300",
 
-               , "Размещение постоянных или временных гаражей с несколькими " +
+               "Размещение постоянных или временных гаражей с несколькими " +
                "стояночными местами, стоянок (парковок), гаражей, в том числе " +
-               "многоярусных, не указанных в коде 2.7.1 "
+               "многоярусных, не указанных в коде 2.7.1 ",
 
-               , "Обслуживание автотранспорта"
-               , ""
-               , ""
-               , new string[] {
+               "Обслуживание автотранспорта",
+               "",
+               "",
+               new string[] {
                     @"\bличн\w*\b|\bметал\w*\b|\bиндивидуал\w*\b",
                     @"\bгар[ао]?ж\w*\b|\bобслуживан\w*\s*(авто)?транспорт\w*|\bавтогараж\w*\b",
 
@@ -3211,17 +3212,17 @@ namespace Classifier
                     @"\bразмещен\w*\s*ракушек\b" }
                ));
 
-            nodes.Add(new GasStation("4.9.1.1", "4.9.1", "3004 04"
+            nodes.Add(new GasStation("4.9.1.1", "4.9.1", "3004", "300",
 
-               , "Размещение автозаправочных станций (бензиновых, газовых); " +
+               "Размещение автозаправочных станций (бензиновых, газовых); " +
                "размещение магазинов сопутствующей торговли, зданий для " +
                "организации общественного питания в качестве " +
-               "объектов придорожного сервиса "
-
-               , "Объекты придорожного сервиса"
-               , ""
-               , ""
-               , new string[] {
+               "объектов придорожного сервиса ",
+               
+               "Объекты придорожного сервиса",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\b(авто\w*|бенз\w*|газо\w*)[-\s]*(заправ\w*|наполнит\w*|колон\w*)\b|\bАЗС\b",
 
@@ -3238,38 +3239,38 @@ namespace Classifier
                     @"\bтоплив\w*[-\s]*раздаточ\w*\s*пункт\w*\b" }
                ));
 
-            nodes.Add(new Motel("4.9.1.2", "4.9.1", "3004 13"
+            nodes.Add(new Motel("4.9.1.2", "4.9.1", "3004", "300",
 
-               , "Размещение зданий для предоставления гостиничных услуг " +
-               "в качестве придорожного сервиса "
+               "Размещение зданий для предоставления гостиничных услуг " +
+               "в качестве придорожного сервиса ",
 
-               , "Объекты придорожного сервиса"
-               , ""
-               , ""
-               , new string[] { }));
+               "Объекты придорожного сервиса",
+               "",
+               "",
+               new string[] { }));
 
-            nodes.Add(new CarWashingStation("4.9.1.3", "4.9.1", "3004 05"
+            nodes.Add(new CarWashingStation("4.9.1.3", "4.9.1", "3004", "300",
 
-               , "Размещение автомобильных моек и прачечных для " +
-               "автомобильных принадлежностей "
+               "Размещение автомобильных моек и прачечных для " +
+               "автомобильных принадлежностей ",
 
-               , "Объекты придорожного сервиса"
-               , ""
-               , ""
-               , new string[] {
+               "Объекты придорожного сервиса",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\b(авто)?мо[ей]к\w*\b|\b(авто)?моеч\w*" }
                ));
 
-            nodes.Add(new BodyShop("4.9.1.4", "4.9.1", "3004 06"
+            nodes.Add(new BodyShop("4.9.1.4", "4.9.1", "3004", "300",
 
-               , "Размещение мастерских, предназначенных для ремонта и " +
-               "обслуживания автомобилей, и прочих объектов придорожного сервиса "
+               "Размещение мастерских, предназначенных для ремонта и " +
+               "обслуживания автомобилей, и прочих объектов придорожного сервиса ",
 
-               , "Объекты придорожного сервиса"
-               , ""
-               , ""
-               , new string[] {
+               "Объекты придорожного сервиса",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bтех\w*\s*обслуж\w*\b|\bремон\w*\s*(автомобил\w*|машин\w*)\b",
 
@@ -3313,38 +3314,38 @@ namespace Classifier
                     @"\b(замен\w*\s*и\s*сбор\w*|сбор\w*\s*и\s*замен\w*)\b.*\bотработан\w*\s*(авто\w*\s*)?мас\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.10.0", "4.10", "1003 08"
+            nodes.Add(new Buisness("4.10.0", "4.10", "1003", "100",
 
-               , "Размещение объектов капитального строительства, сооружений, " +
+               "Размещение объектов капитального строительства, сооружений, " +
                "предназначенных для осуществления выставочно-ярмарочной и " +
                "конгрессной деятельности, включая деятельность, необходимую " +
                "для обслуживания указанных мероприятий " +
                "(застройка экспозиционной площади, " +
-               "организация питания участников мероприятий) "
+               "организация питания участников мероприятий) ",
 
-               , "Выставочно-ярмарочная деятельность"
-               , ""
-               , ""
-               , new string[] {
+               "Выставочно-ярмарочная деятельность",
+               "",
+               "",
+               new string[] {
                    @"",
                    @"\bярмар\w*\b|\bконгрес\w*\b" }
                ));
 
-            nodes.Add(new BaseRecreation("5.0.1", "5.0", "4001 04"
+            nodes.Add(new BaseRecreation("5.0.1", "5.0", "4001", "400",
 
-               , "Обустройство мест для занятия спортом, физической культурой, " +
+               "Обустройство мест для занятия спортом, физической культурой, " +
                "пешими или верховыми прогулками, отдыха и туризма, " +
                "наблюдения за природой, пикников, охоты, рыбалки и иной деятельности. " +
                "Содержание данного вида разрешенного использования включает в " +
                "себя содержание видов разрешенного использования с кодами " +
                "5.1.1, 5.1.2, 5.1.3, 5.1.4, 5.1.5, 5.2.1.0, 5.2.0, 5.3.0, 5.5.0, " +
-               "5.0.2, 5.4.0 "
+               "5.0.2, 5.4.0 ",
 
-               , "Отдых (рекреация)"
-               , ""
-               , ""
-               , new string[] {
-                    @"",                    
+               "Отдых (рекреация)",
+               "",
+               "",
+               new string[] {
+                    @"",
                     @"\bрекреацион\w*\s*деятель\w*\b",
 
                     @"",
@@ -3357,17 +3358,17 @@ namespace Classifier
                     @"\bрекреац\w*\b|\bзон\w*\s*отдых\w*\b"}
                ));
 
-            nodes.Add(new Recreation("5.0.2", "5.0", "4001 01"
+            nodes.Add(new Recreation("5.0.2", "5.0", "4001", "400",
 
-               , "Создание и уход за парками, городскими лесами, садами и " +
+               "Создание и уход за парками, городскими лесами, садами и " +
                "скверами, прудами, озерами, водохранилищами, пляжами, " +
                "береговыми полосами водных объектов общего пользования, " +
-               "а также обустройство мест отдыха в них "
+               "а также обустройство мест отдыха в них ",
 
-               , "Отдых (рекреация)"
-               , ""
-               , ""
-               , new string[] {
+               "Отдых (рекреация)",
+               "",
+               "",
+               new string[] {
                     @"филевский|марьинский|метро|временной|троллей\w*\b|" +
                     @"автобус\w*\b|хуамин|на\sпериод|\bтаксомотор\w*\b|" +
                     @"парка\sрезервуаров|мэлз|с\sтерритории\sпарка|технологических|" +
@@ -3394,15 +3395,15 @@ namespace Classifier
                     @"\bдетск\w*\s*город\w*\b" }
                ));
 
-            nodes.Add(new Sport("5.1.1", "5.1", "1006 01"
+            nodes.Add(new Sport("5.1.1", "5.1", "1006", "100",
 
-               , "Размещение спортивных сооружений массового посещения " +
-               "(стадионов, дворцов спорта, ледовых дворцов) "
+               "Размещение спортивных сооружений массового посещения " +
+               "(стадионов, дворцов спорта, ледовых дворцов) ",
 
-               , "Спорт"
-               , ""
-               , ""
-               , new string[] {
+               "Спорт",
+               "",
+               "",
+               new string[] {
                     @"при\sстадионе\sянтарь",
                     @"\bстадион\w*\b|\bдвор[е]?ц\w*\s*\bспорт\w*\b|\bледов\w*\s*\bдвор[е]?ц\w*\b|" +
                     @"\bспорт[\w\s]{0,7}\bкомплек\b",
@@ -3420,15 +3421,15 @@ namespace Classifier
                     @"\bстроит\w*\s*спортив\w*\s*сооружен\w*\b" }
                ));
 
-            nodes.Add(new Sport("5.1.2", "5.1", "1006 02"
+            nodes.Add(new Sport("5.1.2", "5.1", "1006", "100",
 
-               , "Размещение объектов капитального строительства в качестве " +
-               "спортивных клубов, спортивных залов, бассейнов, ФОКов, фитнес-центров "
+               "Размещение объектов капитального строительства в качестве " +
+               "спортивных клубов, спортивных залов, бассейнов, ФОКов, фитнес-центров ",
 
-               , "Спорт"
-               , ""
-               , ""
-               , new string[] {
+               "Спорт",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bбассейн\w*\b|\bфитнес\w*\b|\bфок\w{0,2}\b",
 
@@ -3437,7 +3438,7 @@ namespace Classifier
 
                     @"",
                     @"\b(физкультур\w*|спорт\w*)[-\s]*(оздоровит\w*\s*)?компл\w*\b",
-                    
+
                     @"\bлагер\w*\b",
                     @"\b(физкульт\w*|спорт\w*)[-\s]*озо?доровит\w*\b",
 
@@ -3475,17 +3476,17 @@ namespace Classifier
                     @"\bразмещен\w*\s*спортив\w*\s*объект\w*\b|\bдля\s*спотив\w*[-\s]*тренировоч\w*\b" }
                ));
 
-            nodes.Add(new Sport("5.1.3", "5.1", "1006 03"
+            nodes.Add(new Sport("5.1.3", "5.1", "1006", "100",
 
-               , "Устройство площадок для занятия спортом и физкультурой " +
+               "Устройство площадок для занятия спортом и физкультурой " +
                "(беговые дорожки, спортивные сооружения, теннисные корты, " +
                "поля для спортивной игры, автодромы, мотодромы, трамплины и т.п., " +
-               "трассы и спортивные стрельбища) "
+               "трассы и спортивные стрельбища) ",
 
-               , "Спорт"
-               , ""
-               , ""
-               , new string[] {
+               "Спорт",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bвело[\s\-]*трек\w*\b|\bвело[\s\-]*дром\w*\b|" +
                     @"\bавто[\s\-]*дром\w*\b|\bкарт[\s\-]*дром\w*\b|" +
@@ -3520,29 +3521,29 @@ namespace Classifier
                     @"\bгонолыж\w*\s*трас\w*\b" }
                ));
 
-            nodes.Add(new Sport("5.1.4", "5.1", "1006 04"
+            nodes.Add(new Sport("5.1.4", "5.1", "1006", "100",
 
-               , "Размещение спортивных баз и лагерей, спортивных сооружений " +
+               "Размещение спортивных баз и лагерей, спортивных сооружений " +
                "для занятия водными видами спорта (причалы и сооружения, " +
                "необходимые для водных видов спорта и хранения " +
-               "соответствующего инвентаря) "
+               "соответствующего инвентаря) ",
 
-               , "Спорт"
-               , ""
-               , ""
-               , new string[] {
+               "Спорт",
+               "",
+               "",
+               new string[] {
                      @"дворца\sводного\sспорта|центра\sводного\sспорта|магазина\sводно-спортивной",
                      @"\bгреб\w*\b|\bлодочн\w*\b|\bводн\w*[\s\-]*спорт\w*\b" }
                ));
 
-            nodes.Add(new Sport("5.1.5", "5.1", "1006 05"
+            nodes.Add(new Sport("5.1.5", "5.1", "1006", "100",
 
-               , "Размещение спортивных баз и лагерей "
+               "Размещение спортивных баз и лагерей ",
 
-               , "Спорт"
-               , ""
-               , ""
-               , new string[] {
+               "Спорт",
+               "",
+               "",
+               new string[] {
                     @"водно|конно|рыболовно",
                     @"\bспорт\w*\b[\s\-]*\bбаз\w*\b|\bспорт\w*\b[\s\-]*\bлагер\w*\b",
 
@@ -3553,18 +3554,18 @@ namespace Classifier
                     @"\bгорнолыжн\w*\s*баз\w*\b" }
                ));
 
-            nodes.Add(new Recreation("5.2.0", "5.2", "1006 07"
+            nodes.Add(new Recreation("5.2.0", "5.2", "1006", "100",
 
-               , "Размещение баз и палаточных лагерей для проведения походов и " +
+               "Размещение баз и палаточных лагерей для проведения походов и " +
                "экскурсий по ознакомлению с природой, пеших и конных прогулок, " +
                "устройство троп и дорожек, размещение щитов с познавательными " +
                "сведениями об окружающей природной среде; осуществление необходимых " +
-               "природоохранных и природовосстановительных мероприятий "
+               "природоохранных и природовосстановительных мероприятий ",
 
-               , "Природно-познавательный туризм"
-               , ""
-               , ""
-               , new string[] {
+               "Природно-познавательный туризм",
+               "",
+               "",
+               new string[] {
                     @"товаров|мотеля|агентств|бюро|тропарево",
                     @"\bтуристич\w*\b|\bпоход\w*\b|\bтроп\w*\b",
 
@@ -3572,18 +3573,18 @@ namespace Classifier
                     @"\bбаз\w*\s*отдых\w*\b|\bцентр\w*\s*дет[.]?\w*[-\s]*юнош\w*\s*туризм\w*\b" }
                ));
 
-            nodes.Add(new Recreation("5.2.1.0", "5.2.1", "1006 06"
+            nodes.Add(new Recreation("5.2.1.0", "5.2.1", "1006", "100",
 
-               , "Размещение пансионатов, туристических гостиниц, кемпингов, " +
+               "Размещение пансионатов, туристических гостиниц, кемпингов, " +
                "домов отдыха, не оказывающих услуги по лечению, а также иных зданий, " +
                "используемых с целью извлечения предпринимательской выгоды из " +
                "предоставления жилого помещения для временного проживания в них; " +
-               "размещение детских лагерей "
+               "размещение детских лагерей ",
 
-               , "Туристическое обслуживание"
-               , ""
-               , ""
-               , new string[] {
+               "Туристическое обслуживание",
+               "",
+               "",
+               new string[] {
                     @"",
                     @"\bдом\w{0,2}[\s\-]*\bотдых\w*\b|\bбаз\w{0,2}[\s\-]*\bотдых\w*\b|" +
                     @"\bлагер\w{0,2}[\s\-]*\bотдых\w*\b",
@@ -3973,7 +3974,7 @@ namespace Classifier
                     @"",
                     @"\bбаз\w*\s*электрослужб\w*\b" }
                ));
-            
+
             nodes.Add(new Industry("6.7.1", "", ""
 
                , "Размещение объектов использования атомной энергии, в том числе " +
@@ -4043,7 +4044,7 @@ namespace Classifier
                     @"\bтерминал\w*\b|\bдок\w{0,5}\b|\bэлеватор\w*\b|" +
                     @"\bнефт\w*[\s\-]*хранили\w*\b|\bгаз\w*[\s\-]*хранили\w*\b",
 
-                    @"\b(авто)?транспортн\w*\s*цех\w*\b|\b(авто)ремонт\w*\b.*\bцех\w*\b",                    
+                    @"\b(авто)?транспортн\w*\s*цех\w*\b|\b(авто)ремонт\w*\b.*\bцех\w*\b",
                     @"\bтар\w*.*\bцех\w*\b",
 
                     @"лыжн|базар|автомобильной|\bсклад\w*\b",
@@ -4235,7 +4236,7 @@ namespace Classifier
                     @"\bэксплуатац\w*\s*опор\w*\s*№",
 
                     @"",
-                    @"\bустройст\w*\s*транспорт\w*\b", 
+                    @"\bустройст\w*\s*транспорт\w*\b",
 
                     @"",
                     @"\bзамоскворец\w*\b|\bэлектродепо\b",
@@ -4320,7 +4321,7 @@ namespace Classifier
                , new string[] {
                     @"",
                     @"\bавтобус\w*\s*парк\w*\b|\bтролл[еий]+бус\w*\s*парк\w*\b",
-                    
+
                     @"на\sпериод|разгрузочной\sплощадки\sмагазина|марьинский\sпарк|" +
                     @"скорост\w*\sвнеуличн\w*\sтранспорт\w*",
                     @"\bотсто\w*[\s\-]*разворот\w*\b|\bкон\w*\s*станц\w*\b",
@@ -5014,7 +5015,7 @@ namespace Classifier
                     @"",
                     @"\b(ре)?культивац\w*\s*деградирован\w*\s*зем\w*\b",
 
-                    @"", 
+                    @"",
                     @"\bнавозоприемн\w*\b|\bстеклобо\w*\b|\bпереработ\w*\s*мукулатур\w*\b",
 
                     @"",
@@ -5042,7 +5043,7 @@ namespace Classifier
                     @"\bотсутств\w*\s*хоз\w*\s*деятнель\w*\b",
 
                     @"",
-                    @"для\sиного\sиспользован",                    
+                    @"для\sиного\sиспользован",
 
                     @"",
                     @"не\s*(определ\w*|установл\w*)\b",
@@ -5136,7 +5137,7 @@ namespace Classifier
                     @"",
                     @"\bлетн\w*\s*дом\w*\b" }
                ));
-            }       
+        }
     }
     /// <summary>
     /// Компоратор для сортировки ВРИ_листа_2 

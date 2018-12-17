@@ -46,7 +46,7 @@ namespace Classifier
         {
             this.input = input;
             RegExpArray = mnstr.GetPatterns();
-            vri540 = mnstr.GetVri540;
+            vri540 = mnstr.Vri540;
             vri = mnstr.Vri;
             simpleDescription = mnstr.GetSimpleDescription();
             fastFederalSearch = false;
@@ -58,7 +58,7 @@ namespace Classifier
         {
             input = "";
             RegExpArray = mnstr.GetPatterns();
-            vri540 = mnstr.GetVri540;
+            vri540 = mnstr.Vri540;
             vri = mnstr.Vri;
             simpleDescription = mnstr.GetSimpleDescription();
             fastFederalSearch = false;

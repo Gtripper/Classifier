@@ -90,7 +90,7 @@ namespace Classifier
                 if (reg.OnlyFederalSearch())
                 {
 
-                    var temp = mf.Where(p => p.GetVri540.Equals(iter.GetVri540));
+                    var temp = mf.Where(p => p.Vri540.Equals(iter.Vri540));
                     foreach (var it in temp)
                     {
                         AddCode(reg.Value(), it);
