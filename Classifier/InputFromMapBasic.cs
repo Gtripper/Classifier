@@ -404,9 +404,6 @@ namespace Classifier
 
                 array[i] = res;
             }
-
-
         }
-
-
     }
+}
