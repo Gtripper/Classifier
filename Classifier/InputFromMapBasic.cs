@@ -380,8 +380,7 @@ namespace Classifier
         /// <summary>
         /// Сортировка строки VRI_List по возрастанию значений кодов.
         /// </summary>
-        /// <param name="inputstr"></param>
-        /// <returns>Отсортированная строка кодов ВРИ</returns>
+        /// <param name="array">[0] - строка, [1] - результат</param>
         public static void Sort(string[] array)
         {
             MatchCollection matchCollection = Regex.Matches(array[0], @"((?:\d+[.]*)+)", RegexOptions.IgnoreCase);
