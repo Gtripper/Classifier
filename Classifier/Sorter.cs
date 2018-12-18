@@ -304,6 +304,101 @@ namespace Classifier
                 AddCode(match, mnstr);
             }
         }
+
+        /// <summary>
+        /// Проверка наличия кодов жилья
+        /// </summary>
+        /// <returns></returns>
+        private bool ResidentialArea()
+        {
+            return codes.Exists(p => p.mnstr.vri.Equals("2.0.0") ||
+                p.mnstr.vri.Equals("2.1.0") ||
+                    p.mnstr.vri.Equals("2.2.0") ||
+                        p.mnstr.vri.Equals("2.3.0") ||
+                            p.mnstr.vri.Equals("2.1.1.0") ||
+                                p.mnstr.vri.Equals("2.5.0") ||
+                                    p.mnstr.vri.Equals("2.6.0"));
+        }
+
+        /// <summary>
+        /// Удаление индексов 3.1.1, 2.7.1.0, 4.9.0 из участков с жильем
+        /// </summary>
+        private void Type230Fix()
+        {
+            var bl = codes.Exists(p => p.mnstr.kindCode.Equals("3004"));
+            if (bl && ResidentialArea())
+            {
+                codes.RemoveAll(p => p.mnstr.kindCode.Equals("3004"));
+            }
+        }
+
+        /// <summary>
+        /// Определение типа земучастка
+        /// </summary>
+        /// <returns><string></returns>
+        private string Type()
+        {
+            if (codes.Exists(p => p.mnstr.typeCode.Equals("333")))
+            {
+                return "333";
+            }
+            else if (codes.Count == 1)
+            {
+                return codes[0].mnstr.typeCode;
+            }
+            else
+            {
+                var result = "";
+                var set = new SortedSet<string>();
+                foreach (var val in codes)
+                {
+                    set.Add(val.mnstr.typeCode.Remove(1));
+                }
+                foreach (var val in set)
+                {
+                    result += val;
+                }
+                while (result.Length < 3)
+                {
+                    result += "0";
+                }
+                return result;
+            }
+        }
+
+
+        /// <summary>
+        /// Определние вида земучастка
+        /// </summary>
+        /// TODO: Как-то переделать codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
+        /// <returns><string></returns>
+        private string Kind()
+        {
+            if (codes.Count == 1 ||
+                    codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
+            {
+                return codes[0].mnstr.kindCode;
+            }
+            else
+            {
+                var result = "";
+                var set = new SortedSet<string>();
+                foreach (var val in codes)
+                {
+                    set.Add(val.mnstr.kindCode.Remove(1));
+                }
+                foreach (var val in set)
+                {
+                    result += val;
+                }
+                while (result.Length < 4)
+                {
+                    result += "0";
+                }
+                return result;
+            }
+        }
+
         #endregion
         #region ListOfCodesMethods
         private void RemoveAllCodes()
@@ -379,6 +474,10 @@ namespace Classifier
         public bool IsFastFederalSearch { get; private set; }
         public bool IsFastPZZSearch { get; private set; }
         public bool IsMainSearch { get; private set; }
+        /// <summary>
+        /// Все результаты работы в этом массиве
+        /// </summary>
+        public string[] Results { get; private set; }
 
         public Bti Bti => bti;
 
@@ -404,7 +503,7 @@ namespace Classifier
         public void GetVRI_FullSearh()
         {              
             GetCodes_FullSearh();
-            SortCodesIndex();
+            //SortCodesIndex(); <== Сортировка индексов не нужна, поскольку лишь увеличивает количество вариантов, ни на что толком не влияя.
             InDaHouse();
             DeleteGenericVRI();
             mathes = StringOfMatches();
@@ -437,6 +536,15 @@ namespace Classifier
         public bool PlacementSearch()
         {
             return Placement();
+        }
+
+        public void TestBehaviorSearchWithoutBti()
+        {
+            GetCodes_FullSearh();
+            Results[0] = StringOfVRI(); // Коды ВРИ после работы основного цикла
+            Results[1] = StringOfMatches(); // Все найденные совпадения
+            DeleteGenericVRI();
+            Results[3] = StringOfVRI(); // Без базовых кодов (6.0.0, 3.0.0, 4.0.0 etc)
         }
     }
 
