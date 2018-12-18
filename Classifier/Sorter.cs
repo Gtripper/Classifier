@@ -90,7 +90,7 @@ namespace Classifier
                 if (reg.OnlyFederalSearch())
                 {
 
-                    var temp = mf.Where(p => p.Vri540.Equals(iter.Vri540));
+                    var temp = mf.Where(p => p.vri540.Equals(iter.vri540));
                     foreach (var it in temp)
                     {
                         AddCode(reg.Value(), it);
@@ -99,7 +99,7 @@ namespace Classifier
             }
             
 
-            codes  = codes.GroupBy(p => p.mnstr.Vri).Select(grp => grp.FirstOrDefault()).ToList();           
+            codes  = codes.GroupBy(p => p.mnstr.vri).Select(grp => grp.FirstOrDefault()).ToList();           
         }
 
         private void GetCodes_MainSearh()
@@ -174,38 +174,38 @@ namespace Classifier
         }
         private void InDaHouse()
         {
-            var bl = codes.Exists(p => p.mnstr.Vri.Equals("2.0.0") ||
-                    p.mnstr.Vri.Equals("2.1.1.0") ||
-                        p.mnstr.Vri.Equals("2.5.0") ||
-                            p.mnstr.Vri.Equals("2.6.0"));
+            var bl = codes.Exists(p => p.mnstr.vri.Equals("2.0.0") ||
+                    p.mnstr.vri.Equals("2.1.1.0") ||
+                        p.mnstr.vri.Equals("2.5.0") ||
+                            p.mnstr.vri.Equals("2.6.0"));
 
             if (bl && ! bti.NullBti)
             {
                 var btiList = new List<Node>();
                 if (bti.low)
                 {
-                    btiList.Add(mf.Find(p => p.Vri.Equals("2.1.1.0")));
+                    btiList.Add(mf.Find(p => p.vri.Equals("2.1.1.0")));
                 }
                 if (bti.mid)
                 {
-                    btiList.Add(mf.Find(p => p.Vri.Equals("2.5.0")));
+                    btiList.Add(mf.Find(p => p.vri.Equals("2.5.0")));
                 }
                 if (bti.hight)
                 {
-                    btiList.Add(mf.Find(p => p.Vri.Equals("2.6.0")));
+                    btiList.Add(mf.Find(p => p.vri.Equals("2.6.0")));
                 }
                 if (btiList.Count > 0)
                 {
-                    var m = codes.Find(p => p.mnstr.Vri.Equals("2.0.0") ||
-                        p.mnstr.Vri.Equals("2.1.1.0") ||
-                            p.mnstr.Vri.Equals("2.5.0") ||
-                                p.mnstr.Vri.Equals("2.6.0"));
+                    var m = codes.Find(p => p.mnstr.vri.Equals("2.0.0") ||
+                        p.mnstr.vri.Equals("2.1.1.0") ||
+                            p.mnstr.vri.Equals("2.5.0") ||
+                                p.mnstr.vri.Equals("2.6.0"));
                     var match = m.match;
 
-                    codes.RemoveAll(p => p.mnstr.Vri.Equals("2.0.0") ||
-                        p.mnstr.Vri.Equals("2.1.1.0") ||
-                            p.mnstr.Vri.Equals("2.5.0") ||
-                                p.mnstr.Vri.Equals("2.6.0"));
+                    codes.RemoveAll(p => p.mnstr.vri.Equals("2.0.0") ||
+                        p.mnstr.vri.Equals("2.1.1.0") ||
+                            p.mnstr.vri.Equals("2.5.0") ||
+                                p.mnstr.vri.Equals("2.6.0"));
 
                     bti.CorrectedByBti = true;
 
@@ -218,38 +218,38 @@ namespace Classifier
         }
         private void ThashZU()
         {
-            var val = codes.Where(p => p.mnstr.Vri.Equals("12.3.0"));
+            var val = codes.Where(p => p.mnstr.vri.Equals("12.3.0"));
 
             if (codes.Count() > 1)
             {
-                codes.RemoveAll(p => p.mnstr.Vri.Equals("12.3.0"));
+                codes.RemoveAll(p => p.mnstr.vri.Equals("12.3.0"));
             }
 
             else if (val.Count() == 1 && !bti.vri.Equals(""))
             {                
                 foreach (var iter in bti.Codes)
                 {
-                    codes.RemoveAll(p => p.mnstr.Vri.Equals("12.3.0"));
+                    codes.RemoveAll(p => p.mnstr.vri.Equals("12.3.0"));
                     AddCode(iter.match, iter.mnstr);
                 }
             }
         }
         private void CleanFederalCodes()
         {
-            var val = codes.Where(p => p.mnstr.Vri.Equals("3.5"));
+            var val = codes.Where(p => p.mnstr.vri.Equals("3.5"));
             if (val.Count() > 0)
             {
-                var i = mf.FindIndex(p => p.Vri.Equals("3.5.1.0"));
-                var j = mf.FindIndex(p => p.Vri.Equals("3.5.2.0"));
+                var i = mf.FindIndex(p => p.vri.Equals("3.5.1.0"));
+                var j = mf.FindIndex(p => p.vri.Equals("3.5.2.0"));
 
-                var match = codes.Find(p => p.mnstr.Vri.Equals("3.5")).match;
-                codes.RemoveAll(p => p.mnstr.Vri.Equals("3.5"));
-                if (bti.Codes.Exists(p => p.mnstr.Vri.Equals("3.5.1.0")))
+                var match = codes.Find(p => p.mnstr.vri.Equals("3.5")).match;
+                codes.RemoveAll(p => p.mnstr.vri.Equals("3.5"));
+                if (bti.Codes.Exists(p => p.mnstr.vri.Equals("3.5.1.0")))
                 {
                     AddCode(match, mf.ElementAt(i));
                     bti.CorrectedByBti = true;
                 }
-                else if (bti.Codes.Exists(p => p.mnstr.Vri.Equals("3.5.2.0")))
+                else if (bti.Codes.Exists(p => p.mnstr.vri.Equals("3.5.2.0")))
                 {
                     AddCode(match, mf.ElementAt(j));
                     bti.CorrectedByBti = true;
@@ -261,25 +261,25 @@ namespace Classifier
                     bti.CorrectedByBti = false;
                 }
             }
-            val = codes.Where(p => p.mnstr.Vri.Equals("6.7"));
+            val = codes.Where(p => p.mnstr.vri.Equals("6.7"));
             if (val.Count() > 0)
             {
-                codes.RemoveAll(p => p.mnstr.Vri.Equals("6.7"));
+                codes.RemoveAll(p => p.mnstr.vri.Equals("6.7"));
             }
-            val = codes.Where(p => p.mnstr.Vri.Equals("3.10"));
+            val = codes.Where(p => p.mnstr.vri.Equals("3.10"));
             if (val.Count() > 0)
             {
-                var i = mf.FindIndex(p => p.Vri.Equals("3.10.1.0"));
-                var j = mf.FindIndex(p => p.Vri.Equals("3.10.2.0"));
+                var i = mf.FindIndex(p => p.vri.Equals("3.10.1.0"));
+                var j = mf.FindIndex(p => p.vri.Equals("3.10.2.0"));
 
-                var match = codes.Find(p => p.mnstr.Vri.Equals("3.10")).match;
-                codes.RemoveAll(p => p.mnstr.Vri.Equals("3.10"));
-                if (bti.Codes.Exists(p => p.mnstr.Vri.Equals("3.10.1.0")))
+                var match = codes.Find(p => p.mnstr.vri.Equals("3.10")).match;
+                codes.RemoveAll(p => p.mnstr.vri.Equals("3.10"));
+                if (bti.Codes.Exists(p => p.mnstr.vri.Equals("3.10.1.0")))
                 {
                     AddCode(match, mf.ElementAt(i));
                     bti.CorrectedByBti = true;
                 }
-                else if (bti.Codes.Exists(p => p.mnstr.Vri.Equals("3.10.2.0")))
+                else if (bti.Codes.Exists(p => p.mnstr.vri.Equals("3.10.2.0")))
                 {
                     AddCode(match, mf.ElementAt(j));
                     bti.CorrectedByBti = true;
@@ -295,12 +295,12 @@ namespace Classifier
         private void PromAreaLess300()
         {
             bool prom;
-            prom = codes.Exists(p => p.mnstr.Vri.Equals("6.7.0"));
+            prom = codes.Exists(p => p.mnstr.vri.Equals("6.7.0"));
             if (prom && area <= 300)
             {
-                var match = codes.Find(p => p.mnstr.Vri.Equals("6.7.0")).match;
-                var mnstr = mf.Find(p => p.Vri.Equals("3.1.1"));
-                codes.RemoveAll(p => p.mnstr.Vri.Equals("6.7.0"));
+                var match = codes.Find(p => p.mnstr.vri.Equals("6.7.0")).match;
+                var mnstr = mf.Find(p => p.vri.Equals("3.1.1"));
+                codes.RemoveAll(p => p.mnstr.vri.Equals("6.7.0"));
                 AddCode(match, mnstr);
             }
         }
@@ -341,7 +341,7 @@ namespace Classifier
             var result = "";
             foreach (Codes str in codes)
             {
-                result += result.Equals("") ? str.mnstr.Vri : ", " + str.mnstr.Vri;
+                result += result.Equals("") ? str.mnstr.vri : ", " + str.mnstr.vri;
             }
             return result;
         }
@@ -361,7 +361,7 @@ namespace Classifier
         }
         private dynamic RemoveVRI(string vri)
         {
-            return codes.RemoveAll(p => p.mnstr.Vri.Equals(vri));
+            return codes.RemoveAll(p => p.mnstr.vri.Equals(vri));
         }
         private dynamic ExistsVRI(string vri)
         {
@@ -369,7 +369,7 @@ namespace Classifier
         }
         private dynamic GetMatchWithVRI(string vri)
         {
-            var temp = codes.Find(p => p.mnstr.Vri.Equals(vri));
+            var temp = codes.Find(p => p.mnstr.vri.Equals(vri));
             return temp.match;
         }
         #endregion
@@ -533,21 +533,6 @@ namespace Classifier
                 throw new NotImplementedException();
 
             }            
-        }
-
-           
-
-        
-
-       
-
-        
-
-
-        
+        }   
     }
-
-    
-
-
 }

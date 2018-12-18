@@ -12,16 +12,6 @@ namespace Classifier
 {
     public abstract class Node
     {
-        private string vri;
-        private string vri540;
-        private string kindCode;
-        private string typeCode;
-        private string description;
-        private string simpleDescription;
-        private string funcUse;
-        private string simpleFuncUse;
-        private string[] regexpPatterns;
-
         public Node() { }
 
         public Node(string vri, string vri540
@@ -41,18 +31,18 @@ namespace Classifier
 
         public Node(Node mnstr)
         {
-            vri = mnstr.Vri;
-            vri540 = mnstr.Vri540;
-            kindCode = mnstr.KindCode;
-            typeCode = mnstr.TypeCode;
-            description = mnstr.GetDescription();
-            simpleDescription = mnstr.GetSimpleDescription();
-            funcUse = mnstr.GetFuncUse();
-            simpleFuncUse = mnstr.GetSimpleFuncUse();
-            regexpPatterns = mnstr.GetPatterns();
+            vri = mnstr.vri;
+            vri540 = mnstr.vri540;
+            kindCode = mnstr.kindCode;
+            typeCode = mnstr.typeCode;
+            description = mnstr.description;
+            simpleDescription = mnstr.simpleDescription;
+            funcUse = mnstr.funcUse;
+            simpleFuncUse = mnstr.simpleFuncUse;
+            regexpPatterns = mnstr.regexpPatterns;
         }
 
-        public string Vri
+        public string vri
         {
             get
             {
@@ -60,73 +50,27 @@ namespace Classifier
 
                 else return vri540;
             }
+            private set { }
         }
 
-        public string Vri540
-        {
-            get => vri540;
-        }
+        public string vri540 { get; set; }
 
-        public string KindCode
-        {
-            get => kindCode;
-        }
+        public string kindCode { get; set; }
 
-        public string TypeCode
-        {
-            get => typeCode;
-        }
+        public string typeCode { get; set; }
 
-        public List<string> GetQCode()
-        {
-            List<string> result = new List<string>();
+        public string description { get; set; }
 
-            MatchCollection match = Regex.Matches(kindCode, @"(\b\d{3,4}\b)", RegexOptions.IgnoreCase);
+        public string simpleDescription { get; set; }
 
-            foreach (Match iter in match)
-            {
-                result.Add(iter.Groups[1].Value);
-            }
-            return result;
-        }
+        public string funcUse { get; set; }
 
-        public string GetDescription()
-        {
-            return description;
-        }
+        public string simpleFuncUse { get; set; }
 
-        public string GetSimpleDescription()
-        {
-            return simpleDescription;
-        }
-
-        public string GetFuncUse()
-        {
-            return funcUse;
-        }
-
-        public string GetSimpleFuncUse()
-        {
-            return simpleFuncUse;
-        }
-
-        public List<string> CodeToList(string input)
-        {
-            List<string> result = new List<string>();
-            //string patternHex = ;
-
-
-            return null;
-        }
-
-        public string[] GetPatterns()
-        {
-            return regexpPatterns;
-        }
+        public string[] regexpPatterns { get; set; }
 
         public virtual bool GetParent(Node mstr)
         {
-            //return null;
             return GetType().BaseType.Equals(mstr.GetType());
         }
 
@@ -146,7 +90,6 @@ namespace Classifier
         {
             return false;
         }
-
     }
 
     class Agriculture : Node
@@ -744,14 +687,14 @@ namespace Classifier
 
         public Node getM(string vri)
         {
-            return nodes.Find(p => p.Vri.Equals(vri));
+            return nodes.Find(p => p.vri.Equals(vri));
         }
 
         public Node GetMonsterFromVRICode(string vri)
         {
             foreach (var iter in nodes)
             {
-                if (iter.Vri.Equals(vri))
+                if (iter.vri.Equals(vri))
                 {
                     return iter;
                 }
@@ -1760,7 +1703,7 @@ namespace Classifier
                ));
 
             nodes.Add(new Community("3.2.2", "3.2", "1007", "100",
-                
+
                "Размещение объектов капитального строительства для служб психологической и " +
                "бесплатной юридической помощи, социальных, пенсионных и иных служб, в которых " +
                "осуществляется прием граждан по вопросам оказания социальной помощи и " +
@@ -2501,7 +2444,7 @@ namespace Classifier
                    @"\bэнергонадзор\w*\b" }
                ));
 
-            nodes.Add(new Community("3.8.2", "3.8", "1001", "100", 
+            nodes.Add(new Community("3.8.2", "3.8", "1001", "100",
 
                "Размещение объектов капитального строительства, предназначенных " +
                "для размещения органов управления политических партий, " +
@@ -3055,7 +2998,7 @@ namespace Classifier
                     @"\bреализац\w*\s*мебел\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.5.0", "4.5", "1001", "100", 
+            nodes.Add(new Buisness("4.5.0", "4.5", "1001", "100",
 
                "Размещение объектов капитального строительства, предназначенных " +
                "для размещения организаций, оказывающих банковские и страховые ",
@@ -3077,7 +3020,7 @@ namespace Classifier
                     @"\bпункт\w*\s*обмен\w*\s*валют\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.6.0", "4.6", "1004", "100", 
+            nodes.Add(new Buisness("4.6.0", "4.6", "1004", "100",
 
                "Размещение объектов капитального строительства в целях " +
                "устройства мест общественного питания (рестораны, " +
@@ -3218,7 +3161,7 @@ namespace Classifier
                "размещение магазинов сопутствующей торговли, зданий для " +
                "организации общественного питания в качестве " +
                "объектов придорожного сервиса ",
-               
+
                "Объекты придорожного сервиса",
                "",
                "",
@@ -3745,7 +3688,7 @@ namespace Classifier
                     @"\bмеханич\w*\s*(масерск\w*|баз\w*)\b|\bремонт\w*\s*авиатехник\w*\b",
 
                     @"",
-                    @"\bремонт\w*[-\s]*строит\w*\s*баз\w*\b" } 
+                    @"\bремонт\w*[-\s]*строит\w*\s*баз\w*\b" }
                ));
 
             nodes.Add(new Industry("6.2.1.0", "6.2.1", "3002", "300",
@@ -4535,7 +4478,7 @@ namespace Classifier
                "",
                new string[] { }));
 
-            nodes.Add(new SecurityForces("8.3.0", "8.3", "3003", "300", 
+            nodes.Add(new SecurityForces("8.3.0", "8.3", "3003", "300",
 
                "Размещение объектов капитального строительства, необходимых " +
                "для подготовки и поддержания в готовности органов внутренних дел " +
@@ -4868,7 +4811,7 @@ namespace Classifier
                "Размещение береговых полос водных объектов общего пользования, " +
                "скверов, бульваров, парков, садов, велодорожек и объектов " +
                "велотранспортной инфраструктуры ",
-               
+
                "Земельные участки (территории) общего пользования",
                "",
                "",
@@ -5139,8 +5082,8 @@ namespace Classifier
         int IComparer<string>.Compare(string x, string y)
         {
             var mf = new NodeFeed().getMonster();
-            var intA = mf.FindIndex(p => p.Vri.Equals(x));
-            var intB = mf.FindIndex(p => p.Vri.Equals(y));
+            var intA = mf.FindIndex(p => p.vri.Equals(x));
+            var intB = mf.FindIndex(p => p.vri.Equals(y));
 
             if (intA > intB) return 1;
             if (intA < intB) return -1;

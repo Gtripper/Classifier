@@ -186,197 +186,197 @@ namespace Classifier
             return result;
         }
 
-        public static string ToQuadroCode(string[] array, int countBti, int fastFed)
-        {
-            var inputstr = array[0];
+        //public static string ToQuadroCode(string[] array, int countBti, int fastFed)
+        //{
+        //    var inputstr = array[0];
 
-            var toilets = "3.1.3, 3.1.2, 3.1.1";
-            if (inputstr.Contains(toilets))
-            {
-                var n = inputstr.IndexOf(toilets);
-                inputstr = inputstr.Remove(n, toilets.Length) + ", 3.1.1";
-                // inputstr += "3.1.1";
-            }
+        //    var toilets = "3.1.3, 3.1.2, 3.1.1";
+        //    if (inputstr.Contains(toilets))
+        //    {
+        //        var n = inputstr.IndexOf(toilets);
+        //        inputstr = inputstr.Remove(n, toilets.Length) + ", 3.1.1";
+        //        // inputstr += "3.1.1";
+        //    }
 
-            var mnstr = new List<Node>();
-            NodeFeed mf = new NodeFeed();
-            var vri = "";
-            var set = new HashSet<String>();
-            var mixedIndexSet = new HashSet<String>();
-            var result = "";
-            var mixedIndexResult = "";
-            var types = new SortedSet<string>();//new HashSet<string>();
-            var sorterList = new SortedSet<string>();
-            var typesStr = "";
-
-
-            MatchCollection matchCollection = Regex.Matches(inputstr, @"((?:\d+[.]*)+)", RegexOptions.IgnoreCase);
-            try
-            {
-                foreach (Match iter in matchCollection)
-                {
-                    vri = iter.Groups[1].Value;
-
-                    if ((vri.Equals("1.0.0") || vri.Equals("1.1.0") || vri.Equals("1.2.0")
-                            || vri.Equals("1.3.0") || vri.Equals("1.4.0")
-                                || vri.Equals("1.5.0") || vri.Equals("1.6.0") || vri.Equals("1.7.0")
-                                    || vri.Equals("1.8.0") || vri.Equals("1.9.0")
-                                        || vri.Equals("1.10.0") || vri.Equals("1.11.0")
-                                            || vri.Equals("1.12.0") || vri.Equals("1.13.0")
-                                                || vri.Equals("1.17.0") || vri.Equals("10.3.0")) && countBti > 0)
-                    {
-                        set.Add("3006");
-                    }
-
-                    else if ((vri.Equals("1.0.0") || vri.Equals("1.1.0") || vri.Equals("1.2.0")
-                            || vri.Equals("1.3.0") || vri.Equals("1.4.0")
-                                || vri.Equals("1.5.0") || vri.Equals("1.6.0") || vri.Equals("1.7.0")
-                                    || vri.Equals("1.8.0") || vri.Equals("1.9.0")
-                                        || vri.Equals("1.10.0") || vri.Equals("1.11.0")
-                                            || vri.Equals("1.12.0") || vri.Equals("1.13.0")
-                                                || vri.Equals("1.17.0") || vri.Equals("10.3.0")) && countBti == 0)
-                    {
-                        set.Add("3006");
-                    }
-
-                    else if (vri.Equals("7.2.1"))
-                    {
-                        set.Add("5000");
-                    }
-
-                    else if (vri.Equals("7.2.2") && fastFed == 1)
-                    {
-                        set.Add("5000");
-                    }
-
-                    else
-                    {
-
-                        Node m = mf.getM(vri);
-                        foreach (var it in m.GetQCode())
-                        {
-                            set.Add(it);
-                        }
-                    }
-                }
-                foreach (var iter in set)
-                {
-                    if (set.Count() == 1)
-                    {
-                        if (iter.Equals("130"))
-                        {
-                            mixedIndexSet.Add("1300");
-                        }
-                        else mixedIndexSet.Add(iter);
-                        result = iter;
-                    }
-                    else
-                    {
-                        result += result.Equals("") ? iter : ", " + iter;
-
-                        if (iter.Equals("1000") || iter.Equals("1001") || iter.Equals("1002") || iter.Equals("1003")
-                                    || iter.Equals("1004") || iter.Equals("1005") || iter.Equals("1006") || iter.Equals("1007"))
-                        {
-                            mixedIndexSet.Add("1000");
-                        }
-
-                        else if (iter.Equals("2000") || iter.Equals("2001") || iter.Equals("2002")
-                                || iter.Equals("2003") || iter.Equals("2004"))
-                        {
-                            mixedIndexSet.Add("2000");
-                        }
-
-                        else if (iter.Equals("3000") || iter.Equals("3001") || iter.Equals("3002") || iter.Equals("3003")
-                                    || iter.Equals("3004") || iter.Equals("3005"))
-                        {
-                            mixedIndexSet.Add("3000");
-                        }
-
-                        else if (iter.Equals("4000") || iter.Equals("4001") || iter.Equals("4002"))
-                        {
-                            mixedIndexSet.Add("4000");
-                        }
-
-                        else if (iter.Equals("130"))
-                        {
-                            mixedIndexSet.Add("1300");
-                        }
-                        else if (iter.Equals("3006"))
-                        {
-                            mixedIndexSet.Add("800");
-                        }
-                        else mixedIndexSet.Add(iter);
-                    }
-                }
-
-                foreach (var mix in mixedIndexSet)
-                {
-                    mixedIndexResult += mixedIndexResult.Equals("") ? mix : ", " + mix;
-
-                    if (mixedIndexSet.Count() == 1)
-                    {
-                        types.Add(mix.Remove(3, 1));
-                    }
-                    else
-                    {
-                        if (mix.Contains("100"))
-                        {
-                            sorterList.Add("1");
-                        }
-                        else if (mix.Contains("200"))
-                        {
-                            sorterList.Add("2");
-                        }
-                        else if (mix.Contains("300") && !mix.Contains("130"))
-                        {
-                            sorterList.Add("3");
-                        }
-                        else if (mix.Contains("400"))
-                        {
-                            sorterList.Add("4");
-                        }
-                        else if (mix.Contains("130"))
-                        {
-                            sorterList.Add("1");
-                            sorterList.Add("3");
-                        }
-                        else types.Add(mix.Remove(3, 1));
-                    }
-                }
-
-                //sorterList.Sort();
-                //var distinctItems = sorterList.Distinct();
-                var stringToTypes = "";
-                if (sorterList.Count() > 0)
-                {
-                    foreach (var iter in sorterList)
-                    {
-                        stringToTypes += iter;
-                    }
-
-                    while (stringToTypes.Length < 3)
-                    {
-                        stringToTypes += "0";
-                    }
-                }
-                types.Add(stringToTypes);
-
-                foreach (var iter in types.OrderBy(p => p))
-                {
-                    typesStr += typesStr.Equals("") ? iter : ", " + iter;
-                }
-
-                array[1] = mixedIndexResult;
-                array[2] = typesStr;
-            }
-            catch
-            {
-                return "";
-            }
-            return result;
+        //    var mnstr = new List<Node>();
+        //    NodeFeed mf = new NodeFeed();
+        //    var vri = "";
+        //    var set = new HashSet<String>();
+        //    var mixedIndexSet = new HashSet<String>();
+        //    var result = "";
+        //    var mixedIndexResult = "";
+        //    var types = new SortedSet<string>();//new HashSet<string>();
+        //    var sorterList = new SortedSet<string>();
+        //    var typesStr = "";
 
 
-        }
+        //    MatchCollection matchCollection = Regex.Matches(inputstr, @"((?:\d+[.]*)+)", RegexOptions.IgnoreCase);
+        //    try
+        //    {
+        //        foreach (Match iter in matchCollection)
+        //        {
+        //            vri = iter.Groups[1].Value;
+
+        //            if ((vri.Equals("1.0.0") || vri.Equals("1.1.0") || vri.Equals("1.2.0")
+        //                    || vri.Equals("1.3.0") || vri.Equals("1.4.0")
+        //                        || vri.Equals("1.5.0") || vri.Equals("1.6.0") || vri.Equals("1.7.0")
+        //                            || vri.Equals("1.8.0") || vri.Equals("1.9.0")
+        //                                || vri.Equals("1.10.0") || vri.Equals("1.11.0")
+        //                                    || vri.Equals("1.12.0") || vri.Equals("1.13.0")
+        //                                        || vri.Equals("1.17.0") || vri.Equals("10.3.0")) && countBti > 0)
+        //            {
+        //                set.Add("3006");
+        //            }
+
+        //            else if ((vri.Equals("1.0.0") || vri.Equals("1.1.0") || vri.Equals("1.2.0")
+        //                    || vri.Equals("1.3.0") || vri.Equals("1.4.0")
+        //                        || vri.Equals("1.5.0") || vri.Equals("1.6.0") || vri.Equals("1.7.0")
+        //                            || vri.Equals("1.8.0") || vri.Equals("1.9.0")
+        //                                || vri.Equals("1.10.0") || vri.Equals("1.11.0")
+        //                                    || vri.Equals("1.12.0") || vri.Equals("1.13.0")
+        //                                        || vri.Equals("1.17.0") || vri.Equals("10.3.0")) && countBti == 0)
+        //            {
+        //                set.Add("3006");
+        //            }
+
+        //            else if (vri.Equals("7.2.1"))
+        //            {
+        //                set.Add("5000");
+        //            }
+
+        //            else if (vri.Equals("7.2.2") && fastFed == 1)
+        //            {
+        //                set.Add("5000");
+        //            }
+
+        //            else
+        //            {
+
+        //                Node m = mf.getM(vri);
+        //                foreach (var it in m.GetQCode())
+        //                {
+        //                    set.Add(it);
+        //                }
+        //            }
+        //        }
+        //        foreach (var iter in set)
+        //        {
+        //            if (set.Count() == 1)
+        //            {
+        //                if (iter.Equals("130"))
+        //                {
+        //                    mixedIndexSet.Add("1300");
+        //                }
+        //                else mixedIndexSet.Add(iter);
+        //                result = iter;
+        //            }
+        //            else
+        //            {
+        //                result += result.Equals("") ? iter : ", " + iter;
+
+        //                if (iter.Equals("1000") || iter.Equals("1001") || iter.Equals("1002") || iter.Equals("1003")
+        //                            || iter.Equals("1004") || iter.Equals("1005") || iter.Equals("1006") || iter.Equals("1007"))
+        //                {
+        //                    mixedIndexSet.Add("1000");
+        //                }
+
+        //                else if (iter.Equals("2000") || iter.Equals("2001") || iter.Equals("2002")
+        //                        || iter.Equals("2003") || iter.Equals("2004"))
+        //                {
+        //                    mixedIndexSet.Add("2000");
+        //                }
+
+        //                else if (iter.Equals("3000") || iter.Equals("3001") || iter.Equals("3002") || iter.Equals("3003")
+        //                            || iter.Equals("3004") || iter.Equals("3005"))
+        //                {
+        //                    mixedIndexSet.Add("3000");
+        //                }
+
+        //                else if (iter.Equals("4000") || iter.Equals("4001") || iter.Equals("4002"))
+        //                {
+        //                    mixedIndexSet.Add("4000");
+        //                }
+
+        //                else if (iter.Equals("130"))
+        //                {
+        //                    mixedIndexSet.Add("1300");
+        //                }
+        //                else if (iter.Equals("3006"))
+        //                {
+        //                    mixedIndexSet.Add("800");
+        //                }
+        //                else mixedIndexSet.Add(iter);
+        //            }
+        //        }
+
+        //        foreach (var mix in mixedIndexSet)
+        //        {
+        //            mixedIndexResult += mixedIndexResult.Equals("") ? mix : ", " + mix;
+
+        //            if (mixedIndexSet.Count() == 1)
+        //            {
+        //                types.Add(mix.Remove(3, 1));
+        //            }
+        //            else
+        //            {
+        //                if (mix.Contains("100"))
+        //                {
+        //                    sorterList.Add("1");
+        //                }
+        //                else if (mix.Contains("200"))
+        //                {
+        //                    sorterList.Add("2");
+        //                }
+        //                else if (mix.Contains("300") && !mix.Contains("130"))
+        //                {
+        //                    sorterList.Add("3");
+        //                }
+        //                else if (mix.Contains("400"))
+        //                {
+        //                    sorterList.Add("4");
+        //                }
+        //                else if (mix.Contains("130"))
+        //                {
+        //                    sorterList.Add("1");
+        //                    sorterList.Add("3");
+        //                }
+        //                else types.Add(mix.Remove(3, 1));
+        //            }
+        //        }
+
+        //        //sorterList.Sort();
+        //        //var distinctItems = sorterList.Distinct();
+        //        var stringToTypes = "";
+        //        if (sorterList.Count() > 0)
+        //        {
+        //            foreach (var iter in sorterList)
+        //            {
+        //                stringToTypes += iter;
+        //            }
+
+        //            while (stringToTypes.Length < 3)
+        //            {
+        //                stringToTypes += "0";
+        //            }
+        //        }
+        //        types.Add(stringToTypes);
+
+        //        foreach (var iter in types.OrderBy(p => p))
+        //        {
+        //            typesStr += typesStr.Equals("") ? iter : ", " + iter;
+        //        }
+
+        //        array[1] = mixedIndexResult;
+        //        array[2] = typesStr;
+        //    }
+        //    catch
+        //    {
+        //        return "";
+        //    }
+        //    return result;
+
+
+        //}
         /// <summary>
         /// Сортировка строки VRI_List по возрастанию значений кодов.
         /// </summary>
