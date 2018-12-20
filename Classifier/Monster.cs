@@ -42,16 +42,21 @@ namespace Classifier
             regexpPatterns = mnstr.regexpPatterns;
         }
 
-        public string vri
-        {
-            get
-            {
-                if (vri != "") return vri;
+        //private string _vri;
+        //public string vri
+        //{
+        //    get
+        //    {
+        //        if (vri != "") return _vri;
 
-                else return vri540;
-            }
-            private set { }
-        }
+        //        else return vri540;
+        //    }
+        //    private set
+        //    {
+        //        _vri = value;
+        //    }
+        //}
+        public string vri { get; set; }
 
         public string vri540 { get; set; }
 
