@@ -6,6 +6,10 @@
 Classifier/Version/
 DebugForDllProject
 Classifier/Diagrams + conf/
+*.Designer.cs
+*.xsc
+*.xsd
+*.xss
 
 
 ## Ignore Visual Studio temporary files, build results, and
