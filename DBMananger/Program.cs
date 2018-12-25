@@ -88,8 +88,11 @@ namespace DBMananger
             var excelApp = new Application();
             excelApp.Visible = true;
             excelApp.Workbooks.Add();
-
             Worksheet workSheet = excelApp.ActiveSheet;
+            var cells = workSheet.Cells;
+            cells.NumberFormat = "@";
+                       
+           
             try
             {
                 var result = Parallel.ForEach<forSorter>(list, item => work(item, workSheet));

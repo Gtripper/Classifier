@@ -66,6 +66,23 @@ namespace Classifier
             mainSearch = false;
         }
 
+        /// <summary>
+        /// Этот конструктор вызвыается только для поиска по федеральным кодам!
+        /// </summary>
+        /// <param name="vri540"></param>
+        /// <param name="input"></param>
+        public RegExp(string vri540, string input)
+        {
+            this.input = input;
+            RegExpArray = null;
+            this.vri540 = vri540;
+            vri = null;
+            simpleDescription = null;
+            fastFederalSearch = false;
+            fastPZZSearch = false;
+            mainSearch = false;
+        }
+
         public bool IsFastFederalSearch()
         {
             return fastFederalSearch;

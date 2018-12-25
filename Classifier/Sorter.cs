@@ -83,22 +83,21 @@ namespace Classifier
 
         private void ForFederalSearch()
         {
-            foreach (var iter in mf)
+            var map = new CodesMapping().Map;
+
+            foreach (var iter in map.Keys)
             {
                 var reg = new RegExp(iter, input);
 
                 if (reg.OnlyFederalSearch())
                 {
-
-                    var temp = mf.Where(p => p.vri540.Equals(iter.vri540));
-                    foreach (var it in temp)
+                    var val = new CodesMapping().CreateNodes(map[iter]);
+                    foreach (var it in val)
                     {
                         AddCode(reg.Value(), it);
                     }
                 }
             }
-            
-
             codes  = codes.GroupBy(p => p.mnstr.vri).Select(grp => grp.FirstOrDefault()).ToList();           
         }
 

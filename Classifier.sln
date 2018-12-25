@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegExTest", "..\RegExTest\R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMananger", "DBMananger\DBMananger.csproj", "{6CAE72DB-F1B6-4E5F-9F4D-A236A34689ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassifierTests", "ClassifierTests\ClassifierTests.csproj", "{3CC8CF6D-5022-415E-AAB0-D490029564BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6CAE72DB-F1B6-4E5F-9F4D-A236A34689ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAE72DB-F1B6-4E5F-9F4D-A236A34689ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAE72DB-F1B6-4E5F-9F4D-A236A34689ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC8CF6D-5022-415E-AAB0-D490029564BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC8CF6D-5022-415E-AAB0-D490029564BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC8CF6D-5022-415E-AAB0-D490029564BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC8CF6D-5022-415E-AAB0-D490029564BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
