@@ -12,16 +12,6 @@ namespace Classifier
 {
     public abstract class Node
     {
-        private string vri;
-        private string vri540;
-        private string kindCode;
-        private string typeCode;
-        private string description;
-        private string simpleDescription;
-        private string funcUse;
-        private string simpleFuncUse;
-        private string[] regexpPatterns;
-
         public Node() { }
 
         public Node(string vri, string vri540
@@ -41,92 +31,37 @@ namespace Classifier
 
         public Node(Node mnstr)
         {
-            vri = mnstr.Vri;
-            vri540 = mnstr.Vri540;
-            kindCode = mnstr.KindCode;
-            typeCode = mnstr.TypeCode;
-            description = mnstr.GetDescription();
-            simpleDescription = mnstr.GetSimpleDescription();
-            funcUse = mnstr.GetFuncUse();
-            simpleFuncUse = mnstr.GetSimpleFuncUse();
-            regexpPatterns = mnstr.GetPatterns();
+            vri = mnstr.vri;
+            vri540 = mnstr.vri540;
+            kindCode = mnstr.kindCode;
+            typeCode = mnstr.typeCode;
+            description = mnstr.description;
+            simpleDescription = mnstr.simpleDescription;
+            funcUse = mnstr.funcUse;
+            simpleFuncUse = mnstr.simpleFuncUse;
+            regexpPatterns = mnstr.regexpPatterns;
         }
 
-        public string Vri
-        {
-            get
-            {
-                if (vri != "") return vri;
+        public string vri { get; set; }
 
-                else return vri540;
-            }
-        }
+        public string vri540 { get; set; }
 
-        public string Vri540
-        {
-            get => vri540;
-        }
+        public string kindCode { get; set; }
 
-        public string KindCode
-        {
-            get => kindCode;
-        }
+        public string typeCode { get; set; }
 
-        public string TypeCode
-        {
-            get => typeCode;
-        }
+        public string description { get; set; }
 
-        public List<string> GetQCode()
-        {
-            List<string> result = new List<string>();
+        public string simpleDescription { get; set; }
 
-            MatchCollection match = Regex.Matches(kindCode, @"(\b\d{3,4}\b)", RegexOptions.IgnoreCase);
+        public string funcUse { get; set; }
 
-            foreach (Match iter in match)
-            {
-                result.Add(iter.Groups[1].Value);
-            }
-            return result;
-        }
+        public string simpleFuncUse { get; set; }
 
-        public string GetDescription()
-        {
-            return description;
-        }
-
-        public string GetSimpleDescription()
-        {
-            return simpleDescription;
-        }
-
-        public string GetFuncUse()
-        {
-            return funcUse;
-        }
-
-        public string GetSimpleFuncUse()
-        {
-            return simpleFuncUse;
-        }
-
-        public List<string> CodeToList(string input)
-        {
-            List<string> result = new List<string>();
-            //string patternHex = ;
-
-
-            return null;
-        }
-
-        public string[] GetPatterns()
-        {
-            return regexpPatterns;
-        }
+        public string[] regexpPatterns { get; set; }
 
         public virtual bool GetParent(Node mstr)
         {
-            //return null;
             return GetType().BaseType.Equals(mstr.GetType());
         }
 
@@ -146,7 +81,6 @@ namespace Classifier
         {
             return false;
         }
-
     }
 
     class Agriculture : Node
@@ -510,8 +444,6 @@ namespace Classifier
         }
     }
 
-
-
     class GasStation : BaseBuisness
     {
         public GasStation(string vri, string vri540, string kindCode, string typeCode, string description,
@@ -744,14 +676,14 @@ namespace Classifier
 
         public Node getM(string vri)
         {
-            return nodes.Find(p => p.Vri.Equals(vri));
+            return nodes.Find(p => p.vri.Equals(vri));
         }
 
         public Node GetMonsterFromVRICode(string vri)
         {
             foreach (var iter in nodes)
             {
-                if (iter.Vri.Equals(vri))
+                if (iter.vri.Equals(vri))
                 {
                     return iter;
                 }
@@ -1760,7 +1692,7 @@ namespace Classifier
                ));
 
             nodes.Add(new Community("3.2.2", "3.2", "1007", "100",
-                
+
                "Размещение объектов капитального строительства для служб психологической и " +
                "бесплатной юридической помощи, социальных, пенсионных и иных служб, в которых " +
                "осуществляется прием граждан по вопросам оказания социальной помощи и " +
@@ -2501,7 +2433,7 @@ namespace Classifier
                    @"\bэнергонадзор\w*\b" }
                ));
 
-            nodes.Add(new Community("3.8.2", "3.8", "1001", "100", 
+            nodes.Add(new Community("3.8.2", "3.8", "1001", "100",
 
                "Размещение объектов капитального строительства, предназначенных " +
                "для размещения органов управления политических партий, " +
@@ -3055,7 +2987,7 @@ namespace Classifier
                     @"\bреализац\w*\s*мебел\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.5.0", "4.5", "1001", "100", 
+            nodes.Add(new Buisness("4.5.0", "4.5", "1001", "100",
 
                "Размещение объектов капитального строительства, предназначенных " +
                "для размещения организаций, оказывающих банковские и страховые ",
@@ -3077,7 +3009,7 @@ namespace Classifier
                     @"\bпункт\w*\s*обмен\w*\s*валют\w*\b" }
                ));
 
-            nodes.Add(new Buisness("4.6.0", "4.6", "1004", "100", 
+            nodes.Add(new Buisness("4.6.0", "4.6", "1004", "100",
 
                "Размещение объектов капитального строительства в целях " +
                "устройства мест общественного питания (рестораны, " +
@@ -3218,7 +3150,7 @@ namespace Classifier
                "размещение магазинов сопутствующей торговли, зданий для " +
                "организации общественного питания в качестве " +
                "объектов придорожного сервиса ",
-               
+
                "Объекты придорожного сервиса",
                "",
                "",
@@ -3745,7 +3677,7 @@ namespace Classifier
                     @"\bмеханич\w*\s*(масерск\w*|баз\w*)\b|\bремонт\w*\s*авиатехник\w*\b",
 
                     @"",
-                    @"\bремонт\w*[-\s]*строит\w*\s*баз\w*\b" } 
+                    @"\bремонт\w*[-\s]*строит\w*\s*баз\w*\b" }
                ));
 
             nodes.Add(new Industry("6.2.1.0", "6.2.1", "3002", "300",
@@ -4535,7 +4467,7 @@ namespace Classifier
                "",
                new string[] { }));
 
-            nodes.Add(new SecurityForces("8.3.0", "8.3", "3003", "300", 
+            nodes.Add(new SecurityForces("8.3.0", "8.3", "3003", "300",
 
                "Размещение объектов капитального строительства, необходимых " +
                "для подготовки и поддержания в готовности органов внутренних дел " +
@@ -4868,7 +4800,7 @@ namespace Classifier
                "Размещение береговых полос водных объектов общего пользования, " +
                "скверов, бульваров, парков, садов, велодорожек и объектов " +
                "велотранспортной инфраструктуры ",
-               
+
                "Земельные участки (территории) общего пользования",
                "",
                "",
@@ -5130,6 +5062,156 @@ namespace Classifier
                ));
         }
     }
+
+    public class CodesMapping
+    {
+        public CodesMapping()
+        {
+            Map = new Dictionary<string, string[]>
+            {
+                { "1.0",     new string[] { "1.0.0" } },
+                { "1.1",     new string[] { "1.1.0" } },
+                { "1.2",     new string[] { "1.2.0" } },
+                { "1.3",     new string[] { "1.3.0" } },
+                { "1.4",     new string[] { "1.4.0" } },
+                { "1.5",     new string[] { "1.5.0" } },
+                { "1.6",     new string[] { "1.6.0" } },
+                { "1.7",     new string[] { "1.7.0" } },
+                { "1.8",     new string[] { "1.8.0" } },
+                { "1.9",     new string[] { "1.9.0" } },
+                { "1.10",    new string[] { "1.10.0" } },
+                { "1.11",    new string[] { "1.11.0" } },
+                { "1.12",    new string[] { "1.12.0" } },
+                { "1.13",    new string[] { "1.13.0" } },
+                { "1.14",    new string[] { "1.14.0" } },
+                { "1.15",    new string[] { "1.15.0" } },
+                { "1.16",    new string[] { "1.16.0" } },
+                { "1.17",    new string[] { "1.17.0" } },
+                { "1.18",    new string[] { "1.18.0" } },
+                { "2.0",     new string[] { "2.0.0" } },
+                { "2.1",     new string[] { "2.1.0" } },
+                { "2.1.1",   new string[] { "2.1.1.0" } },
+                { "2.2",     new string[] { "2.2.0" } },
+                { "2.3",     new string[] { "2.3.0" } },
+                { "2.4",     new string[] { "2.4.0" } },
+                { "2.5",     new string[] { "2.5.0" } },
+                { "2.6",     new string[] { "2.6.0" } },
+                { "2.7",     new string[] { "2.7.0" } },
+                { "2.7.1",   new string[] { "2.7.1.0" } },
+                { "3.0",     new string[] { "3.0.0" } },
+                { "3.1",     new string[] { "3.1.1", "3.1.2", "3.1.3" } }, ///TODO: Приделать механизм для определния типа 100 или 300 
+                { "3.2",     new string[] { "3.2.1", "3.2.2", "3.2.3", "3.2.4" } },
+                { "3.3",     new string[] { "3.3.0" } },
+                { "3.4",     new string[] { "3.4.0" } },
+                { "3.4.1",   new string[] { "3.4.1.0" } },
+                { "3.4.2",   new string[] { "3.4.2.0" } },
+                { "3.5",     new string[] { "3.5.1.0", "3.5.2.0" } },
+                { "3.5.1.0", new string[] { "3.5.1.0" } },
+                { "3.5.2.0", new string[] { "3.5.2.0" } },
+                { "3.6",     new string[] { "3.6.1", "3.6.2", "3.6.3" } },
+                { "3.7",     new string[] { "3.7.1", "3.7.2" } },
+                { "3.8",     new string[] { "3.8.1", "3.8.2", "3.8.3" } },
+                { "3.9",     new string[] { "3.9.2", "3.9.3", "3.9.4", "3.9.5" } },
+                { "3.9.1",   new string[] { "3.9.1.0" } },
+                { "3.10",    new string[] { "3.10.1.0", "3.10.2.0" } },
+                { "4.0",     new string[] { "4.0.0" } },
+                { "4.1",     new string[] { "4.1.0" } },
+                { "4.2",     new string[] { "4.2.0" } },
+                { "4.3",     new string[] { "4.3.0" } },
+                { "4.4",     new string[] { "4.4.0" } },
+                { "4.5",     new string[] { "4.5.0" } },
+                { "4.6",     new string[] { "4.6.0" } },
+                { "4.7",     new string[] { "4.7.1", "4.7.2", "4.7.3" } },
+                { "4.8",     new string[] { "4.8.0" } },
+                { "4.9",     new string[] { "4.9.0" } },
+                { "4.9.1",   new string[] { "4.9.1.1", "4.9.1.2", "4.9.1.3", "4.9.1.4" } },
+                { "4.10",    new string[] { "4.10.0" } },
+                { "5.0",     new string[] { "5.0.1", "5.0.2" } },
+                { "5.1",     new string[] { "5.1.1", "5.1.2", "5.1.3", "5.1.4", "5.1.5" } },
+                { "5.2",     new string[] { "5.2.0" } },
+                { "5.2.1",   new string[] { "5.2.1.0" } },
+                { "5.3",     new string[] { "5.3.0" } },
+                { "5.4",     new string[] { "5.4.0" } },
+                { "5.5",     new string[] { "5.5.0" } },
+                { "6.0",     new string[] { "6.0.0" } },
+                { "6.1",     new string[] { "6.1.0" } },
+                { "6.2",     new string[] { "6.2.0" } },
+                { "6.2.1",   new string[] { "6.2.1.0" } },
+                { "6.3",     new string[] { "6.3.0" } },
+                { "6.3.1",   new string[] { "6.3.1.0" } },
+                { "6.4",     new string[] { "6.4.0" } },
+                { "6.5",     new string[] { "6.5.0" } },
+                { "6.6",     new string[] { "6.6.0" } },
+                { "6.7",     new string[] { "6.7.0" } },
+                { "6.7.1",   new string[] { "6.7.0" } },
+                { "6.8",     new string[] { "6.8.0" } },
+                { "6.9",     new string[] { "6.9.0" } },
+                { "6.10",    new string[] { "6.10.0" } },
+                { "6.11",    new string[] { "6.11.0" } },
+                { "7.0",     new string[] { "" } },                         ///TODO: придумать как проставить тип 777                
+                { "7.1",     new string[] { "7.1.1" } },
+                { "7.2",     new string[] { "7.2.1" } },
+                { "7.3",     new string[] { "7.3.0" } },
+                { "7.4",     new string[] { "7.4.1", "7.4.2" } },
+                { "7.5",     new string[] { "7.5.0" } },
+                { "8.0",     new string[] { "8.0.1", "8.0.2", "8.0.3" } },  ///TODO: Тоже, что и с 3.1.1. Либо 300 либо 100              
+                { "8.1",     new string[] { "8.1.0" } },
+                { "8.2",     new string[] { "" } },                         ///TODO: Что-то надо бы придумать.                
+                { "8.3",     new string[] { "8.3.0" } },
+                { "8.4",     new string[] { "8.4.0" } },
+                { "9.0",     new string[] { "9.0.0" } },
+                { "9.1",     new string[] { "9.1.0" } },
+                { "9.2",     new string[] { "9.2.0" } },
+                { "9.2.1",   new string[] { "9.2.1.0" } },
+                { "9.3",     new string[] { "9.3.0" } },
+                { "10.0",    new string[] { "10.1.0", "10.2.0" } },
+                { "10.1",    new string[] { "10.1.0" } },
+                { "10.2",    new string[] { "10.2.0" } },
+                { "10.3",    new string[] { "" } },                         ///TODO: Index or type or somestnig else               
+                { "10.4",    new string[] { "" } },                         ///TODO: Same shit.
+                { "11.0",    new string[] { "11.1.0" } },
+                { "11.2",    new string[] { "11.2.0" } },
+                { "12.0",    new string[] { "12.0.1", "12.0.2" } },         ///TODO: like 3.1.1.                 
+                { "12.1",    new string[] { "12.1.0" } },
+                { "12.2",    new string[] { "12.2.0" } },
+                { "12.3",    new string[] { "12.3.0" } },
+                { "13.1",    new string[] { "13.1.0" } },
+                { "13.2",    new string[] { "13.2.0" } },
+                { "13.3",    new string[] { "13.3.0" } }
+            };
+        }
+
+        public Dictionary<string, string[]> Map { get; }
+
+        public List<Node> CreateNodes(string[] values)
+        {
+            var mf = new NodeFeed();
+            var result = new List<Node>();
+            foreach (var value in values)
+            {
+                if (value.Equals("7.0"))
+                {
+                    var node = new BaseTransport("7.0", "", "", "777", "", "", "", "", new string[] { });
+                    result.Add(node);
+                }
+                else if (value.Equals("10.3"))
+                {
+                    var node = new BaseTransport("10.3", "", "", "300", "", "", "", "", new string[] { });
+                    result.Add(node);
+                }
+                else if (value.Equals("10.4"))
+                {
+                    var node = new BaseTransport("10.4", "", "", "300", "", "", "", "", new string[] { });
+                    result.Add(node);
+                }
+                else
+                result.Add(mf.getM(value));
+            }
+            return result;
+        }
+    }
+
+
     /// <summary>
     /// Компоратор для сортировки ВРИ_листа_2 
     /// </summary>
@@ -5139,8 +5221,8 @@ namespace Classifier
         int IComparer<string>.Compare(string x, string y)
         {
             var mf = new NodeFeed().getMonster();
-            var intA = mf.FindIndex(p => p.Vri.Equals(x));
-            var intB = mf.FindIndex(p => p.Vri.Equals(y));
+            var intA = mf.FindIndex(p => p.vri.Equals(x));
+            var intB = mf.FindIndex(p => p.vri.Equals(y));
 
             if (intA > intB) return 1;
             if (intA < intB) return -1;

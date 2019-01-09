@@ -45,10 +45,10 @@ namespace Classifier
         public RegExp(Node mnstr, string input)
         {
             this.input = input;
-            RegExpArray = mnstr.GetPatterns();
-            vri540 = mnstr.Vri540;
-            vri = mnstr.Vri;
-            simpleDescription = mnstr.GetSimpleDescription();
+            RegExpArray = mnstr.regexpPatterns;
+            vri540 = mnstr.vri540;
+            vri = mnstr.vri;
+            simpleDescription = mnstr.simpleDescription;
             fastFederalSearch = false;
             fastPZZSearch = false;
             mainSearch = false;
@@ -57,10 +57,27 @@ namespace Classifier
         public RegExp(Node mnstr)
         {
             input = "";
-            RegExpArray = mnstr.GetPatterns();
-            vri540 = mnstr.Vri540;
-            vri = mnstr.Vri;
-            simpleDescription = mnstr.GetSimpleDescription();
+            RegExpArray = mnstr.regexpPatterns;
+            vri540 = mnstr.vri540;
+            vri = mnstr.vri;
+            simpleDescription = mnstr.simpleDescription;
+            fastFederalSearch = false;
+            fastPZZSearch = false;
+            mainSearch = false;
+        }
+
+        /// <summary>
+        /// Этот конструктор вызвыается только для поиска по федеральным кодам!
+        /// </summary>
+        /// <param name="vri540"></param>
+        /// <param name="input"></param>
+        public RegExp(string vri540, string input)
+        {
+            this.input = input;
+            RegExpArray = null;
+            this.vri540 = vri540;
+            vri = null;
+            simpleDescription = null;
             fastFederalSearch = false;
             fastPZZSearch = false;
             mainSearch = false;
