@@ -5160,6 +5160,7 @@ namespace Classifier
                 { "8.3",     new string[] { "8.3.0" } },
                 { "8.4",     new string[] { "8.4.0" } },
                 { "9.0",     new string[] { "9.0.0" } },
+                { "9.1",     new string[] { "9.1.0" } },
                 { "9.2",     new string[] { "9.2.0" } },
                 { "9.2.1",   new string[] { "9.2.1.0" } },
                 { "9.3",     new string[] { "9.3.0" } },

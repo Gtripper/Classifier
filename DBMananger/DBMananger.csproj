@@ -59,6 +59,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>shortList100kDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="БТИDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>БТИDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Сущпол_ЗУDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -77,6 +87,28 @@
     </None>
     <None Include="shortList100kDataSet.xss">
       <DependentUpon>shortList100kDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="БТИDataSet.xsc">
+      <DependentUpon>БТИDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="БТИDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>БТИDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="БТИDataSet.xss">
+      <DependentUpon>БТИDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Сущпол_ЗУDataSet.xsc">
+      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Сущпол_ЗУDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Сущпол_ЗУDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Сущпол_ЗУDataSet.xss">
+      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

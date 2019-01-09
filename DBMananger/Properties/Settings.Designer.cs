@@ -55,5 +55,27 @@ namespace DBMananger.Properties {
                 return ((string)(this["shortList100kConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"D:\\work\\Mapinfo\\карты в работе\\Кла" +
+            "ссификатор\\DB\\Сущпол_ЗУ.accdb\"")]
+        public string Сущпол_ЗУConnectionString {
+            get {
+                return ((string)(this["Сущпол_ЗУConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"D:\\work\\Mapinfo\\карты в работе\\Кла" +
+            "ссификатор\\DB\\БТИ.accdb\"")]
+        public string БТИ {
+            get {
+                return ((string)(this["БТИ"]));
+            }
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace Classifier
             IsFastFederalSearch = false;
             IsFastPZZSearch = false;
             IsMainSearch = false;
+            Results = new string[10];
         }
 
         public Sorter(string input, int area, Bti bti)
@@ -48,6 +49,7 @@ namespace Classifier
             IsFastPZZSearch = false;
             IsMainSearch = false;
             this.bti = bti;
+            Results = new string[10];
         }
 
         private void GetCodes_FullSearh()
@@ -328,6 +330,7 @@ namespace Classifier
             if (bl && ResidentialArea())
             {
                 codes.RemoveAll(p => p.mnstr.kindCode.Equals("3004"));
+                Results[9] = "230FIXED";
             }
         }
 
@@ -337,31 +340,41 @@ namespace Classifier
         /// <returns><string></returns>
         private string Type()
         {
-            if (codes.Exists(p => p.mnstr.typeCode.Equals("333")))
+            try
             {
-                return "333";
+                if (codes.Exists(p => p.mnstr.typeCode.Equals("333")))
+                {
+                    return "333";
+                }
+                else if (codes.Count == 1)
+                {
+                    return codes[0].mnstr.typeCode;
+                }
+                else
+                {
+                    var result = "";
+                    var set = new SortedSet<string>();
+                    foreach (var val in codes)
+                    {
+                        if (val.mnstr.typeCode != "")
+                        set.Add(val.mnstr.typeCode.Remove(1));
+                    }
+                    foreach (var val in set)
+                    {
+                        result += val;
+                    }
+                    while (result.Length < 3)
+                    {
+                        result += "0";
+                    }
+                    return result;
+                }
             }
-            else if (codes.Count == 1)
+            catch (Exception e)
             {
-                return codes[0].mnstr.typeCode;
-            }
-            else
-            {
-                var result = "";
-                var set = new SortedSet<string>();
-                foreach (var val in codes)
-                {
-                    set.Add(val.mnstr.typeCode.Remove(1));
-                }
-                foreach (var val in set)
-                {
-                    result += val;
-                }
-                while (result.Length < 3)
-                {
-                    result += "0";
-                }
-                return result;
+                
+                Console.WriteLine(e.Message);
+                return e.Message;
             }
         }
 
@@ -384,6 +397,7 @@ namespace Classifier
                 var set = new SortedSet<string>();
                 foreach (var val in codes)
                 {
+                    if (val.mnstr.kindCode != "")
                     set.Add(val.mnstr.kindCode.Remove(1));
                 }
                 foreach (var val in set)
@@ -510,8 +524,7 @@ namespace Classifier
             ThashZU();
             CleanFederalCodes();
             Accomplishment();
-            PromAreaLess300();
-            
+            PromAreaLess300();         
             
 
             codesVri = StringOfVRI();           
@@ -540,10 +553,43 @@ namespace Classifier
         public void TestBehaviorSearchWithoutBti()
         {
             GetCodes_FullSearh();
-            Results[0] = StringOfVRI(); // Коды ВРИ после работы основного цикла
-            Results[1] = StringOfMatches(); // Все найденные совпадения
-            DeleteGenericVRI();
-            Results[3] = StringOfVRI(); // Без базовых кодов (6.0.0, 3.0.0, 4.0.0 etc)
+            if (codes.Count > 0)
+            {
+                Results[0] = StringOfVRI(); // Коды ВРИ после работы основного цикла
+                Results[1] = StringOfMatches(); // Все найденные совпадения
+                DeleteGenericVRI();
+                Results[2] = StringOfVRI(); // Без базовых кодов (6.0.0, 3.0.0, 4.0.0 etc)
+                ThashZU();
+                Results[3] = StringOfVRI();
+                Type230Fix();
+                Results[4] = StringOfVRI();
+                Results[5] = Type();
+                Results[6] = Kind();
+            }
+            else
+            {
+                Results[0] = "не успех";
+            }
+        }
+
+        public void Voronezh_search()
+        {
+            GetCodes_FullSearh();
+            if (codes.Count > 0)
+            {
+                Results[0] = StringOfVRI(); // Коды ВРИ после работы основного цикла
+                Results[1] = StringOfMatches(); // Все найденные совпадения
+                DeleteGenericVRI();
+                Results[2] = StringOfVRI(); // Без базовых кодов (6.0.0, 3.0.0, 4.0.0 etc)                
+                Type230Fix();
+                Results[4] = StringOfVRI();
+                Results[5] = Type();
+                Results[6] = Kind();
+            }
+            else
+            {
+                Results[0] = "не успех";
+            }
         }
     }
 

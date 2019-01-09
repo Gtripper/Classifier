@@ -15,7 +15,13 @@ namespace DBMananger
     {
         static void Main(string[] args)
         {
+            inrface2();
+            
+            
+        }
 
+        static void intrface1()
+        {
             string dbPath = @"D:\work\Mapinfo\карты в работе\Классификатор\DB\oldDB.accdb";
             string connetionString = "Provider=Microsoft.ACE.OLEDB.12.0; Mode = 16; Data Source=" + dbPath;
             OleDbConnection dbase;
@@ -31,11 +37,11 @@ namespace DBMananger
 
             int counter = 2;
 
-            
+
 
             var list = new List<forSorter>();
 
-            
+
 
             while (reader.Read())
             {
@@ -59,14 +65,14 @@ namespace DBMananger
 
                 list.Add(new forSorter(counter, bti_func, bti_count, lowLevelHousing, midLevelHousing, highLevelHousing, individualHousing, vri_doc, uniqueID));
 
-                
+
 
                 if (counter % 1000 == 0) Console.WriteLine(counter);
 
                 counter++;
             }
 
-            multyTread(list);
+            //multyTread(list);
 
             int cntr = 1;
             //foreach (var val in list)
@@ -80,10 +86,47 @@ namespace DBMananger
 
             //}
             Console.Read();
-            
         }
 
-        static void multyTread(List<forSorter> list)
+        static void inrface2()
+        {
+            string dbPath = @"D:\work\Mapinfo\карты в работе\Классификатор\DB\БТИ.accdb";
+            string connetionString = "Provider=Microsoft.ACE.OLEDB.12.0; Mode = 16; Data Source=" + dbPath;
+            OleDbConnection dbase;
+            OleDbCommand dbcom;
+
+            dbase = new OleDbConnection(connetionString);
+            dbase.Open();
+
+            string query = "SELECT Назначение_строения, Общая_площадь_здания, MAPINFO_ID, UNOM FROM БТИ";
+            dbcom = new OleDbCommand(query);
+            dbcom.Connection = dbase;
+            OleDbDataReader reader = dbcom.ExecuteReader();
+
+            int counter = 2;
+
+            var list = new List<forSorter2>();
+
+            while (reader.Read())
+            {
+
+                string bydoc = reader[0].ToString();
+                double area = (double)reader[1];
+                int FID = (int)reader[2];
+                int UNOM = (int)reader[3];
+
+                if (bydoc != "")
+                    list.Add(new forSorter2(bydoc, FID, area, UNOM));
+
+                if (counter % 1000 == 0) Console.WriteLine(counter);
+
+                counter++;
+            }
+
+            multyTread(list);
+        }
+
+        static void multyTread(List<forSorter2> list)
         {
             var excelApp = new Application();
             excelApp.Visible = true;
@@ -95,13 +138,38 @@ namespace DBMananger
            
             try
             {
-                var result = Parallel.ForEach<forSorter>(list, item => work(item, workSheet));
+                var result = Parallel.ForEach<forSorter2>(list, item => work2(item, workSheet));
+                
             }
-            catch
+            catch(Exception e)
             {
                 Console.WriteLine("FUCKUP DETECTED");
+                Console.WriteLine(e.InnerException.Message);
             }
 
+        }
+
+        static void work2(forSorter2 fors, Worksheet workSheet)
+        {
+            try
+            {
+                Classifier.Sorter Sample = new Classifier.Sorter(fors.bydoc, (int)fors.area);
+
+                Sample.Voronezh_search();
+
+                workSheet.Cells[fors.FID, "A"] = fors.UNOM;
+                workSheet.Cells[fors.FID, "D"] = Sample.Results[1];
+                workSheet.Cells[fors.FID, "G"] = Sample.Results[4];
+                workSheet.Cells[fors.FID, "H"] = Sample.Results[5];
+                workSheet.Cells[fors.FID, "I"] = Sample.Results[6];
+                workSheet.Cells[fors.FID, "J"] = Sample.Results[9];
+                workSheet.Cells[fors.FID, "M"] = fors.FID;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+                Console.WriteLine(e.Message);
+            }
         }
 
         static void work(forSorter fors, Worksheet workSheet)
@@ -110,11 +178,17 @@ namespace DBMananger
                 new Classifier.Bti(fors.bti_func, fors.bti_count, fors.lowLevelHousing, 
                     fors.midLevelHousing, fors.highLevelHousing, fors.individualHousing));
 
-            Sample.GetVRI_FullSearh();
+            Sample.TestBehaviorSearchWithoutBti();
 
-            workSheet.Cells[fors.excel_row, "C"] = Sample.CodesVri;
-            workSheet.Cells[fors.excel_row, "D"] = Sample.Mathes;
-            workSheet.Cells[fors.excel_row, "E"] = Sample.Input;
+            workSheet.Cells[fors.excel_row, "C"] = Sample.Results[0];
+            workSheet.Cells[fors.excel_row, "D"] = Sample.Results[1];
+            workSheet.Cells[fors.excel_row, "E"] = Sample.Results[2];
+            workSheet.Cells[fors.excel_row, "F"] = Sample.Results[3];
+            workSheet.Cells[fors.excel_row, "G"] = Sample.Results[4];
+            workSheet.Cells[fors.excel_row, "H"] = Sample.Results[5];
+            workSheet.Cells[fors.excel_row, "I"] = Sample.Results[6];
+            workSheet.Cells[fors.excel_row, "J"] = Sample.Results[9];
+            workSheet.Cells[fors.excel_row, "M"] = fors.vri_doc;
             workSheet.Cells[fors.excel_row, "B"] = fors.uniqueID;
             workSheet.Cells[fors.excel_row, "A"] = fors.excel_row;
 
@@ -149,6 +223,22 @@ namespace DBMananger
             this.individualHousing = individualHousing;
             this.vri_doc = vri_doc;
             this.uniqueID = uniqueID;
+        }
+    }
+
+    struct forSorter2
+    {
+        public string bydoc;
+        public int FID;
+        public double area;
+        public int UNOM;
+
+        public forSorter2(string bydoc, int FID, double area, int UNOM)
+        {
+            this.bydoc = bydoc;
+            this.FID = FID;
+            this.area = area;
+            this.UNOM = UNOM;
         }
     }
 }
