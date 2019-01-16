@@ -338,6 +338,7 @@ namespace Classifier
         /// Определение типа земучастка
         /// </summary>
         /// <returns><string></returns>
+        /// TODO: Исключить типы аля 138
         private string Type()
         {
             try
@@ -564,13 +565,19 @@ namespace Classifier
                 Type230Fix();
                 Results[4] = StringOfVRI();
                 Results[5] = Type();
-                Results[6] = Kind();
+                Results[6] = Kind();                
             }
             else
             {
                 Results[0] = "не успех";
             }
         }
+
+        ///TODO: Навести порядок в сортировщках и их методах
+        ///Сделать ветвление. Нет необходмости прогонять все методы
+        ///для всех участков.   
+        
+        ///TODO: Проверка ИЖС. Если участок 2.0.0 и ИЖС true => ИЖС
 
         public void Voronezh_search()
         {

@@ -15,9 +15,9 @@ namespace DBMananger
     {
         static void Main(string[] args)
         {
-            inrface2();
-            
-            
+            var db = new DBAdapter(@"D:\work\Mapinfo\карты в работе\Классификатор\DB\Сущпол_ЗУ.accdb", "Сущпол_ЗУ");
+            db.DbRead("bydoc");
+            Console.Read();
         }
 
         static void intrface1()
@@ -138,7 +138,7 @@ namespace DBMananger
            
             try
             {
-                var result = Parallel.ForEach<forSorter2>(list, item => work2(item, workSheet));
+                var result = Parallel.ForEach(list, item => work2(item, workSheet));
                 
             }
             catch(Exception e)

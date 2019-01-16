@@ -398,5 +398,10 @@ namespace Classifier
             }
             array[1] = result;
         }
+
+        public static bool isCadNum(string input)
+        {
+            return Regex.IsMatch(input, @"\d+:\d+:\d+:\d+");
+        }
     }
 }
