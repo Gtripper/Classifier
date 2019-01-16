@@ -47,27 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBAdapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="shortList100kDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>shortList100kDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="БТИDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>БТИDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Сущпол_ЗУDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -76,39 +62,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="shortList100kDataSet.xsc">
-      <DependentUpon>shortList100kDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="shortList100kDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>shortList100kDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="shortList100kDataSet.xss">
-      <DependentUpon>shortList100kDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="БТИDataSet.xsc">
-      <DependentUpon>БТИDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="БТИDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>БТИDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="БТИDataSet.xss">
-      <DependentUpon>БТИDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Сущпол_ЗУDataSet.xsc">
-      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Сущпол_ЗУDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Сущпол_ЗУDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Сущпол_ЗУDataSet.xss">
-      <DependentUpon>Сущпол_ЗУDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
