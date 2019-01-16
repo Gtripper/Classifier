@@ -217,7 +217,7 @@ namespace Classifier
                 }
             }
         }
-        private void ThashZU()
+        public void ThashZU()
         {
             var val = codes.Where(p => p.mnstr.vri.Equals("12.3.0"));
 
@@ -226,7 +226,7 @@ namespace Classifier
                 codes.RemoveAll(p => p.mnstr.vri.Equals("12.3.0"));
             }
 
-            else if (val.Count() == 1 && !bti.vri.Equals(""))
+            else if (val.Count() == 1 && bti != null)
             {                
                 foreach (var iter in bti.Codes)
                 {
