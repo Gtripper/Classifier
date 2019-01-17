@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 
 namespace DBMananger
 {
@@ -19,6 +21,7 @@ namespace DBMananger
         internal string Path { get; private set; }
         internal string DbName { get; private set; }
         internal OleDbConnection DbConn { get; private set; }
+        internal OleDbDataAdapter adapter { get; private set; }
         internal DataTable Data { get; private set; }
 
         public DBAdapter(string path, string dbName)
@@ -49,34 +52,71 @@ namespace DBMananger
 
         public void DbModify()
         {
-            string cmd = "ALTER TABLE " + DbName + " ADD COLUMN TEST Text(254)";
-            OleDbCommand com = new OleDbCommand(cmd, DbConn);
-            com.ExecuteNonQuery();
+            try
+            {
+                string addCols = "ALTER TABLE " + DbName + " ADD COLUMN new_vri Text(254), " +
+                    "               new_matches Text(254), new_tip Text(10), new_vid Text(10)";
+                OleDbCommand com = new OleDbCommand(addCols, DbConn);
+                com.ExecuteNonQuery();
+            }
+            catch
+            {
+                Console.WriteLine("COLUMNS ARE EXIST");
+            }
         }
 
         public void DbRead(string vri_doc)
         {
             string query = "SELECT * FROM " + DbName;
 
-            OleDbDataAdapter adapter = new OleDbDataAdapter(query, DbConn);
+            adapter = new OleDbDataAdapter(query, DbConn);
+            
             DataSet ds = new DataSet();
             adapter.Fill(ds);
 
             Data = ds.Tables[0];
 
+            
+        }
 
-            Parallel.ForEach(Data.Rows.Cast<DataRow>(), item =>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// TODO: Допилить обрезатель строк под 254 символа.
+        public void RunSorter()
+        {
+            try
             {
-                op(item);
-                Console.WriteLine(item["TEST"]);
-            });
+                Parallel.ForEach(Data.Rows.Cast<DataRow>(), item =>
+                {
+                    var res = new Classifier.Sorter(item["VRI_DOC"].ToString(), 0,
+                    new Classifier.BtiMock().Bti);
 
+                    res.TestBehaviorSearchWithoutBti();
+                    item.BeginEdit();
+                    item["new_vri"] = res.Results[4];
+                    item["new_matches"] = res.Results[1];
+                    item["new_tip"] = res.Results[5];
+                    item["new_vid"] = res.Results[6];
+                    item.EndEdit();
+                    Console.WriteLine(item["new_vri"] + "   " + item["new_tip"]);
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            finally
+            {
+                Console.WriteLine("ЭТО ПИШЕТСЯ ПОСЛЕ ЦИКЛА");
 
+                OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter);
+                adapter.UpdateCommand = builder.GetUpdateCommand();
 
+                adapter.Update(Data);
 
-            adapter.Update(ds);
-
-
+                Console.Read();
+            }
         }
 
         private void op(DataRow row)
@@ -84,6 +124,8 @@ namespace DBMananger
             var res = new Classifier.Sorter(row["bydoc"].ToString(), 0,
                 new Classifier.Bti("жилой дом", 1, false, false, false, true));
             res.TestBehaviorSearchWithoutBti();
+
+            
 
             row["TEST"] = res.Results[4];
         }

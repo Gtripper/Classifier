@@ -50,6 +50,7 @@ namespace Classifier
             IsMainSearch = false;
             this.bti = bti;
             Results = new string[10];
+            //Results[10] = { "", "", "", "", "", "", "", "", "", ""};
         }
 
         private void GetCodes_FullSearh()
@@ -61,7 +62,7 @@ namespace Classifier
 
                 if (reg.IsFastFederalSearch())
                 {
-                    RemoveAllCodes();                    
+                    RemoveAllCodes();
                     IsMainSearch = false;
                     IsFastFederalSearch = true;
                     ForFederalSearch();
@@ -339,7 +340,7 @@ namespace Classifier
         /// </summary>
         /// <returns><string></returns>
         /// TODO: Исключить типы аля 138
-        private string Type()
+        public string Type()
         {
             try
             {
@@ -351,14 +352,14 @@ namespace Classifier
                 {
                     return codes[0].mnstr.typeCode;
                 }
-                else
+                else if (codes.Count > 1)
                 {
                     var result = "";
                     var set = new SortedSet<string>();
                     foreach (var val in codes)
                     {
                         if (val.mnstr.typeCode != "")
-                        set.Add(val.mnstr.typeCode.Remove(1));
+                            set.Add(val.mnstr.typeCode.Remove(1));
                     }
                     foreach (var val in set)
                     {
@@ -370,6 +371,8 @@ namespace Classifier
                     }
                     return result;
                 }
+                else
+                    return "";
             }
             catch (Exception e)
             {
@@ -385,7 +388,7 @@ namespace Classifier
         /// </summary>
         /// TODO: Как-то переделать codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
         /// <returns><string></returns>
-        private string Kind()
+        public string Kind()
         {
             if (codes.Count == 1 ||
                     codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
@@ -399,7 +402,7 @@ namespace Classifier
                 foreach (var val in codes)
                 {
                     if (val.mnstr.kindCode != "")
-                    set.Add(val.mnstr.kindCode.Remove(1));
+                        set.Add(val.mnstr.kindCode.Remove(1));
                 }
                 foreach (var val in set)
                 {
@@ -491,6 +494,7 @@ namespace Classifier
         /// <summary>
         /// Все результаты работы в этом массиве
         /// </summary>
+        /// TODO Инициализировать пустыми строками
         public string[] Results { get; private set; }
 
         public Bti Bti => bti;
@@ -555,7 +559,7 @@ namespace Classifier
         {
             GetCodes_FullSearh();
             if (codes.Count > 0)
-            {
+            {                
                 Results[0] = StringOfVRI(); // Коды ВРИ после работы основного цикла
                 Results[1] = StringOfMatches(); // Все найденные совпадения
                 DeleteGenericVRI();
@@ -570,6 +574,12 @@ namespace Classifier
             else
             {
                 Results[0] = "не успех";
+                Results[1] = "";
+                Results[2] = "";
+                Results[3] = "";
+                Results[4] = "";
+                Results[5] = "";
+                Results[6] = "";
             }
         }
 
@@ -665,6 +675,16 @@ namespace Classifier
         public bool mid { get => is2_5; }
         public bool hight { get => is2_6; }
         public bool CorrectedByBti { get => correctedByBti; set { correctedByBti = value; } }
+    }
+
+    public class BtiMock
+    {
+        public Bti Bti { get; }
+
+        public BtiMock()
+        {
+            Bti = new Bti("IT'S A MOCK", 0, false, false, false, false);
+        }
     }
 
     public class Codes
