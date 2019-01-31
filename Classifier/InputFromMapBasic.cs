@@ -403,5 +403,33 @@ namespace Classifier
         {
             return Regex.IsMatch(input, @"\d+:\d+:\d+:\d+");
         }
+
+        /// <summary>
+        /// Сортировка строки вида "2b 2c 2a 1c 2h"
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>string result</returns>
+        public static string sortStrings(string input)
+        {
+            string result = "";
+
+            var match = Regex.Matches(input, @"\b\d\w\b", RegexOptions.Compiled);
+
+            if (input.Length > 0 && match.Count == 0)
+            {
+                result = "Unexpected format of input string";
+            }
+
+            var list = match.Cast<Match>().Select(p => p.Value).ToList();
+
+            list.Sort();
+
+            foreach (var val in list)
+            {
+                result += val + " ";
+            }
+            result = result.TrimEnd();
+            return result;
+        }
     }
 }

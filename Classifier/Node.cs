@@ -659,7 +659,12 @@ namespace Classifier
     }
 
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// TODO: Реализовать создание одного экземпляра Node без создания List<Node>
+    /// Заменить методы свойствами.
+    /// Переработать кх
     public class NodeFeed : Node, IMonsterFeed
     {
         private List<Node> nodes;
@@ -4994,7 +4999,7 @@ namespace Classifier
                     @"\bзем\w*\s*участ\w*\b.*\bограничен\w*\s*в\s*оборот\w*\b" }
                ));
 
-            nodes.Add(new Housing("13.1.0", "13.1", "8000", "800",
+            nodes.Add(new Housing("13.1.0", "13.1", "3006", "800",
 
                "Осуществление деятельности, связанной с выращиванием " +
                "ягодных, овощных, бахчевых или иных сельскохозяйственных " +

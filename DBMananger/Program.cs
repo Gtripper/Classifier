@@ -15,14 +15,16 @@ namespace DBMananger
     {
         static void Main(string[] args)
         {
-            var db = new DBAdapter(@"D:\work\Mapinfo\карты в работе\Классификатор\DB\Сущпол_ЗУ.accdb", "Сущпол_ЗУ");
-            db.DbRead("bydoc");
+            var db = new DBAdapter(@"D:\work\Mapinfo\карты в работе\Классификатор\DB\ПланФакт_сущпол_СВОД.accdb", "ПланФакт_сущпол_СВОД");
+            db.DbModify();
+            db.DbRead("VRI_DOC");
             Console.Read();
+            
         }
 
         static void intrface1()
         {
-            string dbPath = @"D:\work\Mapinfo\карты в работе\Классификатор\DB\oldDB.accdb";
+            string dbPath = @"D:\work\Mapinfo\карты в работе\Классификатор\DB\Доп_ЗУ.accdb";
             string connetionString = "Provider=Microsoft.ACE.OLEDB.12.0; Mode = 16; Data Source=" + dbPath;
             OleDbConnection dbase;
             OleDbCommand dbcom;
@@ -30,7 +32,7 @@ namespace DBMananger
             dbase = new OleDbConnection(connetionString);
             dbase.Open();
 
-            string query = "SELECT bti_func, кол_во_объектов_БТИ, Признак_2_1_1, Признак_2_5, Признак_2_6, признак_ИЖС, VRI_DOC, OBJECTID FROM ПланФакт_сущпол";
+            string query = "SELECT bydoc, FID FROM Доп_ЗУ";
             dbcom = new OleDbCommand(query);
             dbcom.Connection = dbase;
             OleDbDataReader reader = dbcom.ExecuteReader();
@@ -46,16 +48,16 @@ namespace DBMananger
             while (reader.Read())
             {
 
-                string bti_func = reader[0].ToString();
-                int bti_count = (int)reader[1];
-                bool lowLevelHousing = (bool)reader[2];
-                bool midLevelHousing = (bool)reader[3];
-                bool highLevelHousing = (bool)reader[4];
-                bool individualHousing = (bool)reader[5];
+                string bti_func = "";
+                int bti_count = 0;
+                bool lowLevelHousing = false;
+                bool midLevelHousing = false;
+                bool highLevelHousing = false;
+                bool individualHousing = false;
 
-                string vri_doc = reader[6].ToString();
+                string vri_doc = reader[0].ToString();
 
-                double uniqueID = (double)reader[7];
+                double uniqueID = Single.Parse(reader[1].ToString());
 
                 //var bti = new Classifier.Bti(bti_func, bti_count, lowLevelHousing, midLevelHousing, highLevelHousing, individualHousing);
 
@@ -72,7 +74,7 @@ namespace DBMananger
                 counter++;
             }
 
-            //multyTread(list);
+            multyTread(list);
 
             int cntr = 1;
             //foreach (var val in list)
@@ -123,10 +125,10 @@ namespace DBMananger
                 counter++;
             }
 
-            multyTread(list);
+            //multyTread(list);
         }
 
-        static void multyTread(List<forSorter2> list)
+        static void multyTread(List<forSorter> list)
         {
             var excelApp = new Application();
             excelApp.Visible = true;
@@ -138,7 +140,7 @@ namespace DBMananger
            
             try
             {
-                var result = Parallel.ForEach(list, item => work2(item, workSheet));
+                var result = Parallel.ForEach(list, item => work(item, workSheet));
                 
             }
             catch(Exception e)
