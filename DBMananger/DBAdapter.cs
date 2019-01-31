@@ -13,7 +13,7 @@ namespace DBMananger
     /// <summary>
     /// Подключение к БД Access
     /// </summary>
-    class DBAdapter
+    internal class DBAdapter
     {
         /// <summary>
         /// Путь к базе данных
@@ -74,9 +74,7 @@ namespace DBMananger
             DataSet ds = new DataSet();
             adapter.Fill(ds);
 
-            Data = ds.Tables[0];
-
-            
+            Data = ds.Tables[0];            
         }
 
         /// <summary>

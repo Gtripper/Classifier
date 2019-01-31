@@ -32,6 +32,7 @@ namespace Classifier.Tests
         [TestMethod()]
         public void GetParentTest()
         {
+            var qqq = new Node();
             Assert.Fail();
         }
 

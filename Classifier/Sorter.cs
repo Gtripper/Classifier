@@ -9,11 +9,11 @@ using System.IO;
 namespace Classifier
 {
    
-    public interface Analizer {
+    public interface ISorterTest {
         void GetVRI_FullSearh();
     }
     
-    public class Sorter : Analizer
+    public class Sorter : ISorterTest
     {
         #region Fields
         private List<Node> mf;
@@ -529,9 +529,7 @@ namespace Classifier
             ThashZU();
             CleanFederalCodes();
             Accomplishment();
-            PromAreaLess300();         
-            
-
+            PromAreaLess300();
             codesVri = StringOfVRI();           
         }
         public void GetStringOfVRI()

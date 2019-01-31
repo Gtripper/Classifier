@@ -659,7 +659,12 @@ namespace Classifier
     }
 
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// TODO: Реализовать создание одного экземпляра Node без создания List<Node>
+    /// Заменить методы свойствами.
+    /// Переработать кх
     public class NodeFeed : Node, IMonsterFeed
     {
         private List<Node> nodes;
