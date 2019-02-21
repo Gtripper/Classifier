@@ -32,6 +32,19 @@ namespace Classifier
             if (Sample.IsFastFederalSearch) arrInt[0] = 1; else arrInt[0] = 0;
             if (Sample.IsFastPZZSearch) arrInt[1] = 1; else arrInt[1] = 0;
             if (Sample.IsMainSearch) arrInt[2] = 1; else arrInt[2] = 0;
+
+            var success = int.TryParse(Sample.Type(), out int type);
+            if (success)
+            {
+                arrInt[3] = type;
+            }
+            else arrInt[3] = 0;
+            success = int.TryParse(Sample.Kind(), out int kind);
+            if (success)
+            {
+                arrInt[4] = kind;
+            }
+            else arrInt[4] = 0;
         }
 
         public static void SimpleSearch(string[] array)

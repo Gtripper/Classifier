@@ -390,30 +390,34 @@ namespace Classifier
         /// <returns><string></returns>
         public string Kind()
         {
-            if (codes.Count == 1 ||
-                    codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
+            if (codes.Count != 0)
             {
-                return codes[0].mnstr.kindCode;
+                if (codes.Count == 1 ||
+                        codes.All(p => p.mnstr.kindCode.Equals(codes[0].mnstr.kindCode)))
+                {
+                    return codes[0].mnstr.kindCode;
+                }
+                else
+                {
+                    var result = "";
+                    var set = new SortedSet<string>();
+                    foreach (var val in codes)
+                    {
+                        if (val.mnstr.kindCode != "")
+                            set.Add(val.mnstr.kindCode.Remove(1));
+                    }
+                    foreach (var val in set)
+                    {
+                        result += val;
+                    }
+                    while (result.Length < 4)
+                    {
+                        result += "0";
+                    }
+                    return result;
+                }
             }
-            else
-            {
-                var result = "";
-                var set = new SortedSet<string>();
-                foreach (var val in codes)
-                {
-                    if (val.mnstr.kindCode != "")
-                        set.Add(val.mnstr.kindCode.Remove(1));
-                }
-                foreach (var val in set)
-                {
-                    result += val;
-                }
-                while (result.Length < 4)
-                {
-                    result += "0";
-                }
-                return result;
-            }
+            else return "";
         }
 
         #endregion
@@ -453,7 +457,23 @@ namespace Classifier
             var result = "";
             foreach (Codes str in codes)
             {
-                result += result.Equals("") ? str.mnstr.vri : ", " + str.mnstr.vri;
+                if (str.mnstr.vri.Equals(""))
+                {
+                    result += result.Equals("") ? GetVRIFromCodesMapping(str) : ", " + GetVRIFromCodesMapping(str);
+                }
+                else
+                    result += result.Equals("") ? str.mnstr.vri : ", " + str.mnstr.vri;
+            }
+            return result;
+        }
+        private string GetVRIFromCodesMapping(Codes nullVRI)
+        {
+            var vri540 = nullVRI.mnstr.vri540;
+            var dict = new CodesMapping().Map;
+            var result = "";
+            foreach (var vri in dict[vri540])
+            {
+                result += result.Equals("") ? vri : ", " + vri; 
             }
             return result;
         }
