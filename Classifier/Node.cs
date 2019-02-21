@@ -60,6 +60,15 @@ namespace Classifier
 
         public string[] regexpPatterns { get; set; }
 
+        /// <summary>
+        /// Поиск ВРИ, соответствующих федеральному коду
+        /// </summary>
+        /// <returns></returns>
+        public virtual string[] EmptyVRI()
+        {
+            return new CodesMapping().Map[vri540];
+        }
+
         public virtual bool GetParent(Node mstr)
         {
             return GetType().BaseType.Equals(mstr.GetType());
@@ -679,22 +688,27 @@ namespace Classifier
             return nodes;
         }
 
+        /// <summary>
+        /// Get Node with vri code
+        /// </summary>
+        /// <param name="vri"></param>
+        /// <returns></returns>
         public Node getM(string vri)
         {
             return nodes.Find(p => p.vri.Equals(vri));
         }
 
-        public Node GetMonsterFromVRICode(string vri)
+        /// <summary>
+        /// Get Node with federal code
+        /// </summary>
+        /// <param name="fCode"></param>
+        /// <returns></returns>
+        public Node GetNodeBasedFCode(string fCode)
         {
-            foreach (var iter in nodes)
-            {
-                if (iter.vri.Equals(vri))
-                {
-                    return iter;
-                }
-            }
-            return null;
+            return nodes.Find(p => p.vri540.Equals(fCode));
         }
+
+        
 
         private void Feeding()
         {

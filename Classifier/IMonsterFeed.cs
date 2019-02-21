@@ -4,7 +4,6 @@ namespace Classifier
 {
     public interface IMonsterFeed
     {
-        List<Node> getMonster();
-        Node GetMonsterFromVRICode(string vri);
+        List<Node> getMonster();        
     }
 }
