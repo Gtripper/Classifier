@@ -17,8 +17,8 @@ namespace ClassifierTest
             var input = "";
             var area = 0;
 
-            Analizer analizer = new Sorter(input, area);  //Sample = new Sorter(input, area);
-            analizer.
+            
+            
         }
     }
 }
