@@ -18,5 +18,11 @@ namespace Tests
             var parent = new NodeFeed().getM("2.0.0");
             Assert.True(child.GetParent(parent));
         }
+
+        [Test]
+        public void EmptyVRI_GetCorrectListOfVRIBasedVRI540()
+        {
+            
+        }
     }
 }
