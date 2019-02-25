@@ -120,6 +120,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeProcessing.cs" />
+    <Compile Include="Fasade.cs" />
     <Compile Include="IMonsterFeed.cs" />
     <Compile Include="InputFromMapBasic.cs" />
     <Compile Include="Node.cs" />

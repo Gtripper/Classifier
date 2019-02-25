@@ -150,5 +150,15 @@ namespace Classifier.Tests
                 Vri_List += (Vri_List.Length == 0) ? code : ", " + code;
             }
         }
+
+        [TestCase("магазины(4.4); общественное питание(4.6); развлечения(4.8)", true)]
+        public void ISearch_IsFederalSearch_ReturnsTrue(string input, bool expected)
+        {
+            ISearchCodes Sample = new SearchCodes(input);
+
+            Sample.MainLoop();
+
+            Assert.AreEqual(expected, Sample.IsFederalSearch);
+        }
     }
 }

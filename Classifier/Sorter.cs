@@ -94,11 +94,11 @@ namespace Classifier
 
                 if (reg.OnlyFederalSearch())
                 {
-                    var val = new CodesMapping().CreateNodes(map[iter]);
-                    foreach (var it in val)
-                    {
-                        AddCode(reg.Value(), it);
-                    }
+                    //var val = new CodesMapping().CreateNodes(map[iter]);
+                    //foreach (var it in val)
+                    //{
+                    //    AddCode(reg.Value(), it);
+                    //}
                 }
             }
             codes  = codes.GroupBy(p => p.mnstr.vri).Select(grp => grp.FirstOrDefault()).ToList();           

@@ -120,12 +120,9 @@ namespace Classifier
         /// Добавление в Codes кодов ПЗЗ из массива CodeMapping
         /// </summary>
         /// <param name="codes"></param>
-        private void AddCodesFromCodeMappingArray(string[] codes)
+        private void AddCodesFromCodeMapping(List<string> codes)
         {
-            foreach (var code in codes)
-            {
-                Codes.Add(code);
-            }
+            Codes.AddRange(codes);
         }
 
         /// <summary>
@@ -143,7 +140,7 @@ namespace Classifier
 
                 if (reg.IsMatch(input))
                 {
-                    AddCodesFromCodeMappingArray(nodes[node]);
+                    AddCodesFromCodeMapping(nodes[node]);
                     match = reg.Match(input).Value;
                     AdddMatches(match);
                 }
