@@ -27,7 +27,7 @@ namespace Classifier
         #region Methods
         public Sorter(string input, int area)
         {
-            mf = new NodeFeed().getMonster();
+            mf = new NodeFeed().GetNodes();
             Input = input;
             this.area = area;
             codes = new List<Codes>();
@@ -40,7 +40,7 @@ namespace Classifier
 
         public Sorter(string input, int area, Bti bti)
         {
-            mf = new NodeFeed().getMonster();
+            mf = new NodeFeed().GetNodes();
             this.area = area;
             Input = input;
             codes = new List<Codes>();

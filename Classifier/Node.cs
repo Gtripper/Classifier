@@ -66,7 +66,14 @@ namespace Classifier
         /// <returns></returns>
         public virtual string[] EmptyVRI()
         {
-            return new CodesMapping().Map[vri540];
+            try
+            {
+                return new CodesMapping().Map[vri540];
+            }
+            catch
+            {
+                throw new Exception("Federal code must be exist and correct");
+            }
         }
 
         public virtual bool GetParent(Node mstr)
@@ -92,6 +99,7 @@ namespace Classifier
         }
     }
 
+    #region SomeClasses
     class Agriculture : Node
     {
         public Agriculture(string vri, string vri540, string kindCode, string typeCode, string description,
@@ -666,6 +674,7 @@ namespace Classifier
         {
         }
     }
+    #endregion
 
 
     /// <summary>
@@ -683,7 +692,7 @@ namespace Classifier
             Feeding();
         }
 
-        public List<Node> getMonster()
+        public List<Node> GetNodes()
         {
             return nodes;
         }
@@ -5174,7 +5183,7 @@ namespace Classifier
                 { "6.9",     new string[] { "6.9.0" } },
                 { "6.10",    new string[] { "6.10.0" } },
                 { "6.11",    new string[] { "6.11.0" } },
-                { "7.0",     new string[] { "" } },                         ///TODO: придумать как проставить тип 777                
+                { "7.0",     new string[] {  } },                         ///TODO: придумать как проставить тип 777                
                 { "7.1",     new string[] { "7.1.1" } },
                 { "7.2",     new string[] { "7.2.1" } },
                 { "7.3",     new string[] { "7.3.0" } },
@@ -5182,7 +5191,7 @@ namespace Classifier
                 { "7.5",     new string[] { "7.5.0" } },
                 { "8.0",     new string[] { "8.0.1", "8.0.2", "8.0.3" } },  ///TODO: Тоже, что и с 3.1.1. Либо 300 либо 100              
                 { "8.1",     new string[] { "8.1.0" } },
-                { "8.2",     new string[] { "" } },                         ///TODO: Что-то надо бы придумать.                
+                { "8.2",     new string[] {  } },                           ///TODO: Что-то надо бы придумать.                
                 { "8.3",     new string[] { "8.3.0" } },
                 { "8.4",     new string[] { "8.4.0" } },
                 { "9.0",     new string[] { "9.0.0" } },
@@ -5193,8 +5202,8 @@ namespace Classifier
                 { "10.0",    new string[] { "10.1.0", "10.2.0" } },
                 { "10.1",    new string[] { "10.1.0" } },
                 { "10.2",    new string[] { "10.2.0" } },
-                { "10.3",    new string[] { "" } },                         ///TODO: Index or type or somestnig else               
-                { "10.4",    new string[] { "" } },                         ///TODO: Same shit.
+                { "10.3",    new string[] { } },                            ///TODO: Index or type or somestnig else               
+                { "10.4",    new string[] { } },                            ///TODO: Same shit.
                 { "11.0",    new string[] { "11.1.0" } },
                 { "11.2",    new string[] { "11.2.0" } },
                 { "12.0",    new string[] { "12.0.1", "12.0.2" } },         ///TODO: like 3.1.1.                 
@@ -5246,7 +5255,7 @@ namespace Classifier
     {
         int IComparer<string>.Compare(string x, string y)
         {
-            var mf = new NodeFeed().getMonster();
+            var mf = new NodeFeed().GetNodes();
             var intA = mf.FindIndex(p => p.vri.Equals(x));
             var intB = mf.FindIndex(p => p.vri.Equals(y));
 
