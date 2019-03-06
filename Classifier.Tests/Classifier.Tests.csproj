@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BTI.Tests.cs" />
+    <Compile Include="CodeProcessing.Tests.cs" />
     <Compile Include="Node.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchCodes.Tests.cs" />

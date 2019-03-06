@@ -120,6 +120,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BTI.cs" />
+    <Compile Include="CodeComparer.cs" />
     <Compile Include="CodeProcessing.cs" />
     <Compile Include="Fasade.cs" />
     <Compile Include="IMonsterFeed.cs" />

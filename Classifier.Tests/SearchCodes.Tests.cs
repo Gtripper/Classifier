@@ -139,6 +139,8 @@ namespace Classifier.Tests
     {
         [TestCase("Размещение жилого дачного дома 13.3.0 (не предназначенного для раздела на " +
             "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "13.3.0")]
+        [TestCase("эксплуатации издательства", "6.11.0")]
+        [TestCase("Благоустройство территории", "12.0.1")]
         public void ISearchCodes_MainLoop_ReturnsCorrectVRI(string input, string vri)
         {
             ISearchCodes Sample = new SearchCodes(input);
