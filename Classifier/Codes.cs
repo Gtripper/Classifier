@@ -75,10 +75,46 @@ namespace Classifier
         /// </summary>
         /// <param name="codes"></param>
         void RemoveAll(string codes);
+
+        IEnumerator<Node> GetEnumerator();
+    }
+
+    public interface ICodesTypes
+    {
+        /// <summary>
+        /// Возвращает количество элементов коллекции Nodes
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
+        /// Определяет, содержит ли Nodes типы, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsType(IEnumerable<string> codes);
+
+        /// <summary>
+        /// Определяет, содержит ли Nodes типы, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsType(string codes);
+
+        /// <summary>
+        /// Возвращает коллекцию уникальных типов Nodes
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetTypes();
+
+        /// <summary>
+        /// Возвращает коллекцию уникальных видов Nodes
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetKinds();
     }
 
 
-    class Codes : ICodes
+    class Codes : ICodes, ICodesTypes, IEnumerable<Node>
     {
         NodeFeed mf;
         public List<Node> Nodes { get; private set; }
@@ -89,7 +125,7 @@ namespace Classifier
             Nodes = new List<Node>();
         }
 
-        public int Count {get { return Nodes?.Count ?? 0; }}
+        public int Count { get { return Nodes?.Count ?? 0; } }
 
         public void Add(Node node)
         {
@@ -133,6 +169,20 @@ namespace Classifier
             return Exists(result);
         }
 
+        public bool ExistsType(IEnumerable<string> types)
+        {
+            return Nodes.Exists(p => types.Contains(p.typeCode));
+            return Nodes.Exists(p => types.Contains(p.typeCode));
+        }
+
+        public bool ExistsType(string types)
+        {
+            var pattern = @"\d+";
+            var result = Regex.Matches(types, pattern).Cast<Match>().Select(p => p.Value);
+
+            return ExistsType(result);
+        }
+
         public void RemoveAll(IEnumerable<string> codes)
         {
             Nodes.RemoveAll(p => codes.Contains(p.vri));
@@ -160,6 +210,26 @@ namespace Classifier
         {
             IComparer<Node> comparer = new CodeComparer();
             Nodes.Sort(comparer);
+        }
+
+        public List<string> GetTypes()
+        {
+            return Nodes.Select(p => p.typeCode).Distinct().ToList();
+        }
+
+        public List<string> GetKinds()
+        {
+            return Nodes.Select(p => p.kindCode).Distinct().ToList();
+        }
+
+        public IEnumerator<Node> GetEnumerator()
+        {
+            return Nodes.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return Nodes.GetEnumerator();
         }
     }
 }

@@ -125,7 +125,6 @@
     <Compile Include="CodeProcessing.cs" />
     <Compile Include="Codes.cs" />
     <Compile Include="Fasade.cs" />
-    <Compile Include="IMonsterFeed.cs" />
     <Compile Include="InputFromMapBasic.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,6 +140,7 @@
     </Compile>
     <Compile Include="RegExp.cs" />
     <Compile Include="SearchCodes.cs" />
+    <Compile Include="TypeAndKind.cs" />
     <None Include="Sorter.cs" />
   </ItemGroup>
   <ItemGroup>
