@@ -14,7 +14,8 @@ namespace Classifier
     {
         string input;
         public int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
-        public List<string> Codes { get; private set; }
+        public NodeFeed mf = new NodeFeed(); ///TODO: Same shit ^
+        public ICodes Codes { get; private set; }
         IBTI bti;
 
         /// <summary>
@@ -32,10 +33,10 @@ namespace Classifier
         /// <param name="Codes"></param>
         /// <param name="bti"></param>
         /// <param name="input"></param>
-        public CodeProcessing(List<string> _Codes, IBTI _bti, string _input)
+        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input)
         {
             // Проверка на null
-            Codes = _Codes ?? new List<string>();
+            Codes = _Codes ?? new Codes(mf);
             bti = _bti ?? new BTI();
             input = _input;
         }
@@ -73,8 +74,9 @@ namespace Classifier
                 "6.4.0", "6.5.0", "6.6.0", "6.7.0", "6.8.0", "6.11.0" });
             #endregion
 
+            var listOfVri = Codes.Nodes.Select(p => p.vri);
             // Коллекция базовых кодов, присутствующая в Codes
-            var intersect = baseCodes.Keys.ToList().Intersect(Codes);
+            var intersect = baseCodes.Keys.ToList().Intersect(listOfVri);
 
             if (intersect.Count() > 0)
             {
@@ -82,12 +84,13 @@ namespace Classifier
                 {
                     // Пересечение производных от базовых кодов
                     // и Codes
-                    if (baseCodes[val].Intersect(Codes).Count() > 0)
+                    if (baseCodes[val].Intersect(listOfVri).Count() > 0)
                     {
-                        Codes.RemoveAll(p => p.Equals(val));
+                        Codes.RemoveAll(val);
                     }
                 }
             }
+            Codes.Sort();
         }
 
         /// <summary>
@@ -102,30 +105,26 @@ namespace Classifier
         /// малоэтажные многоквартирные дома
         internal void NumberDeterminant()
         {
-
-            bool IsApartmentOrBaseHouse = Codes.Exists(p => p.Equals("2.0.0") ||
-                    p.Equals("2.1.1.0") || p.Equals("2.5.0") || p.Equals("2.6.0"));
+            var list = new List<string> { "2.0.0", "2.1.1.0", "2.5.0", "2.6.0" };
+            bool IsApartmentOrBaseHouse = Codes.Exists(list);
 
             if (IsApartmentOrBaseHouse && bti.Lo_lvl)
             {
-                Codes.RemoveAll(p => p.Equals("2.0.0") ||
-                    p.Equals("2.1.1.0") || p.Equals("2.5.0") || p.Equals("2.6.0"));
-                Codes.Add("2.1.1.0");
+                Codes.RemoveAll(list);
+                Codes.AddNodes("2.1.1.0");
             }
             if (IsApartmentOrBaseHouse && bti.Mid_lvl)
             {
-                Codes.RemoveAll(p => p.Equals("2.0.0") ||
-                    p.Equals("2.1.1.0") || p.Equals("2.5.0") || p.Equals("2.6.0"));
-                Codes.Add("2.5.0");
+                Codes.RemoveAll(list);
+                Codes.AddNodes("2.5.0");
             }
             if (IsApartmentOrBaseHouse && bti.Hi_lvl)
             {
-                Codes.RemoveAll(p => p.Equals("2.0.0") ||
-                    p.Equals("2.1.1.0") || p.Equals("2.5.0") || p.Equals("2.6.0"));
-                Codes.Add("2.6.0");
+                Codes.RemoveAll(list);
+                Codes.AddNodes("2.6.0");
             }
 
-            Codes.Sort(new CodeComparer());  
+            Codes.Sort();
         }
 
         /// <summary>
@@ -153,16 +152,16 @@ namespace Classifier
         /// TODO: refactoring this
         internal void FixCode_Other()
         {
-            bool IsOtherExist = Codes.Exists(p => p.Equals("12.3.0"));
+            bool IsOtherExist = Codes.Exists("12.3.0");
 
             if (IsOtherExist && Codes.Count > 1)
             {
-                Codes.RemoveAll(p => p.Equals("12.3.0"));
+                Codes.RemoveAll("12.3.0");
             }
             else if (IsOtherExist && Codes.Count == 1 && bti.btiCodes.Count > 0)
             {
-                Codes.RemoveAll(p => p.Equals("12.3.0"));
-                Codes.AddRange(bti.btiCodes);
+                Codes.RemoveAll("12.3.0");
+                Codes.AddNodes(bti.btiCodes.Nodes);
             }
         }
 
@@ -177,13 +176,13 @@ namespace Classifier
         {
             var pattern = @"\bблагоустр\w*\b";
             bool IsLandScaping = Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase);
-            bool CodesIsLandScapingOnly = Codes.Exists(p => p.Equals("12.0.1")) && Codes.Count == 1;
+            bool CodesIsLandScapingOnly = Codes.Exists("12.0.1") && Codes.Count == 1;
 
             if (IsLandScaping && CodesIsLandScapingOnly)
                 return true;
             else
-                
-return false;
+
+                return false;
         }
 
         /// <summary>
@@ -191,12 +190,25 @@ return false;
         /// </summary>
         internal void ElectricityStationsWithAreaLessThan300()
         {
-            bool IsElectricityStation = Codes.Exists(p => p.Equals("6.7.0"));
+            bool IsElectricityStation = Codes.Exists("6.7.0");
 
             if (IsElectricityStation && area < 300)
             {
-                var i = Codes.FindIndex(p => p.Equals("6.7.0"));
-                Codes[i] = "3.1.1";
+                Codes.RemoveAll("6.7.0");
+                Codes.AddNodes("3.1.1");
+            }
+        }
+
+        /// <summary>
+        /// Удаляет коды с видом 3004 в случае, если есть жиоые коды
+        /// </summary>
+        internal void Type230Fix()
+        {
+            var isKindCode3004Exist = Codes.Exists("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+
+            if (IsHousingCodes(Codes) && isKindCode3004Exist)
+            {
+                Codes.RemoveAll("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
             }
         }
 
@@ -205,11 +217,10 @@ return false;
         /// </summary>
         /// <param name="Codes"></param>
         /// <returns></returns>
-        internal bool IsHousingCodes(List<string> _codes)
+        internal bool IsHousingCodes(ICodes _codes)
         {
-            return _codes.Exists(p => p.Equals("2.0.0") ||
-                p.Equals("2.1.0") || p.Equals("2.2.0") || p.Equals("2.3.0") ||
-                            p.Equals("2.1.1.0") || p.Equals("2.5.0") || p.Equals("2.6.0"));
+            return _codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
+
     }
 }

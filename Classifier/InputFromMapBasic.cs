@@ -12,55 +12,55 @@ namespace Classifier
     {
         public static void SearchVRI(string[] array, int[] arrInt, bool[] arrBool, int btiCount, int ZU_area, string[] btiArrayStr, bool[] btiArrayBool)
         {
-            Bti bti = new Bti(btiArrayStr[0], btiCount, btiArrayBool[0], btiArrayBool[1], btiArrayBool[2], btiArrayBool[3]);
+            //Bti bti = new Bti(btiArrayStr[0], btiCount, btiArrayBool[0], btiArrayBool[1], btiArrayBool[2], btiArrayBool[3]);
 
-            var Sample = new Sorter(array[0], ZU_area, bti);
+            //var Sample = new Sorter(array[0], ZU_area, bti);
 
-            Sample.GetVRI_FullSearh();
-            array[1] = Sample.CodesVri;
-            array[2] = Sample.Mathes;
+            //Sample.GetVRI_FullSearh();
+            //array[1] = Sample.CodesVri;
+            //array[2] = Sample.Mathes;
 
-            arrBool[0] = Sample.maintenance;
-            arrBool[1] = Sample.accomplishment;
-            arrBool[2] = Sample.linear;
-            arrBool[3] = Sample.temporary;
+            //arrBool[0] = Sample.maintenance;
+            //arrBool[1] = Sample.accomplishment;
+            //arrBool[2] = Sample.linear;
+            //arrBool[3] = Sample.temporary;
 
 
-            btiArrayStr[1] = bti.GetVri();
-            btiArrayBool[4] = bti.CorrectedByBti;
+            //btiArrayStr[1] = bti.GetVri();
+            //btiArrayBool[4] = bti.CorrectedByBti;
 
-            if (Sample.IsFastFederalSearch) arrInt[0] = 1; else arrInt[0] = 0;
-            if (Sample.IsFastPZZSearch) arrInt[1] = 1; else arrInt[1] = 0;
-            if (Sample.IsMainSearch) arrInt[2] = 1; else arrInt[2] = 0;
+            //if (Sample.IsFastFederalSearch) arrInt[0] = 1; else arrInt[0] = 0;
+            //if (Sample.IsFastPZZSearch) arrInt[1] = 1; else arrInt[1] = 0;
+            //if (Sample.IsMainSearch) arrInt[2] = 1; else arrInt[2] = 0;
 
-            var success = int.TryParse(Sample.Type(), out int type);
-            if (success)
-            {
-                arrInt[3] = type;
-            }
-            else arrInt[3] = 0;
-            success = int.TryParse(Sample.Kind(), out int kind);
-            if (success)
-            {
-                arrInt[4] = kind;
-            }
-            else arrInt[4] = 0;
+            //var success = int.TryParse(Sample.Type(), out int type);
+            //if (success)
+            //{
+            //    arrInt[3] = type;
+            //}
+            //else arrInt[3] = 0;
+            //success = int.TryParse(Sample.Kind(), out int kind);
+            //if (success)
+            //{
+            //    arrInt[4] = kind;
+            //}
+            //else arrInt[4] = 0;
         }
 
         public static void SimpleSearch(string[] array)
         {
-            var area = 0;
-            Sorter Sample = new Sorter(array[0], area);
-            Sample.SimpleSearch();
-            array[1] = Sample.CodesVri;
-            array[2] = Sample.Mathes;
+            //var area = 0;
+            //Sorter Sample = new Sorter(array[0], area);
+            //Sample.SimpleSearch();
+            //array[1] = Sample.CodesVri;
+            //array[2] = Sample.Mathes;
         }
 
         public static void LinearAndTemporary(string inpt, bool[] ArrBool)
         {
-            Sorter Sample = new Sorter(inpt, 0);
-            ArrBool[0] = Sample.temporary;
-            ArrBool[1] = Sample.linear;
+            //Sorter Sample = new Sorter(inpt, 0);
+            //ArrBool[0] = Sample.temporary;
+            //ArrBool[1] = Sample.linear;
         }
 
         public static void Placement(string inpt, string bti, string cad_num, string doc, bool[] ArrBool)

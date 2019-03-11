@@ -64,16 +64,16 @@ namespace Classifier
         /// Поиск ВРИ, соответствующих федеральному коду
         /// </summary>
         /// <returns></returns>
-        public virtual List<string> EmptyVRI()
+        public virtual List<Node> EmptyVRI()
         {
-            try
+            var mf = new NodeFeed();
+            var list = new CodesMapping().Map[vri540];
+            var result = new List<Node>();
+            foreach (var val in list)
             {
-                return new CodesMapping().Map[vri540];
+                result.Add(mf.getM(val));
             }
-            catch
-            {
-                throw new Exception("Federal code must be exist and correct");
-            }
+            return result;
         }
 
         public virtual bool GetParent(Node mstr)
@@ -96,6 +96,11 @@ namespace Classifier
         public virtual bool isHousing()
         {
             return false;
+        }
+
+        public virtual bool Equals(Node node)
+        {
+            return vri.Equals(node.vri);
         }
     }
 
@@ -717,7 +722,7 @@ namespace Classifier
             return nodes.Find(p => p.vri540.Equals(fCode));
         }
 
-        
+
 
         private void Feeding()
         {
@@ -3629,7 +3634,7 @@ namespace Classifier
                     @"(\bпроизводств\w\s*)?цех\w*\s*(по)?\s*(производ\w*|изготовл\w*|(об|пере)работ\w*|выпуск\w*|сборк\w*)?" +
                     @"\bпроизводств\w*\s*центр\w*\b",
 
-                    @"\bбытовых\s*услуг\b|\bучебн\w*\b|\bавтокомбина\w*\b|\bсел\w*\s*хоз\w*\b|\bдревесин\w*\b|" + 
+                    @"\bбытовых\s*услуг\b|\bучебн\w*\b|\bавтокомбина\w*\b|\bсел\w*\s*хоз\w*\b|\bдревесин\w*\b|" +
                     @"\bлесоцех\w*\b|\bдерево\w*\b|\bдет[.]?\w*\b|\bбытов\w*\b",
                     @"\bзавод\w{0,2}\b|\bфабрик\w*\b|\bкомбинат\w*\b",
 
@@ -5242,7 +5247,7 @@ namespace Classifier
                     result.Add(node);
                 }
                 else
-                result.Add(mf.getM(value));
+                    result.Add(mf.getM(value));
             }
             return result;
         }

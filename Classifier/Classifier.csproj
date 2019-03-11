@@ -123,6 +123,7 @@
     <Compile Include="BTI.cs" />
     <Compile Include="CodeComparer.cs" />
     <Compile Include="CodeProcessing.cs" />
+    <Compile Include="Codes.cs" />
     <Compile Include="Fasade.cs" />
     <Compile Include="IMonsterFeed.cs" />
     <Compile Include="InputFromMapBasic.cs" />
@@ -140,7 +141,7 @@
     </Compile>
     <Compile Include="RegExp.cs" />
     <Compile Include="SearchCodes.cs" />
-    <Compile Include="Sorter.cs" />
+    <None Include="Sorter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

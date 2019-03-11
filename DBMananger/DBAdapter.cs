@@ -87,17 +87,17 @@ namespace DBMananger
             {
                 Parallel.ForEach(Data.Rows.Cast<DataRow>(), item =>
                 {
-                    var res = new Classifier.Sorter(item["VRI_DOC"].ToString(), 0,
-                    new Classifier.BtiMock().Bti);
+                    //var res = new Classifier.Sorter(item["VRI_DOC"].ToString(), 0,
+                    //new Classifier.BtiMock().Bti);
 
-                    res.TestBehaviorSearchWithoutBti();
-                    item.BeginEdit();
-                    item["new_vri"] = res.Results[4];
-                    item["new_matches"] = res.Results[1];
-                    item["new_tip"] = res.Results[5];
-                    item["new_vid"] = res.Results[6];
-                    item.EndEdit();
-                    Console.WriteLine(item["new_vri"] + "   " + item["new_tip"]);
+                    //res.TestBehaviorSearchWithoutBti();
+                    //item.BeginEdit();
+                    //item["new_vri"] = res.Results[4];
+                    //item["new_matches"] = res.Results[1];
+                    //item["new_tip"] = res.Results[5];
+                    //item["new_vid"] = res.Results[6];
+                    //item.EndEdit();
+                    //Console.WriteLine(item["new_vri"] + "   " + item["new_tip"]);
                 });
             }
             catch (Exception e)
@@ -119,13 +119,13 @@ namespace DBMananger
 
         private void op(DataRow row)
         {
-            var res = new Classifier.Sorter(row["bydoc"].ToString(), 0,
-                new Classifier.Bti("жилой дом", 1, false, false, false, true));
-            res.TestBehaviorSearchWithoutBti();
+            //var res = new Classifier.Sorter(row["bydoc"].ToString(), 0,
+            //    new Classifier.Bti("жилой дом", 1, false, false, false, true));
+            //res.TestBehaviorSearchWithoutBti();
 
             
 
-            row["TEST"] = res.Results[4];
+            //row["TEST"] = res.Results[4];
         }
 
         public void DbRead(string vri_doc, string area)

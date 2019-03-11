@@ -8,7 +8,7 @@ namespace Classifier
 {
     public interface IBTI
     {
-        List<string> btiCodes { get; }
+        ICodes btiCodes { get; }
         bool Lo_lvl { get; }
         bool Mid_lvl { get; }
         bool Hi_lvl { get; }
@@ -19,14 +19,17 @@ namespace Classifier
     /// </summary>
     class BTI : IBTI
     {
-        public List<string> btiCodes { get; }
+
+        public NodeFeed mf = new NodeFeed();
+
+        public ICodes btiCodes { get; }
         public bool Lo_lvl { get; }
         public bool Mid_lvl { get; }
         public bool Hi_lvl { get; }
 
         public BTI()
         {
-            btiCodes = new List<string>();
+            btiCodes = new Codes(mf);
             Lo_lvl = false;
             Mid_lvl = false;
             Hi_lvl = false;
@@ -40,17 +43,12 @@ namespace Classifier
         /// <param name="hi"></param>
         public BTI(string _codes, bool _lo, bool _mid, bool _hi)
         {
-            btiCodes = ConvertStringOfCodesToList(_codes);
+            btiCodes = new Codes(mf);
+            btiCodes.AddNodes(_codes);
             Lo_lvl = _lo;
             Mid_lvl = _mid;
             Hi_lvl = _hi;
         }
 
-        internal List<string> ConvertStringOfCodesToList(string inputCodes)
-        {
-            var pattern = @"\d+[.]\d+[.]\d+([.]\d+)?";             
-            var result = Regex.Matches(inputCodes, pattern).Cast<Match>().Select(p => p.Value).ToList();
-            return result;
-        }
     }
 }

@@ -155,17 +155,17 @@ namespace DBMananger
         {
             try
             {
-                Classifier.Sorter Sample = new Classifier.Sorter(fors.bydoc, (int)fors.area);
+                //Classifier.Sorter Sample = new Classifier.Sorter(fors.bydoc, (int)fors.area);
 
-                Sample.Voronezh_search();
+                //Sample.Voronezh_search();
 
-                workSheet.Cells[fors.FID, "A"] = fors.UNOM;
-                workSheet.Cells[fors.FID, "D"] = Sample.Results[1];
-                workSheet.Cells[fors.FID, "G"] = Sample.Results[4];
-                workSheet.Cells[fors.FID, "H"] = Sample.Results[5];
-                workSheet.Cells[fors.FID, "I"] = Sample.Results[6];
-                workSheet.Cells[fors.FID, "J"] = Sample.Results[9];
-                workSheet.Cells[fors.FID, "M"] = fors.FID;
+                //workSheet.Cells[fors.FID, "A"] = fors.UNOM;
+                //workSheet.Cells[fors.FID, "D"] = Sample.Results[1];
+                //workSheet.Cells[fors.FID, "G"] = Sample.Results[4];
+                //workSheet.Cells[fors.FID, "H"] = Sample.Results[5];
+                //workSheet.Cells[fors.FID, "I"] = Sample.Results[6];
+                //workSheet.Cells[fors.FID, "J"] = Sample.Results[9];
+                //workSheet.Cells[fors.FID, "M"] = fors.FID;
             }
             catch (Exception e)
             {
@@ -176,23 +176,23 @@ namespace DBMananger
 
         static void work(forSorter fors, Worksheet workSheet)
         {
-            Classifier.Sorter Sample = new Classifier.Sorter(fors.vri_doc, 600, 
-                new Classifier.Bti(fors.bti_func, fors.bti_count, fors.lowLevelHousing, 
-                    fors.midLevelHousing, fors.highLevelHousing, fors.individualHousing));
+            //Classifier.Sorter Sample = new Classifier.Sorter(fors.vri_doc, 600, 
+            //    new Classifier.Bti(fors.bti_func, fors.bti_count, fors.lowLevelHousing, 
+            //        fors.midLevelHousing, fors.highLevelHousing, fors.individualHousing));
 
-            Sample.TestBehaviorSearchWithoutBti();
+            //Sample.TestBehaviorSearchWithoutBti();
 
-            workSheet.Cells[fors.excel_row, "C"] = Sample.Results[0];
-            workSheet.Cells[fors.excel_row, "D"] = Sample.Results[1];
-            workSheet.Cells[fors.excel_row, "E"] = Sample.Results[2];
-            workSheet.Cells[fors.excel_row, "F"] = Sample.Results[3];
-            workSheet.Cells[fors.excel_row, "G"] = Sample.Results[4];
-            workSheet.Cells[fors.excel_row, "H"] = Sample.Results[5];
-            workSheet.Cells[fors.excel_row, "I"] = Sample.Results[6];
-            workSheet.Cells[fors.excel_row, "J"] = Sample.Results[9];
-            workSheet.Cells[fors.excel_row, "M"] = fors.vri_doc;
-            workSheet.Cells[fors.excel_row, "B"] = fors.uniqueID;
-            workSheet.Cells[fors.excel_row, "A"] = fors.excel_row;
+            //workSheet.Cells[fors.excel_row, "C"] = Sample.Results[0];
+            //workSheet.Cells[fors.excel_row, "D"] = Sample.Results[1];
+            //workSheet.Cells[fors.excel_row, "E"] = Sample.Results[2];
+            //workSheet.Cells[fors.excel_row, "F"] = Sample.Results[3];
+            //workSheet.Cells[fors.excel_row, "G"] = Sample.Results[4];
+            //workSheet.Cells[fors.excel_row, "H"] = Sample.Results[5];
+            //workSheet.Cells[fors.excel_row, "I"] = Sample.Results[6];
+            //workSheet.Cells[fors.excel_row, "J"] = Sample.Results[9];
+            //workSheet.Cells[fors.excel_row, "M"] = fors.vri_doc;
+            //workSheet.Cells[fors.excel_row, "B"] = fors.uniqueID;
+            //workSheet.Cells[fors.excel_row, "A"] = fors.excel_row;
 
 
             

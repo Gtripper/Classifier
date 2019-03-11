@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Classifier
 {
-    class CodeComparer : IComparer<string>
+    class CodeComparer : IComparer<Node>
     {
-        int IComparer<string>.Compare(string x, string y)
+        int IComparer<Node>.Compare(Node x, Node y)
         {
             var mf = new NodeFeed().GetNodes();
-            var intA = mf.FindIndex(p => p.vri.Equals(x));
-            var intB = mf.FindIndex(p => p.vri.Equals(y));
+            var intA = mf.FindIndex(p => p.Equals(x));
+            var intB = mf.FindIndex(p => p.Equals(y));
 
             if (intA > intB) return 1;
             if (intA < intB) return -1;

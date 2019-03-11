@@ -10,6 +10,9 @@ namespace Classifier.Tests
     [TestFixture]
     public class SearchCodesTests
     {
+        public NodeFeed mf = new NodeFeed();
+        
+
         [Test]
         public void FederalSearchPattern_WhenCalled_RetunsCorrectedResult()
         {
@@ -19,33 +22,30 @@ namespace Classifier.Tests
         }
 
         [TestCase("магазины(4.4); общественное питание(4.6); развлечения(4.8)", "4.4.0, 4.6.0, 4.8.0")]
-        [TestCase("магазины 4.4; общественное питание(4.6.0); развлечения(4.8.0)", "")]
+        [TestCase("магазины 4.4; общественное питание(4.6.0); развлечения(4.8)", "4.8.0")]
         [TestCase("магазины 4.4; общественное питание 4.6; развлечения 4.8", "")]
         [TestCase("", "")]
         public void SearchFederalCodes_ReturnsCorrectedResult(string input, string output)
         {
             var Sample = new Classifier.SearchCodes(input);
-            Sample.Codes.Add("1.14.0");
-            Sample.Codes.Add("2.2.0");
-            Sample.AdddMatches("JUST TEST THIS SH~");
+            
+            //Тестирование корректного удаления предыдущих найденных результатов
+            Sample.Codes.Add(mf.getM("1.14.0"));
+            Sample.Codes.Add(mf.getM("2.2.0"));
+            Sample.AddMatches("JUST TEST THIS SH~");
 
             Sample.SearchFederalCodes();
-                        
-            var result = "";
-            foreach (var code in Sample.Codes)
-            {
-                result += (result.Length == 0) ? code : ", " + code;
-            }
+            var result = Sample.Codes.ToString();
 
-            Assert.AreEqual(result, output);
+            Assert.AreEqual(output, result);
         }
 
         [TestCase("shops", "shops")]
         public void AdddMatches_AddSomeStringToEmptyMatches_ReturnCorrectResult(string input, string output)
         {
-            var Sample = new Classifier.SearchCodes("");
+            var Sample = new SearchCodes("");
 
-            Sample.AdddMatches(input);
+            Sample.AddMatches(input);
 
             Assert.AreEqual(Sample.Matches.ToString(), output);
         }
@@ -55,8 +55,8 @@ namespace Classifier.Tests
         {
             var Sample = new Classifier.SearchCodes("");
 
-            Sample.AdddMatches("current match");
-            Sample.AdddMatches(input);
+            Sample.AddMatches("current match");
+            Sample.AddMatches(input);
 
             Assert.AreEqual(Sample.Matches.ToString(), output);
         }
@@ -65,9 +65,9 @@ namespace Classifier.Tests
         public void AdddMatches_AddEmptyString_DoNothing()
         {
             var Sample = new Classifier.SearchCodes("");
-            Sample.AdddMatches("some match");
+            Sample.AddMatches("some match");
 
-            Sample.AdddMatches("");
+            Sample.AddMatches("");
 
             Assert.AreEqual(Sample.Matches.ToString(), "some match");
         }
@@ -77,8 +77,8 @@ namespace Classifier.Tests
         {
             var Sample = new Classifier.SearchCodes("");
 
-            Sample.AdddMatches("some match");
-            Sample.Codes.Add("1.1.0");
+            Sample.AddMatches("some match");
+            Sample.Codes.Add(mf.getM("1.1.0"));
             
 
             Sample.ClearOutputFields();
@@ -92,33 +92,31 @@ namespace Classifier.Tests
         [Category("MainLoop.PZZSearch")]
         public void MainLoop_PZZSearchTest_ReturnsCorrectResult(string input, string expMatches, string expVRI_List)
         {
-            var Sample = new Classifier.SearchCodes(input);
-            var Vri_List = "";
+            var Sample = new Classifier.SearchCodes(input);            
 
             Sample.MainLoop();
-            foreach (var code in Sample.Codes)
-            {
-                Vri_List += (Vri_List.Length == 0) ? code : ", " + code;
-            }
+            var result = Sample.Codes.ToString();
+
+            Assert.AreEqual(expMatches, Sample.Matches);
+            Assert.AreEqual(expVRI_List, result);
         }
         
         [TestCase("   13.3.0 - Размещение жилого дачного дома (не предназначенного для раздела на " +
             "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "13.3.0", "13.3.0")]
         [TestCase("13 . 3 . 0 - Размещение жилого дачного дома (не предназначенного для раздела на " +
-            "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "13.3.0", "13.3.0")]
+            "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "13 . 3 . 0", "13.3.0")]
         [TestCase("Размещение жилого дачного дома 13.3.0 (не предназначенного для раздела на " +
-            "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "", "")]
+            "квартиры, пригодного для отдыха и проживания, высотой не выше трех", "дачного", "13.3.0")]
         [Category("MainLoop.PZZSearch")]
         public void MainLoop_PZZSearchTest_TestPatternPosition(string input, string expMatches, string expVRI_List)
         {
             var Sample = new SearchCodes(input);
-            var Vri_List = "";
 
             Sample.MainLoop();
-            foreach (var code in Sample.Codes)
-            {
-                Vri_List += (Vri_List.Length == 0) ? code : ", " + code;
-            }
+            var result = Sample.Codes.ToString();
+
+            Assert.AreEqual(expMatches, Sample.Matches);
+            Assert.AreEqual(expVRI_List, result);
         }
 
         [TestCase("водозаборный узел газопровод", "3.1.1", "водозаборный")]
@@ -144,13 +142,11 @@ namespace Classifier.Tests
         public void ISearchCodes_MainLoop_ReturnsCorrectVRI(string input, string vri)
         {
             ISearchCodes Sample = new SearchCodes(input);
-            var Vri_List = "";
 
             Sample.MainLoop();
-            foreach (var code in Sample.Codes)
-            {
-                Vri_List += (Vri_List.Length == 0) ? code : ", " + code;
-            }
+            var result = Sample.Codes.ToString();
+
+            Assert.AreEqual(vri, result);
         }
 
         [TestCase("магазины(4.4); общественное питание(4.6); развлечения(4.8)", true)]

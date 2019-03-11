@@ -10,38 +10,46 @@ namespace Classifier.Tests
     [TestFixture]
     class CodeProcessingTests
     {
-        private static object[] RemoveBaseCodes_sourseList =
-            {new object[] { new List<string> { "6.2.0", "4.3.0" }, new List<string> { "6.2.0", "4.3.0" } },
-             new object[] { new List<string> { "6.2.0", "6.0.0" }, new List<string> { "6.2.0" } } };
+        public NodeFeed mf = new NodeFeed();
 
-        [TestCaseSource("RemoveBaseCodes_sourseList")]
-        public void RemoveBaseCodes_Intersect_correctWork(List<string> Codes, List<string> expected)
+
+        [TestCase("4.3.0, 6.2.0", "4.3.0, 6.2.0")]
+        [TestCase("6.2.0, 6.0.0", "6.2.0")]
+        public void RemoveBaseCodes_Intersect_correctWork(string Codes, string exceptedCodes)
         {
-            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(Codes);
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes(exceptedCodes);
+            CodeProcessing processing = new CodeProcessing(codes, new BTI(), "");
 
             processing.RemoveBaseCodes();
 
-            CollectionAssert.AreEqual(expected, Codes);
+            Assert.AreEqual(excepted.ToString(), processing.Codes.ToString());
         }
 
-        private static object[] NumberDeterminant_sourseList =            
-            {new object[] { new List<string> { "2.1.1.0", "2.5.0", "2.6.0" }, new List<string> { "2.6.0" } },
-             new object[] { new List<string> { "2.0.0", "2.1.1.0" }, new List<string> { "2.6.0" } }, 
-             new object[] { new List<string> { "2.0.0", "2.1.1.0", "2.5.0", "2.6.0", "3.1.1" }, new List<string> { "2.6.0", "3.1.1" } } };
 
-        [TestCaseSource("NumberDeterminant_sourseList")]
-        public void NumberDeterminant_BTI_HiLvlIsTrue_ReturnsCorrectResult(List<string> Codes, List<string> expected)
+        [TestCase("2.1.1.0, 2.5.0, 2.6.0", "2.6.0")]
+        [TestCase("2.0.0, 2.1.1.0", "2.6.0")]
+        [TestCase("2.0.0, 2.1.1.0, 2.5.0, 2.6.0, 3.1.1", "2.6.0, 3.1.1")]
+        public void NumberDeterminant_BTI_HiLvlIsTrue_ReturnsCorrectResult(string Codes, string exceptedCodes)
         {
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(Codes);
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes(exceptedCodes);
             IBTI bti = new BTI("2.5.0, 2.6.0, 2.7.1.0" , false, false, true);
-            CodeProcessing processing = new CodeProcessing(Codes, bti, "");
+            CodeProcessing processing = new CodeProcessing(codes, bti, "");
 
             processing.NumberDeterminant();
 
-            CollectionAssert.AreEqual(expected, Codes);
+            Assert.AreEqual(excepted.ToString(), processing.Codes.ToString());
         }
 
         [TestCase("эксплуатации части здания под медицинские цели", "2.1.1.0, 2.5.0, 2.6.0")]
         public void _Maintenance_RealZonesFromMaintenanceMap_ReturnsTrue(string input, string btiCodes)
+
+
         {
             IBTI buiding = new BTI(btiCodes, false, false, true);
             ISearchCodes searchResult = new SearchCodes(input);
@@ -68,39 +76,45 @@ namespace Classifier.Tests
         public void FixCode_Other_SingleOtherCodeBTICodeNotNull_RetunsBTICodes()
         {
             IBTI buildings = new BTI("2.6.0", false, false, true);
-            var Codes = new List<string> { "12.3.0" };
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("12.3.0");
             CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
-            var result = new List<string> { "2.6.0" };
+            ICodes result = new Codes(mf);
+            result.AddNodes("2.6.0");
 
             processing.FixCode_Other();
 
-            CollectionAssert.AreEqual(result, processing.Codes);
+            Assert.AreEqual(result.ToString(), Codes.ToString());
         }
 
         [Test]
         public void FixCode_Other_NotASingleOtherCode_RetunsCodesWithoutOther()
         {
             IBTI buildings = new BTI("2.6.0", false, false, true);
-            var Codes = new List<string> { "4.9.0", "12.3.0" };
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("4.9.0, 12.3.0");
             CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
-            var result = new List<string> { "4.9.0" };
+            ICodes result = new Codes(mf);
+            result.AddNodes("4.9.0");
 
             processing.FixCode_Other();
 
-            CollectionAssert.AreEqual(result, processing.Codes);
+            Assert.AreEqual(result.ToString(), Codes.ToString());
         }
 
         [Test]
         public void FixCode_Other_SingleOtherCodeBtiCodesIsEmpty_DoNothing()
         {
             IBTI buildings = new BTI("", false, false, true);
-            var Codes = new List<string> { "12.3.0" };
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("12.3.0");
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes("12.3.0");
             CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
-            var result = new List<string> { "12.3.0" };
 
             processing.FixCode_Other();
 
-            CollectionAssert.AreEqual(result, processing.Codes);
+            Assert.AreEqual(excepted.ToString(), Codes.ToString());
         }
 
         [Test]
@@ -129,6 +143,48 @@ namespace Classifier.Tests
             processing._landscaping();
 
             Assert.AreEqual(false, processing.Landscaping);
+        }
+
+        [Test]
+        public void Type230Fix_3004Exist_RemoveCodes3004()
+        {
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("2.0.0, 3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1");
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes("2.0.0");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+
+            processing.Type230Fix();
+
+            Assert.AreEqual(excepted.ToString(), Codes.ToString());
+        }
+
+        [Test]
+        public void Type230Fix_3004IsNotExist_DoNothing()
+        {
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("2.0.0");
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes("2.0.0");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+
+            processing.Type230Fix();
+
+            Assert.AreEqual(excepted.ToString(), Codes.ToString());
+        }
+
+        [Test]
+        public void Type230Fix_HousingCodesIsNotExist_DoNothing()
+        {
+            ICodes Codes = new Codes(mf);
+            Codes.AddNodes("3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+            ICodes excepted = new Codes(mf);
+            excepted.AddNodes("3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+
+            processing.Type230Fix();
+
+            Assert.AreEqual(excepted.ToString(), Codes.ToString());
         }
     }
 }

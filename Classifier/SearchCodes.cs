@@ -12,7 +12,7 @@ namespace Classifier
         void MainLoop();
 
         string Matches { get; }
-        List<string> Codes { get; }
+        ICodes Codes { get; }
         bool IsFederalSearch { get; }
         bool IsPZZSearch { get; }
         bool IsMainSearch { get; }
@@ -36,9 +36,10 @@ namespace Classifier
     {
         private readonly string input; // ВРИ по документу
         private StringBuilder _matches;
+        private NodeFeed mf = new NodeFeed();
 
         public string Matches { get  { return _matches.ToString(); } }
-        public List<string> Codes { get; private set; }
+        public ICodes Codes { get; }
         public bool IsFederalSearch { get; private set; }
         public bool IsPZZSearch { get; private set; }
         public bool IsMainSearch { get; private set; }
@@ -47,7 +48,7 @@ namespace Classifier
         {
             input = Input;
             _matches = new StringBuilder("");
-            Codes = new List<string>();
+            Codes = new Codes(mf);
 
             IsFederalSearch = false;
             IsPZZSearch = false;
@@ -56,7 +57,7 @@ namespace Classifier
 
         public void MainLoop()
         {
-            var nodes = new NodeFeed().GetNodes();
+            var nodes = mf.GetNodes();
 
             foreach (var node in nodes)
             {
@@ -81,9 +82,9 @@ namespace Classifier
                     if (reg.IsMatch(input))
                     {
                         ClearOutputFields();
-                        Codes.Add(node.vri);
-                        match = reg.Match(input).Value;
-                        AdddMatches(match);
+                        Codes.Add(node);
+                        match = reg.Match(input).Value.Trim();
+                        AddMatches(match);
                         IsFederalSearch = false;
                         IsPZZSearch = true;
                         IsMainSearch = false;
@@ -120,9 +121,9 @@ namespace Classifier
         /// Добавление в Codes кодов ПЗЗ из массива CodeMapping
         /// </summary>
         /// <param name="codes"></param>
-        private void AddCodesFromCodeMapping(List<string> codes)
+        private void AddCodesFromCodeMapping(List<Node> codes)
         {
-            Codes.AddRange(codes);
+            Codes.AddNodes(codes);
         }
 
         /// <summary>
@@ -131,18 +132,17 @@ namespace Classifier
         internal void SearchFederalCodes()
         {
             ClearOutputFields();
-
             var match = "";
-            var nodes = new CodesMapping().Map;
-            foreach (var node in nodes.Keys)
+            var nodes = new CodesMapping();
+            foreach (var node in nodes.Map.Keys)
             {
                 var reg = FederalSearchRegexp(node);
 
                 if (reg.IsMatch(input))
                 {
-                    AddCodesFromCodeMapping(nodes[node]);
+                    Codes.AddNodes(nodes.Map[node]);
                     match = reg.Match(input).Value;
-                    AdddMatches(match);
+                    AddMatches(match);
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace Classifier
                 if (!match.Equals(""))
                 {
                     AddCodesVriByNode(node);
-                    AdddMatches(match);
+                    AddMatches(match);
                     IsFederalSearch = false;
                     IsPZZSearch = false;
                     IsMainSearch = true;
@@ -244,7 +244,7 @@ namespace Classifier
         /// Добавление нового совпадения в строку Matches
         /// </summary>
         /// <param name="match"></param>
-        internal void AdddMatches(string match)
+        internal void AddMatches(string match)
         {
             if (!match.Equals(""))
                 if (_matches.Length == 0)
@@ -267,13 +267,10 @@ namespace Classifier
             if (node.vri.Equals(""))
             {
                 var arr = node.EmptyVRI();
-                foreach (var vri in arr)
-                {
-                    Codes.Add(vri);
-                }
+                Codes.AddNodes(arr);
             }
             else
-                Codes.Add(node.vri);
+                Codes.Add(node);
         }
 
         /// <summary>
