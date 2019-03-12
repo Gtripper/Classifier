@@ -64,6 +64,7 @@
     <Compile Include="Node.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchCodes.Tests.cs" />
+    <Compile Include="TypeAndKind.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

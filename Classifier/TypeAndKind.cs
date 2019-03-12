@@ -63,12 +63,13 @@ namespace Classifier
         private int MixedTypeKind(List<string> set, int N)
         {
             set.Sort();
-            set.ForEach(delegate(string elem)
+            var cutSet = new List<string>();
+            foreach (var item in set)
             {
-                elem.Remove(1);
-            });
+                cutSet.Add(item.Remove(1));
+            }
             var result = "";
-            foreach (var val in set)
+            foreach (var val in cutSet)
             {
                 result += val;
             }

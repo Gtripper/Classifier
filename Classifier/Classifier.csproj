@@ -124,7 +124,8 @@
     <Compile Include="CodeComparer.cs" />
     <Compile Include="CodeProcessing.cs" />
     <Compile Include="Codes.cs" />
-    <Compile Include="Fasade.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="InputData.cs" />
     <Compile Include="InputFromMapBasic.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

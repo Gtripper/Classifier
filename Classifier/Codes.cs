@@ -113,7 +113,6 @@ namespace Classifier
         List<string> GetKinds();
     }
 
-
     class Codes : ICodes, ICodesTypes, IEnumerable<Node>
     {
         NodeFeed mf;

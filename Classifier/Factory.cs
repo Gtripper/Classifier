@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Classifier
 {
-    class Fasade
+    class Factory
     {
         ISearchCodes searchResults;
     }
