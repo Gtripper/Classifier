@@ -12,11 +12,11 @@ namespace Classifier
     /// </summary>
     class CodeProcessing
     {
-        string input;
-        public int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
-        public NodeFeed mf = new NodeFeed(); ///TODO: Same shit ^
+        private string input;
+        private int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
+        private NodeFeed mf;
         public ICodes Codes { get; private set; }
-        IBTI bti;
+        private IBTI bti;
 
         /// <summary>
         /// Эксплуатация
@@ -33,12 +33,14 @@ namespace Classifier
         /// <param name="Codes"></param>
         /// <param name="bti"></param>
         /// <param name="input"></param>
-        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input)
+        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input, int _area, NodeFeed mf)
         {
             // Проверка на null
             Codes = _Codes ?? new Codes(mf);
             bti = _bti ?? new BTI();
             input = _input;
+            area = _area;
+            this.mf = mf;
         }
 
         /// <summary>
@@ -222,5 +224,13 @@ namespace Classifier
             return _codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
 
+        public void FullProcessing()
+        {
+            RemoveBaseCodes();
+            NumberDeterminant();
+            FixCode_Other();
+            ElectricityStationsWithAreaLessThan300();
+            Type230Fix();
+        }
     }
 }

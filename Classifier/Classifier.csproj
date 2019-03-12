@@ -128,6 +128,7 @@
     <Compile Include="InputData.cs" />
     <Compile Include="InputFromMapBasic.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="OutputData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -146,8 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="Diagrams + conf\app.config" />
     <None Include="Diagrams + conf\ClassDiagram1.cd" />
     <None Include="Diagrams + conf\ClassDiagram2.cd" />

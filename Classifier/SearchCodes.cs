@@ -36,7 +36,7 @@ namespace Classifier
     {
         private readonly string input; // ВРИ по документу
         private StringBuilder _matches;
-        private NodeFeed mf = new NodeFeed();
+        private NodeFeed mf;
 
         public string Matches { get  { return _matches.ToString(); } }
         public ICodes Codes { get; }
@@ -44,11 +44,12 @@ namespace Classifier
         public bool IsPZZSearch { get; private set; }
         public bool IsMainSearch { get; private set; }
 
-        public SearchCodes(string Input)
+        public SearchCodes(string Input, ICodes codes, NodeFeed mf)
         {
             input = Input;
             _matches = new StringBuilder("");
-            Codes = new Codes(mf);
+            Codes = codes;
+            this.mf = mf;
 
             IsFederalSearch = false;
             IsPZZSearch = false;

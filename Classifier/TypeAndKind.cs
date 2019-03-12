@@ -15,8 +15,8 @@ namespace Classifier
 
     class TypeAndKind : ITypeAndKind
     {
-        private ICodesTypes codes;
-        public TypeAndKind(ICodesTypes codes)
+        private ICodes codes;
+        public TypeAndKind(ICodes codes)
         {
             this.codes = codes;
         }

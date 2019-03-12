@@ -60,6 +60,32 @@ namespace Classifier
         bool Exists(string codes);
 
         /// <summary>
+        /// Определяет, содержит ли Nodes типы, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsType(IEnumerable<string> codes);
+
+        /// <summary>
+        /// Определяет, содержит ли Nodes типы, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsType(string codes);
+
+        /// <summary>
+        /// Возвращает коллекцию уникальных типов Nodes
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetTypes();
+
+        /// <summary>
+        /// Возвращает коллекцию уникальных видов Nodes
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetKinds();
+
+        /// <summary>
         /// Сортирует элементы в коллекции Nodes с использованием копмпоратора CodeComparer
         /// </summary>
         void Sort();

@@ -11,8 +11,7 @@ namespace Classifier.Tests
         {
             ICodes codes = new Codes(mf);
             codes.AddNodes(vri);
-            var result = (ICodesTypes)codes;
-            ITypeAndKind type = new TypeAndKind(result);
+            ITypeAndKind type = new TypeAndKind(codes);
             return type;
         }
 

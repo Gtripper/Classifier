@@ -21,7 +21,7 @@ namespace Classifier.Tests
             codes.AddNodes(Codes);
             ICodes excepted = new Codes(mf);
             excepted.AddNodes(exceptedCodes);
-            CodeProcessing processing = new CodeProcessing(codes, new BTI(), "");
+            CodeProcessing processing = new CodeProcessing(codes, new BTI(), "", 0, mf);
 
             processing.RemoveBaseCodes();
 
@@ -39,7 +39,7 @@ namespace Classifier.Tests
             ICodes excepted = new Codes(mf);
             excepted.AddNodes(exceptedCodes);
             IBTI bti = new BTI("2.5.0, 2.6.0, 2.7.1.0" , false, false, true);
-            CodeProcessing processing = new CodeProcessing(codes, bti, "");
+            CodeProcessing processing = new CodeProcessing(codes, bti, "", 0, mf);
 
             processing.NumberDeterminant();
 
@@ -48,12 +48,11 @@ namespace Classifier.Tests
 
         [TestCase("эксплуатации части здания под медицинские цели", "2.1.1.0, 2.5.0, 2.6.0")]
         public void _Maintenance_RealZonesFromMaintenanceMap_ReturnsTrue(string input, string btiCodes)
-
-
         {
+            ICodes codes = new Codes(mf);
             IBTI buiding = new BTI(btiCodes, false, false, true);
-            ISearchCodes searchResult = new SearchCodes(input);
-            CodeProcessing processing = new CodeProcessing(searchResult.Codes, buiding, input);
+            ISearchCodes searchResult = new SearchCodes(input, codes, mf);
+            CodeProcessing processing = new CodeProcessing(searchResult.Codes, buiding, input, 0, mf);
 
             var result = processing._maintenance();
 
@@ -63,9 +62,10 @@ namespace Classifier.Tests
         [TestCase("части здания под медицинские цели", "2.1.1.0, 2.5.0, 2.6.0")]
         public void _Maintenance_InputStringIsNotMaintenance_ReturnsFalse(string input, string btiCodes)
         {
+            ICodes codes = new Codes(mf);
             IBTI buiding = new BTI(btiCodes, false, false, true);
-            ISearchCodes searchResult = new SearchCodes(input);
-            CodeProcessing processing = new CodeProcessing(searchResult.Codes, buiding, input);
+            ISearchCodes searchResult = new SearchCodes(input, codes, mf);
+            CodeProcessing processing = new CodeProcessing(searchResult.Codes, buiding, input, 0, mf);
 
             var result = processing._maintenance();
 
@@ -78,7 +78,7 @@ namespace Classifier.Tests
             IBTI buildings = new BTI("2.6.0", false, false, true);
             ICodes Codes = new Codes(mf);
             Codes.AddNodes("12.3.0");
-            CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
+            CodeProcessing processing = new CodeProcessing(Codes, buildings, "", 0, mf);
             ICodes result = new Codes(mf);
             result.AddNodes("2.6.0");
 
@@ -93,7 +93,7 @@ namespace Classifier.Tests
             IBTI buildings = new BTI("2.6.0", false, false, true);
             ICodes Codes = new Codes(mf);
             Codes.AddNodes("4.9.0, 12.3.0");
-            CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
+            CodeProcessing processing = new CodeProcessing(Codes, buildings, "", 0, mf);
             ICodes result = new Codes(mf);
             result.AddNodes("4.9.0");
 
@@ -110,7 +110,7 @@ namespace Classifier.Tests
             Codes.AddNodes("12.3.0");
             ICodes excepted = new Codes(mf);
             excepted.AddNodes("12.3.0");
-            CodeProcessing processing = new CodeProcessing(Codes, buildings, "");
+            CodeProcessing processing = new CodeProcessing(Codes, buildings, "", 0, mf);
 
             processing.FixCode_Other();
 
@@ -122,9 +122,9 @@ namespace Classifier.Tests
         {
             IBTI bti = new BTI();
             string input = "Благоустройство территории";
-            ISearchCodes searchCodes = new SearchCodes(input);
+            ISearchCodes searchCodes = new SearchCodes(input, new Codes(mf), mf);
             searchCodes.MainLoop();
-            CodeProcessing processing = new CodeProcessing(searchCodes.Codes, bti, input);
+            CodeProcessing processing = new CodeProcessing(searchCodes.Codes, bti, input, 0, mf);
 
             processing._landscaping();
 
@@ -136,9 +136,9 @@ namespace Classifier.Tests
         {
             IBTI bti = new BTI();
             string input = "Благоустройство территории и гараж";
-            ISearchCodes searchCodes = new SearchCodes(input);
+            ISearchCodes searchCodes = new SearchCodes(input, new Codes(mf), mf);
             searchCodes.MainLoop();
-            CodeProcessing processing = new CodeProcessing(searchCodes.Codes, bti, input);
+            CodeProcessing processing = new CodeProcessing(searchCodes.Codes, bti, input, 0, mf);
 
             processing._landscaping();
 
@@ -152,7 +152,7 @@ namespace Classifier.Tests
             Codes.AddNodes("2.0.0, 3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1");
             ICodes excepted = new Codes(mf);
             excepted.AddNodes("2.0.0");
-            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "", 0, mf);
 
             processing.Type230Fix();
 
@@ -166,7 +166,7 @@ namespace Classifier.Tests
             Codes.AddNodes("2.0.0");
             ICodes excepted = new Codes(mf);
             excepted.AddNodes("2.0.0");
-            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "", 0, mf);
 
             processing.Type230Fix();
 
@@ -180,7 +180,7 @@ namespace Classifier.Tests
             Codes.AddNodes("3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
             ICodes excepted = new Codes(mf);
             excepted.AddNodes("3.1.1, 2.7.1.0, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
-            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "");
+            CodeProcessing processing = new CodeProcessing(Codes, new BTI(), "", 0, mf);
 
             processing.Type230Fix();
 

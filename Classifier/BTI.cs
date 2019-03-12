@@ -49,6 +49,5 @@ namespace Classifier
             Mid_lvl = _mid;
             Hi_lvl = _hi;
         }
-
     }
 }
