@@ -22,6 +22,7 @@ namespace Classifier
         /// Эксплуатация
         /// </summary>
         public bool Maintenance { get => _maintenance(); }
+
         /// <summary>
         /// Благоустройство
         /// </summary>

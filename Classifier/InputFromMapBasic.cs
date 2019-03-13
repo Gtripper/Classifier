@@ -84,6 +84,16 @@ namespace Classifier
             arrInt[2] = factory.outputData.Kind;
         }
 
+        public static string BtiCodes(string inputstr)
+        {
+            NodeFeed mf = new NodeFeed();
+
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(inputstr);
+
+            return codes.ToString();
+        }
+
         public static string BtiFunc(string inputstr)
         {
             var val = new HashSet<string>();
