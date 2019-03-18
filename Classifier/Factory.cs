@@ -41,7 +41,7 @@ namespace Classifier
 
         private CodeProcessing CreateProcessing()
         {
-            return new CodeProcessing(Codes, Bti, data.Vri_doc, data.Area, mf);
+            return new CodeProcessing(Codes, Bti, data.Vri_doc, data.Area, SearchingResult.IsFederalSearch, mf);
         }
 
         private ITypeAndKind CreateTypes()

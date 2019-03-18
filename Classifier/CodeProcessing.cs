@@ -14,9 +14,10 @@ namespace Classifier
     {
         private string input;
         private int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
-        private NodeFeed mf;
+        private bool isFederal;
         public ICodes Codes { get; private set; }
         private IBTI bti;
+        private NodeFeed mf;
 
         /// <summary>
         /// Эксплуатация
@@ -34,16 +35,17 @@ namespace Classifier
         /// <param name="Codes"></param>
         /// <param name="bti"></param>
         /// <param name="input"></param>
-        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input, int _area, NodeFeed mf)
+        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input, int _area, bool _isFederal, NodeFeed mf)
         {
             // Проверка на null
             Codes = _Codes ?? new Codes(mf);
             bti = _bti ?? new BTI();
             input = _input;
             area = _area;
+            isFederal = _isFederal;
             this.mf = mf;
         }
-
+        #region Behavior
         /// <summary>
         /// Удаляет базовые коды при наличии уточняющих
         /// </summary>
@@ -221,11 +223,16 @@ namespace Classifier
         /// </summary>
         internal void LandscapingFix()
         {
-            var isCodesNeedToDelete = Codes.Exists("12.0.1") && 
+            var isCodesNeedToDelete = Codes.Exists("12.0.1") &&
                 Regex.IsMatch(input, @"\bблагоустр\w*\b", RegexOptions.IgnoreCase);
 
             if (isCodesNeedToDelete && Codes.Count > 1)
                 Codes.RemoveAll("12.0.1");
+        }
+
+        internal void HousingAndRecreationFix()
+        {
+
         }
 
         /// <summary>
@@ -238,8 +245,49 @@ namespace Classifier
             return _codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
 
+        /// <summary>
+        /// Проверяет коллекцию Codes на наличие жилых кодов
+        /// </summary>
+        /// <returns></returns>
+        internal bool IsHousingCodes()
+        {
+            return Codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
+        }
+
+        #region FederalCodesBehavior
+
+        private void FederalBehavior()
+        {
+            FederalToFewPZZCodesFix();
+        }
+
+        /// <summary>
+        /// Осуществляет выбор конкретного кода ПЗЗ в федеральном коде 3.1
+        /// </summary>
+        internal void FederalToFewPZZCodesFix()
+        {
+            var map = new CodesMapping().Map.Where(p => p.Value.Count > 1)
+                .Select(p => p.Value).Where(p => p.Intersect(Codes.Nodes.Select(v => v.vri)).Count() > 0);
+
+            if (map.Count() > 0)
+            {
+                var list = map.ElementAt(0);
+
+                bool bl = Codes.Exists(bti.btiCodes.ToString()) &&
+                    bti.btiCodes.Exists(list);
+
+                if (bl)
+                {
+                    Codes.Nodes.RemoveAll(p => !bti.btiCodes.Exists(p.vri));
+                }
+            }
+        }
+        #endregion
+
+        #endregion
         public void FullProcessing()
         {
+            if (isFederal) FederalBehavior();
             RemoveBaseCodes();
             NumberDeterminant();
             FixCode_Other();
