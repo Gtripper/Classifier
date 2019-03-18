@@ -203,7 +203,7 @@ namespace Classifier
         }
 
         /// <summary>
-        /// Удаляет коды с видом 3004 в случае, если есть жиоые коды
+        /// Удаляет коды с видом 3004 в случае, если есть жилые коды
         /// </summary>
         internal void Type230Fix()
         {
@@ -216,7 +216,8 @@ namespace Classifier
         }
 
         /// <summary>
-        /// Удаляет
+        /// Удаляет код 12.0.1, если присутствет слово "благоустройство"
+        /// и любой другой индекс
         /// </summary>
         internal void LandscapingFix()
         {
