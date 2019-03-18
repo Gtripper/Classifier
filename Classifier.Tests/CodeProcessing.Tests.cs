@@ -186,5 +186,36 @@ namespace Classifier.Tests
 
             Assert.AreEqual(excepted.ToString(), Codes.ToString());
         }
+
+        [TestCase("4.1.0, 12.0.1", "4.1.0", "благоустройство")]
+        [TestCase("4.1.0, 3.6.1, 12.0.1", "4.1.0, 3.6.1", "благоустройство")]
+        [TestCase("4.1.0, 3.6.1, 12.0.1", "4.1.0, 3.6.1, 12.0.1", "")]
+        public void LanscapingFix_MoreThenOneIndexes_Delete12_0_1(string vri, string excepted, string input)
+        {
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(vri);
+            ICodes exceptCodes = new Codes(mf);
+            exceptCodes.AddNodes(excepted);
+            CodeProcessing processing = new CodeProcessing(codes, new BTI(), input, 0, mf);
+
+            processing.LandscapingFix();
+
+            Assert.AreEqual(codes.ToString(), exceptCodes.ToString());
+        }
+
+        [TestCase("12.0.1", "12.0.1", "благоустройство")]
+        [TestCase("3.1.1", "3.1.1", "благоустройство")]
+        public void LandscapingFix_RandomvSoloIndex_DoNothing(string vri, string excepted, string input)
+        {
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(vri);
+            ICodes exceptCodes = new Codes(mf);
+            exceptCodes.AddNodes(excepted);
+            CodeProcessing processing = new CodeProcessing(codes, new BTI(), input, 0, mf);
+
+            processing.LandscapingFix();
+
+            Assert.AreEqual(codes.ToString(), exceptCodes.ToString());
+        }
     }
 }

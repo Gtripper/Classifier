@@ -216,6 +216,18 @@ namespace Classifier
         }
 
         /// <summary>
+        /// Удаляет
+        /// </summary>
+        internal void LandscapingFix()
+        {
+            var isCodesNeedToDelete = Codes.Exists("12.0.1") && 
+                Regex.IsMatch(input, @"\bблагоустр\w*\b", RegexOptions.IgnoreCase);
+
+            if (isCodesNeedToDelete && Codes.Count > 1)
+                Codes.RemoveAll("12.0.1");
+        }
+
+        /// <summary>
         /// Проверяет коллекцию кодов на наличие жилых кодов
         /// </summary>
         /// <param name="Codes"></param>
@@ -232,6 +244,7 @@ namespace Classifier
             FixCode_Other();
             ElectricityStationsWithAreaLessThan300();
             Type230Fix();
+            LandscapingFix();
         }
     }
 }

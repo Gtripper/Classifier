@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 
 namespace Classifier
@@ -84,12 +85,19 @@ namespace Classifier
             arrInt[2] = factory.outputData.Kind;
         }
 
+        /// <summary>
+        /// Сортирует и удаляет дубли из кодов ПЗЗ
+        /// </summary>
+        /// <param name="inputstr"></param>
+        /// <returns></returns>
         public static string BtiCodes(string inputstr)
         {
             NodeFeed mf = new NodeFeed();
+            var pattern = @"\d+[.]\d+[.]\d+([.]\d+)?";
+            var result = Regex.Matches(inputstr, pattern).Cast<Match>().Select(p => p.Value).Distinct();
 
             ICodes codes = new Codes(mf);
-            codes.AddNodes(inputstr);
+            codes.AddNodes(result);
 
             return codes.ToString();
         }

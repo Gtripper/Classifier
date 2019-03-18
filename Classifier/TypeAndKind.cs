@@ -69,7 +69,7 @@ namespace Classifier
                 cutSet.Add(item.Remove(1));
             }
             var result = "";
-            foreach (var val in cutSet)
+            foreach (var val in cutSet.Distinct())
             {
                 result += val;
             }
