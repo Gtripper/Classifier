@@ -230,9 +230,17 @@ namespace Classifier
                 Codes.RemoveAll("12.0.1");
         }
 
+        /// <summary>
+        /// Удаляет код 5.0.1 в случае, если есть коды жилья и в строке
+        /// ВРИ есть слово "рекреация"
+        /// </summary>
         internal void HousingAndRecreationFix()
         {
-
+            bool isRecreationInText = Regex.IsMatch(input, @"\bрекреац\w*\b", RegexOptions.IgnoreCase);
+            if (IsHousingCodes() && isRecreationInText && Codes.Exists("5.0.1"))
+            {
+                Codes.RemoveAll("5.0.1");
+            }
         }
 
         /// <summary>
@@ -294,6 +302,7 @@ namespace Classifier
             ElectricityStationsWithAreaLessThan300();
             Type230Fix();
             LandscapingFix();
+            HousingAndRecreationFix();
         }
     }
 }

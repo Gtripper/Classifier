@@ -243,5 +243,20 @@ namespace Classifier.Tests
 
             Assert.AreEqual(exceptCodes.ToString(), codes.ToString());
         }
+
+        [TestCase("2.1.1.0, 5.0.1", "2.1.1.0", "рекреац")]
+        [TestCase("2.1.1.0, 5.0.1", "2.1.1.0, 5.0.1", "")]
+        public void HousingAndRecreationFix_DeleteRecreationIndex(string vriCodes, string excepted, string input)
+        {
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(vriCodes);
+            ICodes exceptCodes = new Codes(mf);
+            exceptCodes.AddNodes(excepted);
+            CodeProcessing processing = new CodeProcessing(codes, new BTI(), input, 0, false, mf);
+
+            processing.HousingAndRecreationFix();
+
+            Assert.AreEqual(exceptCodes.ToString(), codes.ToString());
+        }
     }
 }
