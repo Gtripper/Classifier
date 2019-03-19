@@ -60,6 +60,22 @@ namespace Classifier
 
         public string[] regexpPatterns { get; set; }
 
+        /// <summary>
+        /// Поиск ВРИ, соответствующих федеральному коду
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<Node> EmptyVRI()
+        {
+            var mf = new NodeFeed();
+            var list = new CodesMapping().Map[vri540];
+            var result = new List<Node>();
+            foreach (var val in list)
+            {
+                result.Add(mf.getM(val));
+            }
+            return result;
+        }
+
         public virtual bool GetParent(Node mstr)
         {
             return GetType().BaseType.Equals(mstr.GetType());
@@ -81,8 +97,14 @@ namespace Classifier
         {
             return false;
         }
+
+        public virtual bool Equals(Node node)
+        {
+            return vri.Equals(node.vri);
+        }
     }
 
+    #region SomeClasses
     class Agriculture : Node
     {
         public Agriculture(string vri, string vri540, string kindCode, string typeCode, string description,
@@ -657,6 +679,7 @@ namespace Classifier
         {
         }
     }
+    #endregion
 
 
     /// <summary>
@@ -665,7 +688,7 @@ namespace Classifier
     /// TODO: Реализовать создание одного экземпляра Node без создания List<Node>
     /// Заменить методы свойствами.
     /// Переработать кх
-    public class NodeFeed : Node, IMonsterFeed
+    public class NodeFeed : Node
     {
         private List<Node> nodes;
 
@@ -674,27 +697,32 @@ namespace Classifier
             Feeding();
         }
 
-        public List<Node> getMonster()
+        public List<Node> GetNodes()
         {
             return nodes;
         }
 
+        /// <summary>
+        /// Get Node with vri code
+        /// </summary>
+        /// <param name="vri"></param>
+        /// <returns></returns>
         public Node getM(string vri)
         {
             return nodes.Find(p => p.vri.Equals(vri));
         }
 
-        public Node GetMonsterFromVRICode(string vri)
+        /// <summary>
+        /// Get Node with federal code
+        /// </summary>
+        /// <param name="fCode"></param>
+        /// <returns></returns>
+        public Node GetNodeBasedFCode(string fCode)
         {
-            foreach (var iter in nodes)
-            {
-                if (iter.vri.Equals(vri))
-                {
-                    return iter;
-                }
-            }
-            return null;
+            return nodes.Find(p => p.vri540.Equals(fCode));
         }
+
+
 
         private void Feeding()
         {
@@ -1094,9 +1122,6 @@ namespace Classifier
 
                     @"",
                     @"\bжил\w*\s*корпус\w*\b",
-
-                    @"",
-                    @"\bмногофункц\w*\s*(комплекс\w*|здан\w*|\bназнач\w*)\b",
 
                     @"",
                     @"\bпод\s*жилые\s*цели\b",
@@ -2058,7 +2083,7 @@ namespace Classifier
                     @"здания\sмосковского\sтеатра|территории\sшколы\s№\s1741",
                     @"\bшкол\w*\b",
 
-                    @"прогулочная|\bказарм\w*\b",
+                    @"\bпрогулочн\w*\b|\bказарм\w*\b",
                     @"\bвоспита\w*\b|\bгимназ\w*\b|\bдошкол\w*\b|\bобщеобраз\w*\b|\bясл\w*\b|" +
                     @"\bдет[.]?[\w]{0,6}[-\s]*сад\w*\b|\bдет[.]?\w*[-\s]*учрежден\w*\b",
 
@@ -3361,7 +3386,10 @@ namespace Classifier
                     @"\bцентр\w*\s*культур\w*\s*и\s*спорт\w*\b",
 
                     @"",
-                    @"\bстроит\w*\s*спортив\w*\s*сооружен\w*\b" }
+                    @"\bстроит\w*\s*спортив\w*\s*сооружен\w*\b",
+
+                    @"",
+                    @"\bспортив\w*\s*сооружен\w*\s*масс\w*\s*посещен\w*\b" }
                ));
 
             nodes.Add(new Sport("5.1.2", "5.1", "1006", "100",
@@ -3445,7 +3473,7 @@ namespace Classifier
                     @"",
                     @"\bспорт\w*\s*(площадк\w*\b|город\w*)\b",
 
-                    @"",
+                    @"\bмасс\w*\s*посещ\w*\b",
                     @"\bспорт\w*\s*сооружен\w*\b",
 
                     @"",
@@ -3609,7 +3637,7 @@ namespace Classifier
                     @"(\bпроизводств\w\s*)?цех\w*\s*(по)?\s*(производ\w*|изготовл\w*|(об|пере)работ\w*|выпуск\w*|сборк\w*)?" +
                     @"\bпроизводств\w*\s*центр\w*\b",
 
-                    @"\bбытовых\s*услуг\b|\bучебн\w*\b|\bавтокомбина\w*\b|\bсел\w*\s*хоз\w*\b|\bдревесин\w*\b|" + 
+                    @"\bбытовых\s*услуг\b|\bучебн\w*\b|\bавтокомбина\w*\b|\bсел\w*\s*хоз\w*\b|\bдревесин\w*\b|" +
                     @"\bлесоцех\w*\b|\bдерево\w*\b|\bдет[.]?\w*\b|\bбытов\w*\b",
                     @"\bзавод\w{0,2}\b|\bфабрик\w*\b|\bкомбинат\w*\b",
 
@@ -5079,122 +5107,129 @@ namespace Classifier
     {
         public CodesMapping()
         {
-            Map = new Dictionary<string, string[]>
+            Map = new Dictionary<string, List<string>>
             {
-                { "1.0",     new string[] { "1.0.0" } },
-                { "1.1",     new string[] { "1.1.0" } },
-                { "1.2",     new string[] { "1.2.0" } },
-                { "1.3",     new string[] { "1.3.0" } },
-                { "1.4",     new string[] { "1.4.0" } },
-                { "1.5",     new string[] { "1.5.0" } },
-                { "1.6",     new string[] { "1.6.0" } },
-                { "1.7",     new string[] { "1.7.0" } },
-                { "1.8",     new string[] { "1.8.0" } },
-                { "1.9",     new string[] { "1.9.0" } },
-                { "1.10",    new string[] { "1.10.0" } },
-                { "1.11",    new string[] { "1.11.0" } },
-                { "1.12",    new string[] { "1.12.0" } },
-                { "1.13",    new string[] { "1.13.0" } },
-                { "1.14",    new string[] { "1.14.0" } },
-                { "1.15",    new string[] { "1.15.0" } },
-                { "1.16",    new string[] { "1.16.0" } },
-                { "1.17",    new string[] { "1.17.0" } },
-                { "1.18",    new string[] { "1.18.0" } },
-                { "2.0",     new string[] { "2.0.0" } },
-                { "2.1",     new string[] { "2.1.0" } },
-                { "2.1.1",   new string[] { "2.1.1.0" } },
-                { "2.2",     new string[] { "2.2.0" } },
-                { "2.3",     new string[] { "2.3.0" } },
-                { "2.4",     new string[] { "2.4.0" } },
-                { "2.5",     new string[] { "2.5.0" } },
-                { "2.6",     new string[] { "2.6.0" } },
-                { "2.7",     new string[] { "2.7.0" } },
-                { "2.7.1",   new string[] { "2.7.1.0" } },
-                { "3.0",     new string[] { "3.0.0" } },
-                { "3.1",     new string[] { "3.1.1", "3.1.2", "3.1.3" } }, ///TODO: Приделать механизм для определния типа 100 или 300 
-                { "3.2",     new string[] { "3.2.1", "3.2.2", "3.2.3", "3.2.4" } },
-                { "3.3",     new string[] { "3.3.0" } },
-                { "3.4",     new string[] { "3.4.0" } },
-                { "3.4.1",   new string[] { "3.4.1.0" } },
-                { "3.4.2",   new string[] { "3.4.2.0" } },
-                { "3.5",     new string[] { "3.5.1.0", "3.5.2.0" } },
-                { "3.5.1.0", new string[] { "3.5.1.0" } },
-                { "3.5.2.0", new string[] { "3.5.2.0" } },
-                { "3.6",     new string[] { "3.6.1", "3.6.2", "3.6.3" } },
-                { "3.7",     new string[] { "3.7.1", "3.7.2" } },
-                { "3.8",     new string[] { "3.8.1", "3.8.2", "3.8.3" } },
-                { "3.9",     new string[] { "3.9.2", "3.9.3", "3.9.4", "3.9.5" } },
-                { "3.9.1",   new string[] { "3.9.1.0" } },
-                { "3.10",    new string[] { "3.10.1.0", "3.10.2.0" } },
-                { "4.0",     new string[] { "4.0.0" } },
-                { "4.1",     new string[] { "4.1.0" } },
-                { "4.2",     new string[] { "4.2.0" } },
-                { "4.3",     new string[] { "4.3.0" } },
-                { "4.4",     new string[] { "4.4.0" } },
-                { "4.5",     new string[] { "4.5.0" } },
-                { "4.6",     new string[] { "4.6.0" } },
-                { "4.7",     new string[] { "4.7.1", "4.7.2", "4.7.3" } },
-                { "4.8",     new string[] { "4.8.0" } },
-                { "4.9",     new string[] { "4.9.0" } },
-                { "4.9.1",   new string[] { "4.9.1.1", "4.9.1.2", "4.9.1.3", "4.9.1.4" } },
-                { "4.10",    new string[] { "4.10.0" } },
-                { "5.0",     new string[] { "5.0.1", "5.0.2" } },
-                { "5.1",     new string[] { "5.1.1", "5.1.2", "5.1.3", "5.1.4", "5.1.5" } },
-                { "5.2",     new string[] { "5.2.0" } },
-                { "5.2.1",   new string[] { "5.2.1.0" } },
-                { "5.3",     new string[] { "5.3.0" } },
-                { "5.4",     new string[] { "5.4.0" } },
-                { "5.5",     new string[] { "5.5.0" } },
-                { "6.0",     new string[] { "6.0.0" } },
-                { "6.1",     new string[] { "6.1.0" } },
-                { "6.2",     new string[] { "6.2.0" } },
-                { "6.2.1",   new string[] { "6.2.1.0" } },
-                { "6.3",     new string[] { "6.3.0" } },
-                { "6.3.1",   new string[] { "6.3.1.0" } },
-                { "6.4",     new string[] { "6.4.0" } },
-                { "6.5",     new string[] { "6.5.0" } },
-                { "6.6",     new string[] { "6.6.0" } },
-                { "6.7",     new string[] { "6.7.0" } },
-                { "6.7.1",   new string[] { "6.7.0" } },
-                { "6.8",     new string[] { "6.8.0" } },
-                { "6.9",     new string[] { "6.9.0" } },
-                { "6.10",    new string[] { "6.10.0" } },
-                { "6.11",    new string[] { "6.11.0" } },
-                { "7.0",     new string[] { "" } },                         ///TODO: придумать как проставить тип 777                
-                { "7.1",     new string[] { "7.1.1" } },
-                { "7.2",     new string[] { "7.2.1" } },
-                { "7.3",     new string[] { "7.3.0" } },
-                { "7.4",     new string[] { "7.4.1", "7.4.2" } },
-                { "7.5",     new string[] { "7.5.0" } },
-                { "8.0",     new string[] { "8.0.1", "8.0.2", "8.0.3" } },  ///TODO: Тоже, что и с 3.1.1. Либо 300 либо 100              
-                { "8.1",     new string[] { "8.1.0" } },
-                { "8.2",     new string[] { "" } },                         ///TODO: Что-то надо бы придумать.                
-                { "8.3",     new string[] { "8.3.0" } },
-                { "8.4",     new string[] { "8.4.0" } },
-                { "9.0",     new string[] { "9.0.0" } },
-                { "9.1",     new string[] { "9.1.0" } },
-                { "9.2",     new string[] { "9.2.0" } },
-                { "9.2.1",   new string[] { "9.2.1.0" } },
-                { "9.3",     new string[] { "9.3.0" } },
-                { "10.0",    new string[] { "10.1.0", "10.2.0" } },
-                { "10.1",    new string[] { "10.1.0" } },
-                { "10.2",    new string[] { "10.2.0" } },
-                { "10.3",    new string[] { "" } },                         ///TODO: Index or type or somestnig else               
-                { "10.4",    new string[] { "" } },                         ///TODO: Same shit.
-                { "11.0",    new string[] { "11.1.0" } },
-                { "11.2",    new string[] { "11.2.0" } },
-                { "12.0",    new string[] { "12.0.1", "12.0.2" } },         ///TODO: like 3.1.1.                 
-                { "12.1",    new string[] { "12.1.0" } },
-                { "12.2",    new string[] { "12.2.0" } },
-                { "12.3",    new string[] { "12.3.0" } },
-                { "13.1",    new string[] { "13.1.0" } },
-                { "13.2",    new string[] { "13.2.0" } },
-                { "13.3",    new string[] { "13.3.0" } }
+                { "1.0",     new List<string> { "1.0.0" } },
+                { "1.1",     new List<string> { "1.1.0" } },
+                { "1.2",     new List<string> { "1.2.0" } },
+                { "1.3",     new List<string> { "1.3.0" } },
+                { "1.4",     new List<string> { "1.4.0" } },
+                { "1.5",     new List<string> { "1.5.0" } },
+                { "1.6",     new List<string> { "1.6.0" } },
+                { "1.7",     new List<string> { "1.7.0" } },
+                { "1.8",     new List<string> { "1.8.0" } },
+                { "1.9",     new List<string> { "1.9.0" } },
+                { "1.10",    new List<string> { "1.10.0" } },
+                { "1.11",    new List<string> { "1.11.0" } },
+                { "1.12",    new List<string> { "1.12.0" } },
+                { "1.13",    new List<string> { "1.13.0" } },
+                { "1.14",    new List<string> { "1.14.0" } },
+                { "1.15",    new List<string> { "1.15.0" } },
+                { "1.16",    new List<string> { "1.16.0" } },
+                { "1.17",    new List<string> { "1.17.0" } },
+                { "1.18",    new List<string> { "1.18.0" } },
+                { "2.0",     new List<string> { "2.0.0" } },
+                { "2.1",     new List<string> { "2.1.0" } },
+                { "2.1.1",   new List<string> { "2.1.1.0" } },
+                { "2.2",     new List<string> { "2.2.0" } },
+                { "2.3",     new List<string> { "2.3.0" } },
+                { "2.4",     new List<string> { "2.4.0" } },
+                { "2.5",     new List<string> { "2.5.0" } },
+                { "2.6",     new List<string> { "2.6.0" } },
+                { "2.7",     new List<string> { "2.7.0" } },
+                { "2.7.1",   new List<string> { "2.7.1.0" } },
+                { "3.0",     new List<string> { "3.0.0" } },
+                { "3.1",     new List<string> { "3.1.1", "3.1.2", "3.1.3" } }, ///TODO: Приделать механизм для определния типа 100 или 300 
+                { "3.2",     new List<string> { "3.2.1", "3.2.2", "3.2.3", "3.2.4" } },
+                { "3.3",     new List<string> { "3.3.0" } },
+                { "3.4",     new List<string> { "3.4.0" } },
+                { "3.4.1",   new List<string> { "3.4.1.0" } },
+                { "3.4.2",   new List<string> { "3.4.2.0" } },
+                { "3.5",     new List<string> { "3.5.1.0", "3.5.2.0" } },
+                { "3.5.1",   new List<string> { "3.5.1.0" } },
+                { "3.5.2",   new List<string> { "3.5.2.0" } },
+                { "3.6",     new List<string> { "3.6.1", "3.6.2", "3.6.3" } },
+                { "3.7",     new List<string> { "3.7.1", "3.7.2" } },
+                { "3.8",     new List<string> { "3.8.1", "3.8.2", "3.8.3" } },
+                { "3.9",     new List<string> { "3.9.2", "3.9.3", "3.9.4", "3.9.5" } },
+                { "3.9.1",   new List<string> { "3.9.1.0" } },
+                { "3.10",    new List<string> { "3.10.1.0", "3.10.2.0" } },
+                { "3.10.1",    new List<string> { "3.10.1.0" } },
+                { "3.10.2",    new List<string> { "3.10.2.0" } },
+                { "4.0",     new List<string> { "4.0.0" } },
+                { "4.1",     new List<string> { "4.1.0" } },
+                { "4.2",     new List<string> { "4.2.0" } },
+                { "4.3",     new List<string> { "4.3.0" } },
+                { "4.4",     new List<string> { "4.4.0" } },
+                { "4.5",     new List<string> { "4.5.0" } },
+                { "4.6",     new List<string> { "4.6.0" } },
+                { "4.7",     new List<string> { "4.7.1", "4.7.2", "4.7.3" } },
+                { "4.8",     new List<string> { "4.8.0" } },
+                { "4.9",     new List<string> { "4.9.0" } },
+                { "4.9.1",   new List<string> { "4.9.1.1", "4.9.1.2", "4.9.1.3", "4.9.1.4" } },
+                { "4.10",    new List<string> { "4.10.0" } },
+                { "5.0",     new List<string> { "5.0.1", "5.0.2" } },
+                { "5.1",     new List<string> { "5.1.1", "5.1.2", "5.1.3", "5.1.4", "5.1.5" } },
+                { "5.2",     new List<string> { "5.2.0" } },
+                { "5.2.1",   new List<string> { "5.2.1.0" } },
+                { "5.3",     new List<string> { "5.3.0" } },
+                { "5.4",     new List<string> { "5.4.0" } },
+                { "5.5",     new List<string> { "5.5.0" } },
+                { "6.0",     new List<string> { "6.0.0" } },
+                { "6.1",     new List<string> { "6.1.0" } },
+                { "6.2",     new List<string> { "6.2.0" } },
+                { "6.2.1",   new List<string> { "6.2.1.0" } },
+                { "6.3",     new List<string> { "6.3.0" } },
+                { "6.3.1",   new List<string> { "6.3.1.0" } },
+                { "6.4",     new List<string> { "6.4.0" } },
+                { "6.5",     new List<string> { "6.5.0" } },
+                { "6.6",     new List<string> { "6.6.0" } },
+                { "6.7",     new List<string> { "6.7.0" } },
+                { "6.7.1",   new List<string> { "6.7.0" } },
+                { "6.8",     new List<string> { "6.8.0" } },
+                { "6.9",     new List<string> { "6.9.0" } },
+                { "6.10",    new List<string> { "6.10.0" } },
+                { "6.11",    new List<string> { "6.11.0" } },
+                { "7.0",     new List<string> { "7.1.1", "7.1.2", "7.2.1", "7.2.2", "7.3.0", "7.4.1", "7.4.2", "7.5.0"} },                         ///TODO: придумать как проставить тип 777                
+                { "7.1",     new List<string> { "7.1.1" } },
+                { "7.2",     new List<string> { "7.2.1" } },
+                { "7.3",     new List<string> { "7.3.0" } },
+                { "7.4",     new List<string> { "7.4.1", "7.4.2" } },
+                { "7.5",     new List<string> { "7.5.0" } },
+                { "8.0",     new List<string> { "8.0.1", "8.0.2", "8.0.3" } },  ///TODO: Тоже, что и с 3.1.1. Либо 300 либо 100              
+                { "8.1",     new List<string> { "8.1.0" } },
+                { "8.2",     new List<string> {  } },                           ///TODO: Что-то надо бы придумать.                
+                { "8.3",     new List<string> { "8.3.0" } },
+                { "8.4",     new List<string> { "8.4.0" } },
+                { "9.0",     new List<string> { "9.0.0" } },
+                { "9.1",     new List<string> { "9.1.0" } },
+                { "9.2",     new List<string> { "9.2.0" } },
+                { "9.2.1",   new List<string> { "9.2.1.0" } },
+                { "9.3",     new List<string> { "9.3.0" } },
+                { "10.0",    new List<string> { "10.1.0", "10.2.0" } },
+                { "10.1",    new List<string> { "10.1.0" } },
+                { "10.2",    new List<string> { "10.2.0" } },
+                { "10.3",    new List<string> { } },                            ///TODO: Index or type or somestnig else               
+                { "10.4",    new List<string> { } },                            ///TODO: Same shit.
+                { "11.0",    new List<string> { "11.1.0" } },
+                { "11.2",    new List<string> { "11.2.0" } },
+                { "12.0",    new List<string> { "12.0.1", "12.0.2" } },         ///TODO: like 3.1.1.                 
+                { "12.1",    new List<string> { "12.1.0" } },
+                { "12.2",    new List<string> { "12.2.0" } },
+                { "12.3",    new List<string> { "12.3.0" } },
+                { "13.1",    new List<string> { "13.1.0" } },
+                { "13.2",    new List<string> { "13.2.0" } },
+                { "13.3",    new List<string> { "13.3.0" } }
             };
         }
 
-        public Dictionary<string, string[]> Map { get; }
+        public Dictionary<string, List<string>> Map { get; }
 
+        /// <summary>
+        /// TODO: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public List<Node> CreateNodes(string[] values)
         {
             var mf = new NodeFeed();
@@ -5217,7 +5252,7 @@ namespace Classifier
                     result.Add(node);
                 }
                 else
-                result.Add(mf.getM(value));
+                    result.Add(mf.getM(value));
             }
             return result;
         }
@@ -5232,7 +5267,7 @@ namespace Classifier
     {
         int IComparer<string>.Compare(string x, string y)
         {
-            var mf = new NodeFeed().getMonster();
+            var mf = new NodeFeed().GetNodes();
             var intA = mf.FindIndex(p => p.vri.Equals(x));
             var intB = mf.FindIndex(p => p.vri.Equals(y));
 

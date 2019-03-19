@@ -27,7 +27,7 @@ namespace Classifier
         #region Methods
         public Sorter(string input, int area)
         {
-            mf = new NodeFeed().getMonster();
+            mf = new NodeFeed().GetNodes();
             Input = input;
             this.area = area;
             codes = new List<Codes>();
@@ -40,7 +40,7 @@ namespace Classifier
 
         public Sorter(string input, int area, Bti bti)
         {
-            mf = new NodeFeed().getMonster();
+            mf = new NodeFeed().GetNodes();
             this.area = area;
             Input = input;
             codes = new List<Codes>();
@@ -94,11 +94,11 @@ namespace Classifier
 
                 if (reg.OnlyFederalSearch())
                 {
-                    var val = new CodesMapping().CreateNodes(map[iter]);
-                    foreach (var it in val)
-                    {
-                        AddCode(reg.Value(), it);
-                    }
+                    //var val = new CodesMapping().CreateNodes(map[iter]);
+                    //foreach (var it in val)
+                    //{
+                    //    AddCode(reg.Value(), it);
+                    //}
                 }
             }
             codes  = codes.GroupBy(p => p.mnstr.vri).Select(grp => grp.FirstOrDefault()).ToList();           
@@ -705,32 +705,31 @@ namespace Classifier
         }
     }
 
-    public class Codes
-    {
-        internal Match match;
-        internal Node mnstr;
+    //public class Codes
+    //{
+    //    internal Match match;
+    //    internal Node mnstr;
         
-        public Codes(Match match, Node mnstr)
-        {
-            this.match = match;
-            this.mnstr = mnstr;
-        }       
+    //    public Codes(Match match, Node mnstr)
+    //    {
+    //        this.match = match;
+    //        this.mnstr = mnstr;
+    //    }       
 
-        public class CodeComparer : IComparer<Codes>
-        {
-            public int Compare(Codes x, Codes y)
-            {
-                try
-                {
-                    return x.match.Index - y.match.Index;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-                throw new NotImplementedException();
-
-            }            
-        }   
-    }
+    //    public class CodeComparer : IComparer<Codes>
+    //    {
+    //        public int Compare(Codes x, Codes y)
+    //        {
+    //            try
+    //            {
+    //                return x.match.Index - y.match.Index;
+    //            }
+    //            catch (Exception e)
+    //            {
+    //                Console.WriteLine(e);
+    //            }
+    //            throw new NotImplementedException();
+    //        }            
+    //    }   
+    //}
 }
