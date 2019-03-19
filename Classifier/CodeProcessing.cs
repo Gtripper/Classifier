@@ -253,7 +253,13 @@ namespace Classifier
 
         private void GasPipelineFix()
         {
+            bool isPipeLine = Codes.Exists("7.5.0");
 
+            if (isPipeLine && area < 300)
+            {
+                Codes.RemoveAll("7.5.0");
+                Codes.AddNodes("3.1.1");
+            }
         }
 
         /// <summary>
@@ -316,6 +322,7 @@ namespace Classifier
             Type230Fix();
             LandscapingFix();
             HousingAndRecreationFix();
+            GasPipelineFix();
         }
     }
 }

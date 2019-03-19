@@ -259,7 +259,7 @@ namespace Classifier.Tests
             ICodes codes = new Codes(mf);
             codes.AddNodes("7.5.0");
             var result = exceptedCodes("3.1.1");
-            ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "газопровод", 150, false, mf);
+            ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "", 150, false, mf);
 
             processing.FullProcessing();
 
@@ -272,7 +272,7 @@ namespace Classifier.Tests
             ICodes codes = new Codes(mf);
             codes.AddNodes("7.5.0");
             var result = exceptedCodes("7.5.0");
-            ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "газопровод", 350, false, mf);
+            ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "", 350, false, mf);
 
             processing.FullProcessing();
 
