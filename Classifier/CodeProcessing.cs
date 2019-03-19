@@ -61,7 +61,7 @@ namespace Classifier
         /// Например если есть коды {6.0.0, 6.2.0} на 
         /// выходе должен остаться только индекс {6.2.0}
         /// </remark>
-        internal void RemoveBaseCodes()
+        private void RemoveBaseCodes()
         {
             #region Dictionary
             var baseCodes = new Dictionary<string, List<string>>();
@@ -116,7 +116,7 @@ namespace Classifier
         /// </remark>
         /// TODO: Посмотреть на реальных участках, где в ВРИ указано
         /// малоэтажные многоквартирные дома
-        internal void NumberDeterminant()
+        private void NumberDeterminant()
         {
             var list = new List<string> { "2.0.0", "2.1.1.0", "2.5.0", "2.6.0" };
             bool IsApartmentOrBaseHouse = Codes.Exists(list);
@@ -148,7 +148,7 @@ namespace Classifier
         /// кодом, а в полученных из ВРИ кодах жилые индексы отстуствуют
         /// </remark>
         /// TODO: логика для "обслуживание части жилого дома"
-        internal bool _maintenance()
+        private bool _maintenance()
         {
             //var pattern = @"\bэксплуатац\w*\s*(пристройк\w*|((в|при)строен\w*\s*)?помещен\w*|част\w*\s*здан\w*|нежилы\w*|" +
             //    @"(в\s*здан\w*)?служебн\w*\s*помещен\w*)\b";
@@ -163,7 +163,7 @@ namespace Classifier
         /// Обрабатывает коды 12.3.0
         /// </summary>
         /// TODO: refactoring this
-        internal void FixCode_Other()
+        private void FixCode_Other()
         {
             bool IsOtherExist = Codes.Exists("12.3.0");
 
@@ -185,7 +185,7 @@ namespace Classifier
         /// Если участок имеет в ВРИ слово благоустройство (удовлетворяющее паттерну регулярки)
         /// и имеет единственный код ПЗЗ 12.0.1, то он маркируется как благоустройство.
         /// </remark>
-        internal bool _landscaping()
+        private bool _landscaping()
         {
             var pattern = @"\bблагоустр\w*\b";
             bool IsLandScaping = Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase);
@@ -201,7 +201,7 @@ namespace Classifier
         /// <summary>
         /// Меняет код ПЗЗ с 6.7.0 на 3.1.1 в случае, если площадь участка меньше 300
         /// </summary>
-        internal void ElectricityStationsWithAreaLessThan300()
+        private void ElectricityStationsWithAreaLessThan300()
         {
             bool IsElectricityStation = Codes.Exists("6.7.0");
 
@@ -215,7 +215,7 @@ namespace Classifier
         /// <summary>
         /// Удаляет коды с видом 3004 в случае, если есть жилые коды
         /// </summary>
-        internal void Type230Fix()
+        private void Type230Fix()
         {
             var isKindCode3004Exist = Codes.Exists("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
 
@@ -229,7 +229,7 @@ namespace Classifier
         /// Удаляет код 12.0.1, если присутствет слово "благоустройство"
         /// и любой другой индекс
         /// </summary>
-        internal void LandscapingFix()
+        private void LandscapingFix()
         {
             var isCodesNeedToDelete = Codes.Exists("12.0.1") &&
                 Regex.IsMatch(input, @"\bблагоустр\w*\b", RegexOptions.IgnoreCase);
@@ -242,7 +242,7 @@ namespace Classifier
         /// Удаляет код 5.0.1 в случае, если есть коды жилья и в строке
         /// ВРИ есть слово "рекреация"
         /// </summary>
-        internal void HousingAndRecreationFix()
+        private void HousingAndRecreationFix()
         {
             bool isRecreationInText = Regex.IsMatch(input, @"\bрекреац\w*\b", RegexOptions.IgnoreCase);
             if (IsHousingCodes() && isRecreationInText && Codes.Exists("5.0.1"))
@@ -251,7 +251,7 @@ namespace Classifier
             }
         }
 
-        internal void GasPipelineFix()
+        private void GasPipelineFix()
         {
 
         }
@@ -261,7 +261,7 @@ namespace Classifier
         /// </summary>
         /// <param name="Codes"></param>
         /// <returns></returns>
-        internal bool IsHousingCodes(ICodes _codes)
+        private bool IsHousingCodes(ICodes _codes)
         {
             return _codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
@@ -270,7 +270,7 @@ namespace Classifier
         /// Проверяет коллекцию Codes на наличие жилых кодов
         /// </summary>
         /// <returns></returns>
-        internal bool IsHousingCodes()
+        private bool IsHousingCodes()
         {
             return Codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
