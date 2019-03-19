@@ -30,6 +30,9 @@ namespace Classifier.Tests
 
         [TestCase("осуществления учебно-воспитательной деятельности (прогулочная площадка)", "12.0.1")]
         [TestCase("организации отдыха, культурного проведения свободного времени, укрепления здоровья, а так же для выращивания плодовых, ягодных, овощных и", "13.2.0")]
+        //[TestCase("газопровод", "7.5.0")]
+        //[TestCase("водопровод", "7.5.0")]
+        //[TestCase("нефтепровод", "7.5.0")]
         public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
         {
             IInputData data = new InputData(_vri_doc, 0, "", false, false, false);
