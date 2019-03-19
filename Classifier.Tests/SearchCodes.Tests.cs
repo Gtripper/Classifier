@@ -35,7 +35,7 @@ namespace Classifier.Tests
             Sample.AddMatches("JUST TEST THIS SH~");
 
             Sample.SearchFederalCodes();
-            var result = Sample.Codes.ToString();
+            var result = Sample.Codes.Show;
 
             Assert.AreEqual(output, result);
         }
@@ -95,7 +95,7 @@ namespace Classifier.Tests
             var Sample = new Classifier.SearchCodes(input, new Codes(mf), mf);            
 
             Sample.MainLoop();
-            var result = Sample.Codes.ToString();
+            var result = Sample.Codes.Show;
 
             Assert.AreEqual(expMatches, Sample.Matches);
             Assert.AreEqual(expVRI_List, result);
@@ -113,7 +113,7 @@ namespace Classifier.Tests
             var Sample = new SearchCodes(input, new Codes(mf), mf);
 
             Sample.MainLoop();
-            var result = Sample.Codes.ToString();
+            var result = Sample.Codes.Show;
 
             Assert.AreEqual(expMatches, Sample.Matches);
             Assert.AreEqual(expVRI_List, result);
@@ -145,7 +145,7 @@ namespace Classifier.Tests
             ISearchCodes Sample = new SearchCodes(input, new Codes(mf), mf);
 
             Sample.MainLoop();
-            var result = Sample.Codes.ToString();
+            var result = Sample.Codes.Show;
 
             Assert.AreEqual(vri, result);
         }

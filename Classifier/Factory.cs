@@ -51,7 +51,7 @@ namespace Classifier
 
         private IOutputData CreateOutputData()
         {
-            return new OutputData(Codes.ToString(), SearchingResult.Matches,
+            return new OutputData(Codes.Show, SearchingResult.Matches,
                 SearchingResult.IsMainSearch, SearchingResult.IsPZZSearch,
                     SearchingResult.IsFederalSearch, processing.Landscaping,
                         processing.Maintenance, Types.Type, Types.Kind);

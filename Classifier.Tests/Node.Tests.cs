@@ -32,7 +32,7 @@ namespace Classifier.Tests
             codes.AddNodes(result);
             
 
-            Assert.AreEqual(codes.ToString(), vriCodes);
+            Assert.AreEqual(codes.Show, vriCodes);
         }
 
         [Test]

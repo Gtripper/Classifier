@@ -91,6 +91,12 @@ namespace Classifier
         void Sort();
 
         /// <summary>
+        /// Выводит ворматированную строку кодов ВРИ
+        /// </summary>
+        /// <returns></returns>
+        string Show { get; }
+
+        /// <summary>
         /// Удаляет все элемениы коллекции Nodes, переданные в аргументе
         /// </summary>
         /// <param name="codes"></param>
@@ -220,6 +226,8 @@ namespace Classifier
 
             RemoveAll(result);
         }
+
+        public string Show { get { return ToString(); } }
 
         public override string ToString()
         {

@@ -22,7 +22,7 @@ namespace Classifier.Tests
 
             codes.Sort();
 
-            Assert.AreEqual(codes.ToString(), sortedCodes);
+            Assert.AreEqual(codes.Show, sortedCodes);
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace Classifier.Tests
 
             codes.Sort();
 
-            Assert.AreEqual(codes.ToString(), "");
+            Assert.AreEqual(codes.Show, "");
         }
 
         [TestCase("2.5.0, 2.6.0, 3.1.1, 2.7.0", "3.1.1, 2.7.0", "2.5.0, 2.6.0")]
@@ -46,7 +46,7 @@ ICodes codes = new Codes(mf);
 
             codes.RemoveAll(codesRem);
 
-            Assert.AreEqual(expected, codes.ToString());
+            Assert.AreEqual(expected, codes.Show);
         }
 
         [TestCase("2.5.0, 2.6.0, 3.1.1", "200")]

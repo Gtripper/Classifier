@@ -294,7 +294,7 @@ namespace Classifier
             {
                 var list = map.ElementAt(0);
 
-                bool bl = Codes.Exists(bti.btiCodes.ToString()) &&
+                bool bl = Codes.Exists(bti.btiCodes.Show) &&
                     bti.btiCodes.Exists(list);
 
                 if (bl)

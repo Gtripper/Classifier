@@ -99,7 +99,7 @@ namespace Classifier
             ICodes codes = new Codes(mf);
             codes.AddNodes(result);
 
-            return codes.ToString();
+            return codes.Show;
         }
 
         public static string BtiFunc(string inputstr)
