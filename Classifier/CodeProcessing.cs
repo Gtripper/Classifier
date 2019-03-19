@@ -261,7 +261,7 @@ namespace Classifier
             if (isPipeLine && area < 300)
             {
                 Codes.RemoveAll("7.5.0");
-                Codes.AddNodes("3.1.1");
+                if (!Codes.Exists("3.1.1")) Codes.AddNodes("3.1.1");
             }
         }
 
@@ -272,7 +272,7 @@ namespace Classifier
         private void SpeciallyProtectedAreaFix()
         {
             var isCodesNeedToDelete = Codes.Exists("9.0.0") &&
-                Regex.IsMatch(input, @"\bособ\w*\s*охран\w*\s*природ\w*\s*терр\w*\b", RegexOptions.IgnoreCase);
+                Regex.IsMatch(input, @"\bособ\w*\s*охран\w*\s*(природ\w*\s*)?терр\w*\b", RegexOptions.IgnoreCase);
 
             if (isCodesNeedToDelete && Codes.Count > 1)
                 Codes.RemoveAll("9.0.0");
