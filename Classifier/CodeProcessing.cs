@@ -7,10 +7,18 @@ using System.Threading.Tasks;
 
 namespace Classifier
 {
+    public interface ICodeProcessing
+    {
+        bool Maintenance { get; }
+        bool Landscaping { get; }
+        ICodes Codes { get; }
+        void FullProcessing();
+    }
+
     /// <summary>
     /// Содержит методы обработки кодов ПЗЗ
     /// </summary>
-    class CodeProcessing
+    class CodeProcessing : ICodeProcessing
     {
         private string input;
         private int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
@@ -241,6 +249,11 @@ namespace Classifier
             {
                 Codes.RemoveAll("5.0.1");
             }
+        }
+
+        internal void GasPipelineFix()
+        {
+
         }
 
         /// <summary>

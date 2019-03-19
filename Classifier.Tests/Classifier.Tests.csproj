@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BTI.Tests.cs" />
-    <Compile Include="CodeProcessing.Tests.cs" />
+    <Compile Include="ICodeProcessing.Tests.cs" />
     <Compile Include="Codes.Tests.cs" />
     <Compile Include="FactoryTests.cs" />
     <Compile Include="IFactoryTests.cs" />
