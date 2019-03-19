@@ -27,5 +27,16 @@ namespace Classifier.Tests
             Assert.AreEqual(factory.outputData.Type, type);
             Assert.AreEqual(factory.outputData.Kind, kind);
         }
+
+        [TestCase("осуществления учебно-воспитательной деятельности (прогулочная площадка)", "12.0.1")]
+        public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
+        {
+            IInputData data = new InputData(_vri_doc, 0, "", false, false, false);
+            IFactory factory = new Factory(data);
+
+            factory.Execute();
+
+            Assert.AreEqual(factory.outputData.VRI_List, exceptedCodes);
+        }
     }
 }
