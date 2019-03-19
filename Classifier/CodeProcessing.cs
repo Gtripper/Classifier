@@ -276,7 +276,6 @@ namespace Classifier
 
             if (isCodesNeedToDelete && Codes.Count > 1)
                 Codes.RemoveAll("9.0.0");
-
         }
 
         /// <summary>
