@@ -278,5 +278,28 @@ namespace Classifier.Tests
 
             Assert.AreEqual(result, processing.Codes.Show);
         }
+
+        [TestCase("9.0.0", "особо охраняемые природные территории", "9.0.0")]
+        public void SpeciallyProtectedAreasFix_SingleCode_DoNothing(string vri, string input, string excepted)
+        {
+            var processing = Processing(vri, input);
+            var result = exceptedCodes(excepted);
+
+            processing.FullProcessing();
+
+            Assert.AreEqual(result, processing.Codes.Show);
+        }
+
+        [TestCase("4.1.0, 9.0.0", "особо охраняемые природные территории", "4.1.0")]
+        [TestCase("4.1.0, 9.0.0", "", "4.1.0, 9.0.0")]
+        public void SpeciallyProtectedAreasFix_FewCodes_DoNothing(string vri, string input, string excepted)
+        {
+            var processing = Processing(vri, input);
+            var result = exceptedCodes(excepted);
+
+            processing.FullProcessing();
+
+            Assert.AreEqual(result, processing.Codes.Show);
+        }
     }
 }

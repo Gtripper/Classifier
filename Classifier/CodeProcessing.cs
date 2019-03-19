@@ -251,6 +251,9 @@ namespace Classifier
             }
         }
 
+        /// <summary>
+        /// Изменяет код с 7.5.0 на 3.1.1, если площадь объекта меньше 300 кв. м.
+        /// </summary>
         private void GasPipelineFix()
         {
             bool isPipeLine = Codes.Exists("7.5.0");
@@ -260,6 +263,20 @@ namespace Classifier
                 Codes.RemoveAll("7.5.0");
                 Codes.AddNodes("3.1.1");
             }
+        }
+
+        /// <summary>
+        /// Удаляет код 9.0.0, если присутствет словосочетание "особо охраняемая природная территория"
+        /// и любой другой индекс
+        /// </summary>
+        private void SpeciallyProtectedAreaFix()
+        {
+            var isCodesNeedToDelete = Codes.Exists("9.0.0") &&
+                Regex.IsMatch(input, @"\bособ\w*\s*охран\w*\s*природ\w*\s*терр\w*\b", RegexOptions.IgnoreCase);
+
+            if (isCodesNeedToDelete && Codes.Count > 1)
+                Codes.RemoveAll("9.0.0");
+
         }
 
         /// <summary>
@@ -323,6 +340,7 @@ namespace Classifier
             LandscapingFix();
             HousingAndRecreationFix();
             GasPipelineFix();
+            SpeciallyProtectedAreaFix();
         }
     }
 }
