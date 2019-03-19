@@ -253,12 +253,14 @@ namespace Classifier.Tests
             Assert.AreEqual(result, processing.Codes.Show);
         }
 
-        [Test]
-        public void GasPipeline_areaLessThan300_returnCommunalIndex()
+        [TestCase("7.5.0", "3.1.1")]
+        [TestCase("3.1.1, 7.5.0", "3.1.1")]
+        [TestCase("3.1.1, 4.4.0, 7.5.0", "3.1.1, 4.4.0")]
+        public void GasPipeline_areaLessThan300_returnCommunalIndex(string vri, string excepted)
         {
             ICodes codes = new Codes(mf);
-            codes.AddNodes("7.5.0");
-            var result = exceptedCodes("3.1.1");
+            codes.AddNodes(vri);
+            var result = exceptedCodes(excepted);
             ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "", 150, false, mf);
 
             processing.FullProcessing();
@@ -266,12 +268,14 @@ namespace Classifier.Tests
             Assert.AreEqual(result, processing.Codes.Show);
         }
 
-        [Test]
-        public void GasPipeline_areaMoreThan300_returnPipeLineIndex()
+        [TestCase("7.5.0", "7.5.0")]
+        [TestCase("3.1.1, 7.5.0", "3.1.1, 7.5.0")]
+        [TestCase("3.1.1, 4.4.0, 7.5.0", "3.1.1, 4.4.0, 7.5.0")]
+        public void GasPipeline_areaMoreThan300_returnPipeLineIndex(string vri, string excepted)
         {
             ICodes codes = new Codes(mf);
-            codes.AddNodes("7.5.0");
-            var result = exceptedCodes("7.5.0");
+            codes.AddNodes(vri);
+            var result = exceptedCodes(excepted);
             ICodeProcessing processing = new CodeProcessing(codes, new BTI(), "", 350, false, mf);
 
             processing.FullProcessing();
@@ -280,6 +284,7 @@ namespace Classifier.Tests
         }
 
         [TestCase("9.0.0", "особо охраняемые природные территории", "9.0.0")]
+        [TestCase("9.0.0", "земельные участки, занятые особо охраняемыми территориями и объектами, городскими лесами", "9.0.0")]
         public void SpeciallyProtectedAreasFix_SingleCode_DoNothing(string vri, string input, string excepted)
         {
             var processing = Processing(vri, input);
@@ -291,6 +296,7 @@ namespace Classifier.Tests
         }
 
         [TestCase("4.1.0, 9.0.0", "особо охраняемые природные территории", "4.1.0")]
+        [TestCase("4.1.0, 9.0.0", "земельные участки, занятые особо охраняемыми территориями и объектами, городскими лесами", "4.1.0")]
         [TestCase("4.1.0, 9.0.0", "", "4.1.0, 9.0.0")]
         public void SpeciallyProtectedAreasFix_FewCodes_DoNothing(string vri, string input, string excepted)
         {
