@@ -277,6 +277,7 @@ namespace Classifier
                 Codes.RemoveAll("7.5.0");
                 if (!Codes.Exists("3.1.1")) Codes.AddNodes("3.1.1");
             }
+            Codes.Sort();
         }
 
         /// <summary>
