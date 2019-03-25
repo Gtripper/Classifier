@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
 using System.Data;
-using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
+using Classifier;
 
 namespace DBMananger
 {
     /// <summary>
     /// Подключение к БД Access
     /// </summary>
-    internal class DBAdapter
+    public class DBAdapter
     {
         /// <summary>
         /// Путь к базе данных
@@ -22,7 +22,7 @@ namespace DBMananger
         internal string DbName { get; private set; }
         internal OleDbConnection DbConn { get; private set; }
         internal OleDbDataAdapter adapter { get; private set; }
-        internal DataTable Data { get; private set; }
+        public DataTable Data { get; private set; }
 
         public DBAdapter(string path, string dbName)
         {
@@ -65,16 +65,23 @@ namespace DBMananger
             }
         }
 
-        public void DbRead(string vri_doc)
+        public void DbRead(string vri_doc = "*")
         {
-            string query = "SELECT * FROM " + DbName;
+            string query = "SELECT " + vri_doc + " FROM " + DbName;
 
             adapter = new OleDbDataAdapter(query, DbConn);
             
             DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
             adapter.Fill(ds);
 
-            Data = ds.Tables[0];            
+            Data = ds.Tables[0];
+            Console.WriteLine("here");
+        }
+
+        public InputData CreateInputData(DataRow dataRow)
+        {
+            return new InputData((string) dataRow["VRI_DOC"], (int) dataRow["_COL13"], (string) dataRow["BTICodes"], (bool)dataRow["lo_lvl"], (bool)dataRow["mid_lvl"], (bool)dataRow["hi_lvl"]);
         }
 
         /// <summary>
@@ -85,20 +92,57 @@ namespace DBMananger
         {
             try
             {
-                Parallel.ForEach(Data.Rows.Cast<DataRow>(), item =>
+                for (int j = 0; j < 5; j++)
                 {
-                    //var res = new Classifier.Sorter(item["VRI_DOC"].ToString(), 0,
-                    //new Classifier.BtiMock().Bti);
+                    DataRow item = Data.Rows[j];
 
-                    //res.TestBehaviorSearchWithoutBti();
-                    //item.BeginEdit();
-                    //item["new_vri"] = res.Results[4];
-                    //item["new_matches"] = res.Results[1];
-                    //item["new_tip"] = res.Results[5];
-                    //item["new_vid"] = res.Results[6];
-                    //item.EndEdit();
-                    //Console.WriteLine(item["new_vri"] + "   " + item["new_tip"]);
-                });
+                    //var _lo = (int)item["lo_lvl"] == 0;
+                    //var _mid = (int)item["mid_lvl"] == 0;
+                    //var _hi = (int)item["hi_lvl"] == 0;
+
+                    var inpt = new InputData((string)item["VRI_DOC"], 0, "", false, false, false);
+                    IFactory factory = new Factory(inpt);
+                    factory.Execute();
+
+                    Console.WriteLine(item["VRI_DOC"].ToString() + "  " + factory.outputData.VRI_List);
+
+                    item["VRI"] = factory.outputData.VRI_List;
+                    item["Matches"] = factory.outputData.Matches;
+                    item["Type"] = factory.outputData.Type;
+                    item["Kind"] = factory.outputData.Kind;
+                    item["Maintenance"] = factory.outputData.IsMaintenance;
+                    item["Landscape"] = factory.outputData.IsLandscape;
+                    item["FedSearch"] = factory.outputData.IsFederalSearch;
+                }
+
+                //Parallel.ForEach(Data.AsEnumerable(), item =>
+                //{
+                //    var inpt = new InputData((string)item["VRI_DOC"], (int)item["_COL13"],
+                //        (string)item["BTICodes"], (bool)item["lo_lvl"], (bool)item["mid_lvl"], (bool)item["hi_lvl"]);
+                //    IFactory factory = new Factory(inpt);
+
+                //    Console.WriteLine((string)item["VRI_DOC"] + "  " + factory.outputData.VRI_List);
+
+                //    item["VRI"] = factory.outputData.VRI_List;
+                //    item["Matches"] = factory.outputData.Matches;
+                //    item["Type"] = factory.outputData.Type;
+                //    item["Kind"] = factory.outputData.Kind;
+                //    item["Maintenance"] = factory.outputData.IsMaintenance;
+                //    item["Landscape"] = factory.outputData.IsLandscape;
+                //    item["FedSearch"] = factory.outputData.IsFederalSearch;
+
+                //    //var res = new Classifier.Sorter(item["VRI_DOC"].ToString(), 0,
+                //    //new Classifier.BtiMock().Bti);
+
+                //    //res.TestBehaviorSearchWithoutBti();
+                //    //item.BeginEdit();
+                //    //item["new_vri"] = res.Results[4];
+                //    //item["new_matches"] = res.Results[1];
+                //    //item["new_tip"] = res.Results[5];
+                //    //item["new_vid"] = res.Results[6];
+                //    //item.EndEdit();
+                //    //Console.WriteLine(item["new_vri"] + "   " + item["new_tip"]);
+                //});
             }
             catch (Exception e)
             {
@@ -115,6 +159,13 @@ namespace DBMananger
 
                 Console.Read();
             }
+        }
+
+        public void Update()
+        {
+            OleDbCommandBuilder builder = new OleDbCommandBuilder(adapter);
+            adapter.UpdateCommand = builder.GetUpdateCommand();
+            adapter.Update(Data);
         }
 
         private void op(DataRow row)

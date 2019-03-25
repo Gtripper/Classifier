@@ -203,7 +203,6 @@ namespace Classifier
         public bool ExistsType(IEnumerable<string> types)
         {
             return Nodes.Exists(p => types.Contains(p.typeCode));
-            return Nodes.Exists(p => types.Contains(p.typeCode));
         }
 
         public bool ExistsType(string types)

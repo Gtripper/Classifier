@@ -219,7 +219,21 @@ namespace Classifier
         {
             var isKindCode3004Exist = Codes.Exists("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
 
-            if (IsHousingCodes(Codes) && isKindCode3004Exist)
+            if (IsHousingCodes() && isKindCode3004Exist)
+            {
+                Codes.RemoveAll("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+            }
+        }
+
+        /// <summary>
+        /// Удаляет коды с видом 3004 в случае, если если есть тип 100
+        /// </summary>
+        private void Type130Fix()
+        {
+            var isKindCode3004Exist = Codes.Exists("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+            var isType100 = Codes.Nodes.Exists(p => p.typeCode.Equals("100") && !p.vri.Equals("3.1.2") && !p.vri.Equals("3.1.3"));
+
+            if (isType100 && isKindCode3004Exist)
             {
                 Codes.RemoveAll("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
             }
@@ -273,6 +287,8 @@ namespace Classifier
         {
             var isCodesNeedToDelete = Codes.Exists("9.0.0") &&
                 Regex.IsMatch(input, @"\bособ\w*\s*охран\w*\s*(природ\w*\s*)?терр\w*\b", RegexOptions.IgnoreCase);
+
+            var isBuildingsExist = Codes.Nodes.Exists(p => p.typeCode.Equals("100") || p.typeCode.Equals("200") || p.typeCode.Equals("300"));
 
             if (isCodesNeedToDelete && Codes.Count > 1)
                 Codes.RemoveAll("9.0.0");
@@ -336,6 +352,7 @@ namespace Classifier
             FixCode_Other();
             ElectricityStationsWithAreaLessThan300();
             Type230Fix();
+            Type130Fix();
             LandscapingFix();
             HousingAndRecreationFix();
             GasPipelineFix();

@@ -15,10 +15,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E93C8339
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classifier.Tests", "Classifier.Tests\Classifier.Tests.csproj", "{62FB337E-1102-4276-B0D8-62758AA5B211}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapInfoWrap", "MapInfoWrap\MapInfoWrap.csproj", "{4427A9A4-9885-4BB9-87E8-01355083C68B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CCB1758D-DDA8-4B24-882C-283FB9EF3BCD}"
+	ProjectSection(SolutionItems) = preProject
+		TestSettings.testsettings = TestSettings.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassifierGUI", "ClassifierGUI\ClassifierGUI.csproj", "{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -42,6 +50,18 @@ Global
 		{62FB337E-1102-4276-B0D8-62758AA5B211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62FB337E-1102-4276-B0D8-62758AA5B211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62FB337E-1102-4276-B0D8-62758AA5B211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4427A9A4-9885-4BB9-87E8-01355083C68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4427A9A4-9885-4BB9-87E8-01355083C68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4427A9A4-9885-4BB9-87E8-01355083C68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4427A9A4-9885-4BB9-87E8-01355083C68B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +71,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF1B6E62-270C-4C30-92AF-D3C539D6746C}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
