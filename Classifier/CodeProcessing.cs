@@ -217,11 +217,11 @@ namespace Classifier
         /// </summary>
         private void Type230Fix()
         {
-            var isKindCode3004Exist = Codes.Exists("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+            var isKindCode3004Exist = Codes.Exists("2.7.0, 2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
 
             if (IsHousingCodes() && isKindCode3004Exist)
             {
-                Codes.RemoveAll("2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
+                Codes.RemoveAll("2.7.0, 2.7.1.0, 3.1.1, 4.9.0, 4.9.1.1, 4.9.1.2, 4.9.1.3, 4.9.1.4");
             }
         }
 
