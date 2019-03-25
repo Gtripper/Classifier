@@ -255,7 +255,7 @@ namespace Classifier.Tests
 
         [TestCase("7.5.0", "3.1.1")]
         [TestCase("3.1.1, 7.5.0", "3.1.1")]
-        [TestCase("3.1.1, 4.4.0, 7.5.0", "3.1.1, 4.4.0")]
+        [TestCase("3.3.0, 4.4.0, 7.5.0", "3.1.1, 3.3.0, 4.4.0")]
         public void GasPipeline_areaLessThan300_returnCommunalIndex(string vri, string excepted)
         {
             ICodes codes = new Codes(mf);
@@ -270,7 +270,7 @@ namespace Classifier.Tests
 
         [TestCase("7.5.0", "7.5.0")]
         [TestCase("3.1.1, 7.5.0", "3.1.1, 7.5.0")]
-        [TestCase("3.1.1, 4.4.0, 7.5.0", "3.1.1, 4.4.0, 7.5.0")]
+        [TestCase("3.3.0, 4.4.0, 7.5.0", "3.3.0, 4.4.0, 7.5.0")]
         public void GasPipeline_areaMoreThan300_returnPipeLineIndex(string vri, string excepted)
         {
             ICodes codes = new Codes(mf);
