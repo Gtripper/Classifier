@@ -45,6 +45,7 @@ namespace Classifier.Tests
         [TestCase(@"ПОД УСТАНОВКУ МЕТАЛЛИЧЕСКОГО УКРЫТИЯ ТИПА ""РАКУШКА"" ДЛЯ ХРАНЕНИЯ АВТОМАШИНЫ МАРКИ ""ОКА - 11113-02""", "2.7.1.0")]
         [TestCase(@"ЭКСПЛУАТАЦИИ ИНДИВИДУАЛЬНОГО КИРПИЧНОГО ГАРАЖА", "2.7.1.0")]
         [TestCase(@"ЭКСПЛУАТАЦИИ КРЫТАЯ А/С №59 НА 8 МАШИНОМЕСТ", "4.9.0")]
+        [TestCase(@"ЭКСПЛУАТАЦИИ гаража-тента типа ""Ракушка""", "2.7.1.0")]
         public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
         {
             IInputData data = new InputData(_vri_doc, 0, "", false, false, false);
