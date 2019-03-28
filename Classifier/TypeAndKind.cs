@@ -7,9 +7,25 @@ using System.Threading.Tasks;
 namespace Classifier
 {
     public interface ITypeAndKind
-    {
+    {   
+        /// <summary>
+        /// Тип
+        /// </summary>
         int Type { get; }
+        /// <summary>
+        /// Вид
+        /// </summary>
         int Kind { get; }
+        /// <summary>
+        /// Event's observer
+        /// </summary>
+        /// <param name="msg"></param>
+        void IsFederal(bool state, string msg);
+        /// <summary>
+        /// Event's observer
+        /// </summary>
+        /// <param name="state"></param>
+        void CodesAreCuting(bool state);
     }
 
 
@@ -42,14 +58,55 @@ namespace Classifier
             }
         }
 
-        /// TODO: Посмотреть и доработать метод (рассмотреть варианты и возможности)
+        #region Events
+        #region SearchCodes event
+        string node = "";
+        bool federal = false;
+        /// <summary>
+        /// Подписчик на событие: Найден федеральный код.
+        /// </summary>
+        /// <param name="msg">Передает федеральный код</param>
+        public void IsFederal(bool state, string msg)
+        {
+            node = msg;
+            federal = state;
+        }
+        #endregion
+
+        #region CodeProcessing event
+        bool cut = false;
+        /// <summary>
+        /// Подписчик на событие: Есть уточняющий код БТИ
+        /// для федерального кода. 
+        /// <remark>Вместо россыпи кодов из федерального
+        /// придет один код, из БТИ</remark>
+        /// </summary>
+        /// <param name="state"></param>
+        public void CodesAreCuting(bool state)
+        {
+            cut = state;
+        }
+        #endregion
+        #endregion
+
         private int getType()
         {
             var whiteList = new List<int> {100, 200, 300,
                 120, 130, 230, 140, 240, 340, 124, 134, 234,
                     123, 500, 600, 700, 800, 900 };
 
-            var set = codes.GetTypes();
+            var set = new List<string>();
+            if (federal && !cut)
+            {
+                if (Equals(node, "3.1"))
+                    set = codes.GetTypes("3.1.2, 3.1.3");
+                else
+                    set = codes.GetTypes();
+            }
+            else
+            {
+                set = codes.GetTypes();
+            }
 
             if (set.Count == 1)
             {                
@@ -80,14 +137,25 @@ namespace Classifier
             return int.Parse(result);
         }
 
-        /// TODO: Посмотреть и доработать метод (рассмотреть варианты и возможности)
+       
         private int getKind()
         {
             List<int> whiteList = new List<int> { 1001, 1002, 1003, 1004, 1005, 1006, 1007,
                 1000, 2001, 2002, 2003, 2004, 2000, 3001, 3002, 3003, 3004, 3005, 3006, 3000,
                     4001, 4002, 4000, 1200, 1300, 2300, 1230, 5000, 6000, 7000, 8000, 9000 };
 
-            var set = codes.GetKinds();
+            var set = new List<string>();
+            if (federal && !cut)
+            {
+                if (Equals(node, "3.1"))
+                    set = codes.GetKinds("3.1.2, 3.1.3");
+                else
+                    set = codes.GetKinds();
+            }
+            else
+            {
+                set = codes.GetKinds();
+            }
 
             if (set.Count == 1)
             {

@@ -67,7 +67,7 @@ namespace Classifier
         /// arrBool[2] - hi_lvl
         /// arrBool[3] - Maintenance;
         /// arrBool[4] - Landscape;
-        /// arrBool[5] - FederalSearch;
+        /// arrBool[5] - SendFederalCode;
         /// </remark> 
         public static void FullSearch(string[] arrStr, int[] arrInt, bool[] arrBool)
         {

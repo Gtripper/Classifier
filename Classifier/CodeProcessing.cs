@@ -13,6 +13,9 @@ namespace Classifier
         bool Landscaping { get; }
         ICodes Codes { get; }
         void FullProcessing();
+
+        event Action<bool> CodesAreCuting;
+        void FederalBehavior(bool isFederalState);
     }
 
     /// <summary>
@@ -26,6 +29,8 @@ namespace Classifier
         public ICodes Codes { get; private set; }
         private IBTI bti;
         private NodeFeed mf;
+
+        public event Action<bool> CodesAreCuting;
 
         /// <summary>
         /// Эксплуатация
@@ -43,14 +48,13 @@ namespace Classifier
         /// <param name="Codes"></param>
         /// <param name="bti"></param>
         /// <param name="input"></param>
-        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input, int _area, bool _isFederal, NodeFeed mf)
+        public CodeProcessing(ICodes _Codes, IBTI _bti, string _input, int _area, NodeFeed mf)
         {
             // Проверка на null
             Codes = _Codes ?? new Codes(mf);
             bti = _bti ?? new BTI();
             input = _input;
             area = _area;
-            isFederal = _isFederal;
             this.mf = mf;
         }
         #region Behavior
@@ -316,13 +320,15 @@ namespace Classifier
 
         #region FederalCodesBehavior
 
-        private void FederalBehavior()
+        
+
+        public void FederalBehavior(bool isFederalState)
         {
             FederalToFewPZZCodesFix();
         }
 
         /// <summary>
-        /// Осуществляет выбор конкретного кода ПЗЗ в федеральном коде 3.1
+        /// Осуществляет выбор конкретного кода ПЗЗ в федеральных кодах
         /// </summary>
         internal void FederalToFewPZZCodesFix()
         {
@@ -338,16 +344,17 @@ namespace Classifier
 
                 if (bl)
                 {
-                    Codes.Nodes.RemoveAll(p => !bti.btiCodes.Exists(p.vri));
+                    Codes.Nodes.RemoveAll(p => !bti.btiCodes.Exists(p.vri) && list.Contains(p.vri));
+                    CodesAreCuting?.Invoke(true);
                 }
-            }
+            }       
         }
         #endregion
 
         #endregion
         public void FullProcessing()
         {
-            if (isFederal) FederalBehavior();
+            FederalBehavior(isFederal);
             RemoveBaseCodes();
             NumberDeterminant();
             FixCode_Other();

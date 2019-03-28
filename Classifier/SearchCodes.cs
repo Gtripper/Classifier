@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,6 +17,9 @@ namespace Classifier
         bool IsFederalSearch { get; }
         bool IsPZZSearch { get; }
         bool IsMainSearch { get; }
+
+        event Action<bool, string> SendFederalCode;
+        event Action<bool> IsFedSearch;
     }
 
 
@@ -37,12 +41,17 @@ namespace Classifier
         private readonly string input; // ВРИ по документу
         private StringBuilder _matches;
         private NodeFeed mf;
-
+        
         public string Matches { get  { return _matches.ToString(); } }
         public ICodes Codes { get; }
         public bool IsFederalSearch { get; private set; }
         public bool IsPZZSearch { get; private set; }
         public bool IsMainSearch { get; private set; }
+
+        #region event
+        public event Action<bool, string> SendFederalCode;
+        public event Action<bool> IsFedSearch;
+        #endregion
 
         public SearchCodes(string Input, ICodes codes, NodeFeed mf)
         {
@@ -68,10 +77,11 @@ namespace Classifier
                     var reg = FederalSearchRegexp(node.vri540);
                     if (reg.IsMatch(input))
                     {
-                        SearchFederalCodes();
                         IsFederalSearch = true;
                         IsPZZSearch = false;
                         IsMainSearch = false;
+                        IsFedSearch?.Invoke(IsFederalSearch);
+                        SearchFederalCodes();
                         break;
                     }
                 }
@@ -141,6 +151,7 @@ namespace Classifier
 
                 if (reg.IsMatch(input))
                 {
+                    SendFederalCode?.Invoke(IsFederalSearch, node);
                     Codes.AddNodes(nodes.Map[node]);
                     match = reg.Match(input).Value;
                     AddMatches(match);

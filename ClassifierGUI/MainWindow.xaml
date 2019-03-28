@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassifierGUI"
         mc:Ignorable="d"
-        Title="Classifier" Height="450" Width="800">
-    <RadioButton Content="Текущий клиент MapInfo" HorizontalAlignment="Left" Margin="35,60,0,0" VerticalAlignment="Top"/>
+        Title="Classifier" Height="325" Width="480">
+    <Grid HorizontalAlignment="Left" Height="237" Margin="64,22,0,0" VerticalAlignment="Top" Width="349">
+        <Button Content="Button" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="160" Height="217"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="175,10,0,0" VerticalAlignment="Top" Width="164" Height="217"/>
+    </Grid>
 </Window>

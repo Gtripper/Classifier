@@ -18,7 +18,7 @@ namespace Classifier
         IInputData data;
         ICodes Codes { get; set; }
         ISearchCodes SearchingResult { get; set; }
-        CodeProcessing processing { get; set; }
+        ICodeProcessing processing { get; set; }
         ITypeAndKind Types { get; set; }
         IBTI Bti { get; set; }
         public IOutputData outputData { get; private set; }
@@ -39,9 +39,9 @@ namespace Classifier
             return new SearchCodes(data.Vri_doc, Codes, mf);
         }
 
-        private CodeProcessing CreateProcessing()
+        private ICodeProcessing CreateProcessing()
         {
-            return new CodeProcessing(Codes, Bti, data.Vri_doc, data.Area, SearchingResult.IsFederalSearch, mf);
+            return new CodeProcessing(Codes, Bti, data.Vri_doc, data.Area, mf);
         }
 
         private ITypeAndKind CreateTypes()
@@ -60,11 +60,15 @@ namespace Classifier
         public void Execute()
         {
             SearchingResult = CreateISearch();
+            Types = CreateTypes();
+            SearchingResult.SendFederalCode += Types.IsFederal;
             SearchingResult.MainLoop();
             Bti = CreateBTI();
             processing = CreateProcessing();
-            processing.FullProcessing();
-            Types = CreateTypes();
+            SearchingResult.IsFedSearch += processing.FederalBehavior;
+            processing.CodesAreCuting += Types.CodesAreCuting;
+            processing.FullProcessing();        
+
 
             outputData = CreateOutputData();
         }

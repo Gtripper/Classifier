@@ -80,10 +80,24 @@ namespace Classifier
         List<string> GetTypes();
 
         /// <summary>
+        /// Возвращает коллекцию уникальных типов Nodes, за исключением кодов
+        /// указанных в аргументе функции
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetTypes(string except);
+
+        /// <summary>
         /// Возвращает коллекцию уникальных видов Nodes
         /// </summary>
         /// <returns></returns>
         List<string> GetKinds();
+
+        /// <summary>
+        /// Возвращает коллекцию уникальных видов Nodes, за исключением кодов
+        /// указанных в аргументе функции
+        /// </summary>
+        /// <returns></returns>
+        List<string> GetKinds(string except);
 
         /// <summary>
         /// Сортирует элементы в коллекции Nodes с использованием копмпоратора CodeComparer
@@ -249,9 +263,25 @@ namespace Classifier
             return Nodes.Select(p => p.typeCode).Distinct().ToList();
         }
 
+        public List<string> GetTypes(string except)
+        {
+            var pattern = @"\d+[.]\d+[.]\d+([.]\d+)?";
+            var result = Regex.Matches(except, pattern).Cast<Match>().Select(p => p.Value).ToList();
+
+            return Nodes.Where(p => !result.Contains(p.vri)).Select(p => p.typeCode).Distinct().ToList();
+        }
+
         public List<string> GetKinds()
         {
             return Nodes.Select(p => p.kindCode).Distinct().ToList();
+        }
+
+        public List<string> GetKinds(string except)
+        {
+            var pattern = @"\d+[.]\d+[.]\d+([.]\d+)?";
+            var result = Regex.Matches(except, pattern).Cast<Match>().Select(p => p.Value).ToList();
+
+            return Nodes.Where(p => !result.Contains(p.vri)).Select(p => p.kindCode).Distinct().ToList();
         }
 
         public IEnumerator<Node> GetEnumerator()

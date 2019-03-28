@@ -18,6 +18,14 @@ namespace Classifier.Tests
             1416, "", false, false, false, "12.0.1", 400, 4001)]
         [TestCase("земельные участки, предназначенные для размещения газопроводов (1.2.13), земельные участки, занятые особо охраняемыми территориями и объект",
             4, "", false, false, false, "3.1.1", 300, 3004)]
+        [TestCase("(3.1)",
+            4, "", false, false, false, "3.1.1, 3.1.2, 3.1.3", 300, 3004)]
+        [TestCase("(3.1)",
+            4, "3.1.2", false, false, false, "3.1.2", 100, 1004)]
+        [TestCase("(3.1) , (4.1)",
+            4, "3.1.2", false, false, false, "3.1.2, 4.1.0", 100, 1000)]
+        [TestCase("(3.1) , (4.1)",
+            4, "", false, false, false, "3.1.2, 3.1.3, 4.1.0", 100, 1000)]
         public void IFactory_FullDataTest(string _vri_doc, int _area, string _btiVri, bool _lo, bool _mid, bool _hi, string vri_list, int type, int kind)
         {
             IInputData data = new InputData(_vri_doc, _area, _btiVri, _lo, _mid, _hi);
@@ -46,6 +54,8 @@ namespace Classifier.Tests
         [TestCase(@"ЭКСПЛУАТАЦИИ ИНДИВИДУАЛЬНОГО КИРПИЧНОГО ГАРАЖА", "2.7.1.0")]
         [TestCase(@"ЭКСПЛУАТАЦИИ КРЫТАЯ А/С №59 НА 8 МАШИНОМЕСТ", "4.9.0")]
         [TestCase(@"ЭКСПЛУАТАЦИИ гаража-тента типа ""Ракушка""", "2.7.1.0")]
+        [TestCase(@"участки размещения многоквартирных жилых домов: объекты размещения жилых и нежилых помещений, инженерного оборудования многоквартирных", "2.1.1.0, 2.5.0, 2.6.0")]
+        [TestCase(@"(3.1) , (4.2)", "3.1.2, 3.1.3, 4.2.0")]
         public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
         {
             IInputData data = new InputData(_vri_doc, 0, "", false, false, false);
