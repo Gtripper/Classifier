@@ -15,6 +15,7 @@ namespace Classifier
         void FullProcessing();
 
         event Action<bool> CodesAreCuting;
+        event Action<string> Cutter;
         void FederalBehavior(bool isFederalState);
     }
 
@@ -26,11 +27,13 @@ namespace Classifier
         private string input;
         private int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
         private bool isFederal;
+        private bool uncut;
         public ICodes Codes { get; private set; }
         private IBTI bti;
         private NodeFeed mf;
 
         public event Action<bool> CodesAreCuting;
+        public event Action<string> Cutter;
 
         /// <summary>
         /// Эксплуатация
@@ -55,6 +58,7 @@ namespace Classifier
             bti = _bti ?? new BTI();
             input = _input;
             area = _area;
+            uncut = true;
             this.mf = mf;
         }
         #region Behavior
@@ -318,19 +322,28 @@ namespace Classifier
             return Codes.Exists("2.0.0, 2.1.0, 2.2.0, 2.3.0, 2.1.1.0, 2.5.0, 2.6.0");
         }
 
+        private void SomeCodesFix()
+        {
+            bool isCodesExist = Codes.Exists("7.1.1, 7.2.1");
+            bool isTypesExist = Codes.ExistsType("100, 200, 300");
+
+            if (isCodesExist && isTypesExist)
+            {
+                CutterFix("7.1.1, 7.2.1");
+            }
+        }
+
         #region FederalCodesBehavior
-
-        
-
         public void FederalBehavior(bool isFederalState)
         {
             FederalToFewPZZCodesFix();
+            CommunalFix();
         }
 
         /// <summary>
         /// Осуществляет выбор конкретного кода ПЗЗ в федеральных кодах
         /// </summary>
-        internal void FederalToFewPZZCodesFix()
+        private void FederalToFewPZZCodesFix()
         {
             var map = new CodesMapping().Map.Where(p => p.Value.Count > 1)
                 .Select(p => p.Value).Where(p => p.Intersect(Codes.Nodes.Select(v => v.vri)).Count() > 0);
@@ -345,9 +358,23 @@ namespace Classifier
                 if (bl)
                 {
                     Codes.Nodes.RemoveAll(p => !bti.btiCodes.Exists(p.vri) && list.Contains(p.vri));
+                    uncut = false;
                     CodesAreCuting?.Invoke(true);
                 }
             }       
+        }
+
+        private void CommunalFix()
+        {
+            bool isCommunal = Codes.Exists("3.1.1, 3.1.2, 3.1.3");
+
+            if (isCommunal && uncut)
+                CutterFix("3.1.2, 3.1.3");
+        }
+
+        private void CutterFix(string except)
+        {
+            Cutter?.Invoke(except);
         }
         #endregion
 
@@ -365,6 +392,7 @@ namespace Classifier
             HousingAndRecreationFix();
             GasPipelineFix();
             SpeciallyProtectedAreaFix();
+            SomeCodesFix();
         }
     }
 }

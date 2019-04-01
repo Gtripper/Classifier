@@ -63,5 +63,16 @@ ICodes codes = new Codes(mf);
             Assert.AreEqual(res, true);
         }
 
+        [TestCase("2.5.0, 2.6.0, 3.1.1", "2.5.0, 2.6.0", "3.1.1")]
+        public void Except_NotEmptyArgument_correctResult(string vri, string result, string except)
+        {
+            ICodes codes = new Codes(mf);
+            codes.AddNodes(vri);
+            var q = (ICodesTypes)codes;            
+
+            var res = q.Except(except);
+
+            Assert.AreEqual(result, res);
+        }
     }
 }

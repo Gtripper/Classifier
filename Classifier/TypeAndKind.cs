@@ -26,15 +26,23 @@ namespace Classifier
         /// </summary>
         /// <param name="state"></param>
         void CodesAreCuting(bool state);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        void CutterDelegate(string input);
     }
 
 
     class TypeAndKind : ITypeAndKind
     {
         private ICodes codes;
+        private string cutter;
         public TypeAndKind(ICodes codes)
         {
             this.codes = codes;
+            cutter = "";
         }
 
         public int Type
@@ -86,6 +94,11 @@ namespace Classifier
         {
             cut = state;
         }
+        public void CutterDelegate(string input)
+        {
+            cutter = input;
+        }
+        
         #endregion
         #endregion
 
@@ -96,12 +109,10 @@ namespace Classifier
                     123, 500, 600, 700, 800, 900 };
 
             var set = new List<string>();
-            if (federal && !cut)
+
+            if (!Equals(cutter, ""))
             {
-                if (Equals(node, "3.1"))
-                    set = codes.GetTypes("3.1.2, 3.1.3");
-                else
-                    set = codes.GetTypes();
+                set = codes.GetTypes(cutter);
             }
             else
             {
@@ -145,12 +156,9 @@ namespace Classifier
                     4001, 4002, 4000, 1200, 1300, 2300, 1230, 5000, 6000, 7000, 8000, 9000 };
 
             var set = new List<string>();
-            if (federal && !cut)
+            if (!Equals(cutter, ""))
             {
-                if (Equals(node, "3.1"))
-                    set = codes.GetKinds("3.1.2, 3.1.3");
-                else
-                    set = codes.GetKinds();
+                set = codes.GetKinds(cutter);
             }
             else
             {

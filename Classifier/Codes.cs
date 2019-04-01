@@ -74,6 +74,14 @@ namespace Classifier
         bool ExistsType(string codes);
 
         /// <summary>
+        /// Возвращает строку, содержащую все индексы ВРИ, кроме
+        /// переданных в аргументе
+        /// </summary>
+        /// <param name="vri"></param>
+        /// <returns></returns>
+        string Except(string vri);
+
+        /// <summary>
         /// Возвращает коллекцию уникальных типов Nodes
         /// </summary>
         /// <returns></returns>
@@ -145,6 +153,14 @@ namespace Classifier
         /// <param name="codes"></param>
         /// <returns></returns>
         bool ExistsType(string codes);
+
+        /// <summary>
+        /// Возвращает строку, содержащую все индексы ВРИ, кроме
+        /// переданных в аргументе
+        /// </summary>
+        /// <param name="vri"></param>
+        /// <returns></returns>
+        string Except(string vri);
 
         /// <summary>
         /// Возвращает коллекцию уникальных типов Nodes
@@ -225,6 +241,16 @@ namespace Classifier
             var result = Regex.Matches(types, pattern).Cast<Match>().Select(p => p.Value);
 
             return ExistsType(result);
+        }
+
+        public string Except(string vri)
+        {
+            string result = "";
+            foreach (var node in this.Where(p => !vri.Contains(p.vri)))
+            {
+                result += (result.Length == 0) ? node.vri : ", " + node.vri;
+            }
+            return result;
         }
 
         public void RemoveAll(IEnumerable<string> codes)

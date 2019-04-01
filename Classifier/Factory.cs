@@ -67,6 +67,7 @@ namespace Classifier
             processing = CreateProcessing();
             SearchingResult.IsFedSearch += processing.FederalBehavior;
             processing.CodesAreCuting += Types.CodesAreCuting;
+            processing.Cutter += Types.CutterDelegate;
             processing.FullProcessing();        
 
 
