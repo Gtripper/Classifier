@@ -74,6 +74,7 @@ namespace Classifier.Tests
         [TestCase(@"Для строительства подъездной дороги и разворотной площадки", "12.0.2")]
         [TestCase(@"Для строительства подъездной автодороги и разворотной площадки", "12.0.2")]
         [TestCase(@"Для строительства подъездной автомобильной дороги и разворотной площадки", "12.0.2")]
+        [TestCase(@"использование территории и эксплуатация зданий детской городской больницы", "3.4.2.0")]
         public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
         {
             IInputData data = new InputData(_vri_doc, 0, "", false, false, false);
