@@ -30,6 +30,8 @@ namespace Classifier.Tests
             4, "", false, false, false, "4.1.0, 7.1.1", 100, 1001)]
         [TestCase("(7.2) , (4.1)",
             4, "", false, false, false, "4.1.0, 7.2.1", 100, 1001)]
+        [TestCase("Объекты размещения помещений и технических устройств общественных туалетов (1.2.9)",
+            4, "", false, false, false, "3.1.2", 100, 1004)]
         public void IFactory_FullDataTest(string _vri_doc, int _area, string _btiVri, bool _lo, bool _mid, bool _hi, string vri_list, int type, int kind)
         {
             IInputData data = new InputData(_vri_doc, _area, _btiVri, _lo, _mid, _hi);

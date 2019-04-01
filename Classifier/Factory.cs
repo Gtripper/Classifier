@@ -61,13 +61,15 @@ namespace Classifier
         {
             SearchingResult = CreateISearch();
             Types = CreateTypes();
-            SearchingResult.SendFederalCode += Types.IsFederal;
-            SearchingResult.MainLoop();
             Bti = CreateBTI();
             processing = CreateProcessing();
-            SearchingResult.IsFedSearch += processing.FederalBehavior;
-            processing.CodesAreCuting += Types.CodesAreCuting;
+
+                     
+            //SearchingResult.IsFedSearch += processing.FederalBehavior;
             processing.Cutter += Types.CutterDelegate;
+            SearchingResult.SendFederalCode += processing.IsFederal;
+
+            SearchingResult.MainLoop();
             processing.FullProcessing();        
 
 

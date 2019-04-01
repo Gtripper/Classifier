@@ -14,9 +14,9 @@ namespace Classifier
         ICodes Codes { get; }
         void FullProcessing();
 
-        event Action<bool> CodesAreCuting;
+        
         event Action<string> Cutter;
-        void FederalBehavior(bool isFederalState);
+        void IsFederal(bool state, string msg);
     }
 
     /// <summary>
@@ -27,12 +27,12 @@ namespace Classifier
         private string input;
         private int area; /// TODO: Пока так. Пока не готов полноценный интерфейс со всеми данными из MapInfo
         private bool isFederal;
+        private List<string> node;
         private bool uncut;
         public ICodes Codes { get; private set; }
         private IBTI bti;
         private NodeFeed mf;
 
-        public event Action<bool> CodesAreCuting;
         public event Action<string> Cutter;
 
         /// <summary>
@@ -59,6 +59,8 @@ namespace Classifier
             input = _input;
             area = _area;
             uncut = true;
+            isFederal = false;
+            node = new List<string>();
             this.mf = mf;
         }
         #region Behavior
@@ -342,7 +344,7 @@ namespace Classifier
         }
 
         #region FederalCodesBehavior
-        public void FederalBehavior(bool isFederalState)
+        private void FederalBehavior()
         {
             FederalToFewPZZCodesFix();
             CommunalFix();
@@ -367,16 +369,13 @@ namespace Classifier
                 {
                     Codes.Nodes.RemoveAll(p => !bti.btiCodes.Exists(p.vri) && list.Contains(p.vri));
                     uncut = false;
-                    CodesAreCuting?.Invoke(true);
                 }
             }       
         }
 
         private void CommunalFix()
         {
-            bool isCommunal = Codes.Exists("3.1.1, 3.1.2, 3.1.3");
-
-            if (isCommunal && uncut)
+            if (node.Exists(p => Equals(p, "3.1")) && uncut)
                 CutterFix("3.1.2, 3.1.3");
         }
 
@@ -386,10 +385,21 @@ namespace Classifier
         }
         #endregion
 
+        #region
+        public void IsFederal(bool state, string msg)
+        {
+            if (state)
+            {
+                isFederal = state;
+                node.Add(msg);
+            }
+        }
+        #endregion
+
         #endregion
         public void FullProcessing()
         {
-            FederalBehavior(isFederal);
+            FederalBehavior();
             RemoveBaseCodes();
             NumberDeterminant();
             FixCode_Other();

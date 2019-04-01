@@ -19,18 +19,7 @@ namespace Classifier
         /// <summary>
         /// Event's observer
         /// </summary>
-        /// <param name="msg"></param>
-        void IsFederal(bool state, string msg);
-        /// <summary>
-        /// Event's observer
-        /// </summary>
-        /// <param name="state"></param>
-        void CodesAreCuting(bool state);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="msg"></param>        
         void CutterDelegate(string input);
     }
 
@@ -67,39 +56,17 @@ namespace Classifier
         }
 
         #region Events
-        #region SearchCodes event
-        string node = "";
-        bool federal = false;
-        /// <summary>
-        /// Подписчик на событие: Найден федеральный код.
-        /// </summary>
-        /// <param name="msg">Передает федеральный код</param>
-        public void IsFederal(bool state, string msg)
-        {
-            node = msg;
-            federal = state;
-        }
-        #endregion
-
-        #region CodeProcessing event
-        bool cut = false;
         /// <summary>
         /// Подписчик на событие: Есть уточняющий код БТИ
         /// для федерального кода. 
         /// <remark>Вместо россыпи кодов из федерального
         /// придет один код, из БТИ</remark>
         /// </summary>
-        /// <param name="state"></param>
-        public void CodesAreCuting(bool state)
-        {
-            cut = state;
-        }
+        /// <param name="state"></param>        
         public void CutterDelegate(string input)
         {
             cutter = input;
         }
-        
-        #endregion
         #endregion
 
         private int getType()

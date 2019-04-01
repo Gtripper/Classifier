@@ -19,6 +19,7 @@ namespace Classifier.Tests
         [TestCase("3.2.1, 3.2.2, 3.2.3, 3.2.4", 100)]
         [TestCase("2.6.0, 3.1.1", 230)]
         [TestCase("2.6.0, 9.3.0", 999)]
+        [TestCase("7.4.1, 7.4.2", 300)]
         public void ITypeAndKind_CheckCorrectType(string vri, int type)
         {
             var codes = Maker(vri);
