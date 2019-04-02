@@ -26,10 +26,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassifierGUI", "ClassifierGUI\ClassifierGUI.csproj", "{D20EBB4C-5399-43C6-8F75-C72F31EF16B6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dev", "Dev", "{1CC2347C-4095-419A-874D-33CA4E1670E7}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -70,10 +69,18 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6CAE72DB-F1B6-4E5F-9F4D-A236A34689ED} = {1CC2347C-4095-419A-874D-33CA4E1670E7}
+		{2418827C-96B9-495E-9CAA-368A0022AF6F} = {1CC2347C-4095-419A-874D-33CA4E1670E7}
 		{62FB337E-1102-4276-B0D8-62758AA5B211} = {E93C8339-79C1-418B-A3C4-8C44506FB37B}
+		{4427A9A4-9885-4BB9-87E8-01355083C68B} = {1CC2347C-4095-419A-874D-33CA4E1670E7}
+		{5645EA9C-DFAF-4CA5-82A7-36C327BD9E11} = {1CC2347C-4095-419A-874D-33CA4E1670E7}
+		{D20EBB4C-5399-43C6-8F75-C72F31EF16B6} = {1CC2347C-4095-419A-874D-33CA4E1670E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF1B6E62-270C-4C30-92AF-D3C539D6746C}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

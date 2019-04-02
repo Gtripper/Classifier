@@ -2510,7 +2510,7 @@ namespace Classifier
                    @"консульств|посольств|правительств",
 
                    @"",
-                   @"\bино\w*\s*представительст\w*\b|\bдом\w*\s*прием\w*\s*официал\w*\s*делегац\w*\b" }
+                   @"\b(ино\w*|дип\w*)\s*представительст\w*\b|\bдом\w*\s*прием\w*\s*официал\w*\s*делегац\w*\b" }
                ));
 
             nodes.Add(new Sсience("3.9.2", "3.9", "1001", "100",
@@ -5233,6 +5233,7 @@ namespace Classifier
                 { "10.4",    new List<string> { } },                            ///TODO: Same shit.
                 { "11.0",    new List<string> { "11.1.0" } },
                 { "11.2",    new List<string> { "11.2.0" } },
+                { "11.3",    new List<string> { "11.3.0" } },
                 { "12.0",    new List<string> { "12.0.1", "12.0.2" } },         ///TODO: like 3.1.1.                 
                 { "12.1",    new List<string> { "12.1.0" } },
                 { "12.2",    new List<string> { "12.2.0" } },

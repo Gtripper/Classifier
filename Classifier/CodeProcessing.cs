@@ -303,6 +303,12 @@ namespace Classifier
 
             if (isCodesNeedToDelete && Codes.Count > 1)
                 Codes.RemoveAll("9.0.0");
+
+            if (Codes.Exists("9.1.0, 9.3.0") && Codes.Count > 1)
+            {
+                Codes.RemoveAll("9.1.0");
+                Codes.RemoveAll("9.3.0");
+            }
         }
 
         /// <summary>
@@ -335,9 +341,21 @@ namespace Classifier
             }
         }
 
+        
+        private void SomeCodesCut(string codes, string types, Func<bool> foo )
+        {
+            bool isCodesExist = Codes.Exists(codes);
+            bool isTypesExist = Codes.ExistsType(types);
+
+            if (isCodesExist && isTypesExist && foo())
+            {
+                CutterFix(codes);
+            }
+        }
+
         private void SomeCodesFix()
         {
-            SomeCodesCut("7.1.1, 7.2.1", "100, 200, 300");
+            SomeCodesCut("7.1.1, 7.2.1", "100, 200, 300", () => { return !Codes.ExistsKind("3005"); });
             SomeCodesCut("13.1.0", "200");
             SomeCodesCut("12.0.1, 12.0.2", "100, 200, 300, 800");
             SomeCodesCut("9.3.0", "100, 200, 300");

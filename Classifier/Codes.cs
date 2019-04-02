@@ -74,6 +74,20 @@ namespace Classifier
         bool ExistsType(string codes);
 
         /// <summary>
+        /// Определяет, содержит ли Nodes виды, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsKind(IEnumerable<string> codes);
+
+        /// <summary>
+        /// Определяет, содержит ли Nodes виды, переданные в аргументе
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        bool ExistsKind(string codes);
+
+        /// <summary>
         /// Возвращает строку, содержащую все индексы ВРИ, кроме
         /// переданных в аргументе
         /// </summary>
@@ -241,6 +255,19 @@ namespace Classifier
             var result = Regex.Matches(types, pattern).Cast<Match>().Select(p => p.Value);
 
             return ExistsType(result);
+        }
+
+        public bool ExistsKind(IEnumerable<string> kindes)
+        {
+            return Nodes.Exists(p => kindes.Contains(p.kindCode));
+        }
+
+        public bool ExistsKind(string kindes)
+        {
+            var pattern = @"\d+";
+            var result = Regex.Matches(kindes, pattern).Cast<Match>().Select(p => p.Value);
+
+            return ExistsKind(result);
         }
 
         public string Except(string vri)
