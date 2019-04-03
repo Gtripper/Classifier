@@ -4667,7 +4667,9 @@ namespace Classifier
                "Охрана природных территорий",
                "",
                "",
-               new string[] { }
+               new string[] {
+                    @"",
+                    @"\bзащи(тн|нт)\w*\s*лес\w*\b" }
                ));
 
             nodes.Add(new Environment("9.2.0", "9.2", "4002", "400",
