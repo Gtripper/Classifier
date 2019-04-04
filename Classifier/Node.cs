@@ -2163,7 +2163,7 @@ namespace Classifier
                     @"\bдюсш\b",
 
                     @"проф|комбинат|\bказарм\w*\b",
-                    @"\bучебн\w*[\s\-]*\bвоспитат\w*\b" }
+                    @"\bучебн\w*[-\s]*восс?питат\w*\b" }
                ));
 
             nodes.Add(new ProfessionalEducation("3.5.2.0", "3.5.2", "1002", "100",
