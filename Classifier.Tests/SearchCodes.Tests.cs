@@ -270,7 +270,6 @@ namespace Classifier.Tests
         [TestCase(@".", "12.3.0")]
         [TestCase(@"отсутствует", "12.3.0")]
         [TestCase(@"ЭКСПЛУАТАЦИИ РЕЖИМНОГО УЧРЕЖДЕНИЯ", "8.4.0")]
-        [TestCase(@"строительства ( воссоздание исторического строения в несгораемых конструкциях с пристройкой и использованием чердачного пространства) и", "8.4.0")]
         public void ISearchCodes_MainLoop_ReturnsCorrectVRI(string input, string vri)
         {
             ISearchCodes Sample = new SearchCodes(input, new Codes(mf), mf);
