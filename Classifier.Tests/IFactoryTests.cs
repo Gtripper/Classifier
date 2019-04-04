@@ -36,6 +36,8 @@ namespace Classifier.Tests
             4, "", false, false, false, "7.1.1, 7.1.2", 999, 999)]
         [TestCase("Коммунальное обслуживание (3.1). Охрана природных территорий (9.1).",
             4, "", false, false, false, "3.1.1, 3.1.2, 3.1.3", 300, 3004)]
+        [TestCase("Для ведения садоводства",
+            4, "", false, false, false, "13.2.0", 200, 2004)]
         public void IFactory_FullDataTest(string _vri_doc, int _area, string _btiVri, bool _lo, bool _mid, bool _hi, string vri_list, int type, int kind)
         {
             IInputData data = new InputData(_vri_doc, _area, _btiVri, _lo, _mid, _hi);
@@ -204,6 +206,7 @@ namespace Classifier.Tests
         [TestCase(@"-", "12.3.0")]
         [TestCase(@".", "12.3.0")]
         [TestCase(@"отсутствует", "12.3.0")]
+        [TestCase(@"Для ведения садоводства", "13.2.0")]
         public void IFactory_OnlyVRYTest(string _vri_doc, string exceptedCodes)
         {
             IInputData data = new InputData(_vri_doc, 0, "", false, false, false);

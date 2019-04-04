@@ -41,7 +41,7 @@ namespace Classifier
                 if (codes.Count > 0)
                     return getType();
                 else
-                    return 0;
+                    return 777;
             }
         }
         public int Kind
@@ -51,7 +51,7 @@ namespace Classifier
                 if (codes.Count > 0)
                     return getKind();
                 else
-                    return 0;
+                    return 777;
             }
         }
 
