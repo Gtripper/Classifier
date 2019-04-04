@@ -69,41 +69,47 @@ namespace Classifier
         {
             var nodes = mf.GetNodes();
 
-            foreach (var node in nodes)
+            if (String.IsNullOrEmpty(input))
+                Codes.AddNodes("12.3.0");
+            else
             {
-                // Search Federal codes
-                if (!node.vri540.Equals(""))
+
+                foreach (var node in nodes)
                 {
-                    var reg = FederalSearchRegexp(node.vri540);
-                    if (reg.IsMatch(input))
+                    // Search Federal codes
+                    if (!node.vri540.Equals(""))
                     {
-                        IsFederalSearch = true;
-                        IsPZZSearch = false;
-                        IsMainSearch = false;
-                        IsFedSearch?.Invoke(IsFederalSearch);
-                        SearchFederalCodes();
-                        break;
+                        var reg = FederalSearchRegexp(node.vri540);
+                        if (reg.IsMatch(input))
+                        {
+                            IsFederalSearch = true;
+                            IsPZZSearch = false;
+                            IsMainSearch = false;
+                            IsFedSearch?.Invoke(IsFederalSearch);
+                            SearchFederalCodes();
+                            break;
+                        }
                     }
-                }
-                // Search PZZ code
-                if (!node.vri.Equals(""))
-                {
-                    var reg = CodePZZSearchRegexp(node.vri);
-                    var match = "";
-                    if (reg.IsMatch(input))
+                    // Search PZZ code
+                    if (!node.vri.Equals(""))
                     {
-                        ClearOutputFields();
-                        Codes.Add(node);
-                        match = reg.Match(input).Value.Trim();
-                        AddMatches(match);
-                        IsFederalSearch = false;
-                        IsPZZSearch = true;
-                        IsMainSearch = false;
-                        break;
+                        var reg = CodePZZSearchRegexp(node.vri);
+                        var match = "";
+                        if (reg.IsMatch(input))
+                        {
+                            ClearOutputFields();
+                            Codes.Add(node);
+                            match = reg.Match(input).Value.Trim();
+                            AddMatches(match);
+                            IsFederalSearch = false;
+                            IsPZZSearch = true;
+                            IsMainSearch = false;
+                            break;
+                        }
                     }
+                    // Searching based node.regexpPatterns
+                    regexpPatternsSearch(node);
                 }
-                // Searching based node.regexpPatterns
-                regexpPatternsSearch(node);
             }
         }
 
